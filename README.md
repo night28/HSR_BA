@@ -1,3 +1,3 @@
-# HSR_SA_FS2018
+# HSR_BA_HS2018
 
 [Organisation](Organisation.md)
