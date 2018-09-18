@@ -1,0 +1,178 @@
+\documentclass[12pt,titlepage]{article}
+\usepackage[table]{xcolor}
+\usepackage{longtable}
+\usepackage[utf8]{inputenc}
+%Language of Document Elements like Figure or Table
+\usepackage[english]{babel}
+\usepackage[bookmarks]{hyperref}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{colortbl,array}
+\usepackage[justification=centering]{caption}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+\usepackage{lscape}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{nameref}
+\usepackage{tabularx}
+\usepackage[a4paper,width=160mm,top=25mm,bottom=25mm]{geometry}
+\usepackage[ngerman]{translator}
+\usepackage{acronym}
+\usepackage{listings}
+\usepackage{makecell}
+\usepackage{rotating}
+
+
+\definecolor{warningbackground}{RGB}{252,226,158}
+
+\newcommand{\alertwarningbox}[1]{
+	\begin{tabularx}{\linewidth}{
+			>{\columncolor{warningbackground}}c
+			>{\columncolor{warningbackground}}X}
+		\raisebox{\dimexpr2\baselineskip-\height} &
+		\raisebox{\tabcolsep}{\strut}#1\raisebox{-\tabcolsep}{\strut}
+	\end{tabularx}
+}
+
+%Syntax-highlighting]
+%\usepackage{minted}
+%\usemintedstyle{vs}
+
+%Each Section in a new Page
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection}
+
+%Fix for to long Roman letters
+\makeatletter 
+\renewcommand{\@pnumwidth}{5em} 
+\makeatother
+
+%Set space around and between lists
+\setlist[enumerate]{noitemsep, topsep=0cm}
+\setlist[itemize]{noitemsep, topsep=0cm}
+
+%Figure/Table Numbering style "Section Number.figure counter
+\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
+\renewcommand{\thetable}{\arabic{section}.\arabic{table}}
+
+%Reset figure/table counter after section change
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+
+\hypersetup{
+	colorlinks,
+	linkcolor={black},
+	citecolor={black},
+	urlcolor={black}
+}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\newcommand{\todonl}[1]{\newline\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
+
+%Set Paragraph indent to null
+\setlength{\parindent}{0pt}
+% Smaler Table Space
+\renewcommand{\arraystretch}{1.5}
+
+% renamig of section to Abschnitt \autoref
+\addto\extrasenglish{%
+	\def\sectionautorefname{Abschnitt}%
+}
+
+% renamig of subsubsection to Abschnitt \autoref
+\addto\extrasenglish{%
+	\def\subsubsectionautorefname{Abschnitt}%
+}
+
+% renamig of subsection to Abschnitt \autoref
+\addto\extrasenglish{%
+	\def\subsectionautorefname{Abschnitt}%
+}
+%rename Figure zu Abbildung
+\addto\captionsenglish{\renewcommand{\figurename}{Abbildung}}
+
+%rename Tabe zu Tabelle
+\addto\captionsenglish{\renewcommand{\tablename}{Tabelle}}
+
+
+% Befehle für die Tabellenerstellung der Testcases
+\newcommand{\testpttb}[3]{
+%	\begin{landscape}
+		\subsection{#1}
+		#2
+		\rowcolors{2}{gray!25}{white}
+		\begin{longtable}{| m{0.5cm} | m{9cm} | m{6cm} | m{6cm} | m{1.5cm} |}
+			\caption{#1} %\label{tab:#1}
+			\endlastfoot
+			\hline
+			\textbf{Nr} & \textbf{Beschreibung} & \textbf{Erwartetes Ergebnis} & \textbf{Tatsächliches Ergebnis} & \textbf{Status}
+			\\
+			\hline
+			#3
+			\hline 
+		\end{longtable}
+%	\end{landscape}
+}
+
+\newcommand{\testptrow}[5]{
+	#1 & #2 & #3 & #4 & #5 \\
+}
+
+\title{Krisenresistente Software Defined Netzwerke}
+\author{Sandro Kaspar, Jessica Kalberer}
+\date{17.09.2018}
+
+\pagestyle{fancy}
+\lhead{Krisenresistente Software Defined Netzwerke}
+\begin{document}
+\pagenumbering{Roman}
+
+
+\includepdf{pdfincludes/titlepage}
+
+\newpage
+%new Title for tableofcontent
+\renewcommand{\contentsname}{Inhaltsverzeichnis}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+
+\input{sections/aufgabenstellung}
+\input{sections/abstract}
+\input{sections/managementSummary}
+\input{sections/problembeschreibung}
+\input{sections/technologien}
+\input{sections/usecases}
+\input{sections/testprotokolle}
+\input{sections/umsetzung}
+\input{sections/vorgehen}
+\input{sections/ergebnisse}
+\input{sections/schlussfolgerung}
+\input{sections/glossar}
+
+\newpage
+\appendix
+\pagenumbering{Roman}
+
+\input{sections/installationsanleitung}
+\input{sections/benutzerhandbuch}
+\input{sections/projektmanagement}
+\input{sections/zeitmanagement}
+\input{sections/bugs}
+\input{sections/personalsummaries}
+\input{sections/sitzungsprotokolle}
+\input{sections/erklaerungen}
+\input{sections/verzeichnisse}
+
+
+
+\end{document}
+
