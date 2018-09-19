@@ -2,4 +2,4 @@
 
 [Organisation](Organisation.md)
 
-[![Waffle.io - Issues in progress](https://badge.waffle.io/night28/HSR_BA.png?label=in%20progress&title=In%20Progress)](http://waffle.io/night28/HSR_BA)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/night28/HSR_BA.svg?columns=all)](https://waffle.io/night28/HSR_BA)
