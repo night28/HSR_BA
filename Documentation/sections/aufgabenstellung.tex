@@ -1,5 +1,35 @@
 \section{Aufgabenstellung}
 Dies ist die initiale Aufgabenstellung, welche zu Beginn der Bachelorarbeit vorlag. 
 
-.......
+\subsection{Erster Teil (~10\%): Phase Analyse}
+Ziel: Sämtliche Analyse der SD-A Lösung und Identifizierung der kritischen Elemente der Verfügbarkeit (LISP Database, Radius, SGT Access-list,…) und der Network Services (NTP, DNS, Lizenzen, ….)
+\begin{itemize}
+	\item Die Clients werden am Netz mit dot1x authentifiziert und mit Wired Access verbunden. (Wireless Access ist nicht Teil der BA)
+\end{itemize}
+
+
+\subsection{Zweiter Teil (~45\%): Phase Absicherung}
+Ziel: Erstellung von Technische Design und Ansätze um die SD-A Lösung Krisenresistenter zu machen.
+\begin{itemize}
+	\item Die Arbeiten umfassen:
+	\begin{itemize}
+		\item Analyse und Gegenüberstellung der mögliche Optionen für die Verbindungen von zwei SD-A Fabric (VRF-Lite, Transit Fabric, …)
+		\item Empfehlungen für das Deployment eines krisensicheren SD-A
+		\item Aufbau eines Pilots mit mindestens zwei Standorte
+		\item Durchführung der definierten Vorgaben im Pilot
+	\end{itemize}
+	\item Ein ECNS 5000 wird zur Verfügung gestellt und kann in der krisensicheren Lösung integriert sein.
+\end{itemize}
+
+
+\subsection{Dritter Teil (~45\%): Phase Abstrahierung}
+Ziel: Entwicklung eines Operations Orchestrators für 2-3 Use Cases. 
+\begin{itemize}
+	\item Die Use cases werden von Betreuern und Industiepartner festgelegt.
+	\item Der Operations Orchestrator wird bestimmte Operations Tätigkeiten vereinfachen und wird mit DNA-Center, ISE und dem Fusion-Router interagieren. (Wenn zwei VRFs zusammen kommunizieren werden die Fabric und der Fusion Router gleichzeitig konfiguriert)
+	\item Idealerweise gibt es ein Web Interfaces für Demozweck.
+\end{itemize}
+
+Notwendige Kenntnisse: Routing\&Switching, VXLAN overlays, Network Services, objektorientierte programmierung (python bevorzugt)
+
 
