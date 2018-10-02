@@ -3,7 +3,7 @@ Nachfolgend werden alle kritischen Elemente der SDA Lösung analysiert. Dazu geh
 
 Das Ziel ist die komplette Analyse der SDA Lösung und die Identifizierung der kritischen Elemente der Verfügbarkeit (LISP Database, Radius, SGT Access-list etc.) und der Network Services (NTP, DNS, Lizenzen etc.).
 
-\subsection{Architektur}
+\subsection{SDA Architektur und Design}
 Unsere Architektur der Lab Umgebung, welche in der Studienarbeit erarbeitet und nun in der Bachelorarbeit noch erweitert wurde, sieht zur Zeit wie folgend aus:
 
 \begin{figure}[H]
@@ -14,3 +14,115 @@ Unsere Architektur der Lab Umgebung, welche in der Studienarbeit erarbeitet und 
 \end{figure}
 
 Die Analyse wird auf dieser Architektur aufbauen und die von der FUB gegebenen Grössenordnung berücksichtigen.
+
+Nachfolgend werden die aktuell von Cisco empfohlenen Design Entscheidungen, Grössenüberlegungen, sowie die Skalierungen gezeigt. Aktuelle und ausführliche Informationen hierzu, können direkt im SDA Design Guide von Cisco \cite{sda-designguide} eingesehen werden. 
+
+\subsubsection{Entscheidungen}
+Die Design Entscheidungen beruhen auf den aktuellen Empfehlungen von Cisco, welche sich laufend Ändern können.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/SDAswitchingplatformsanddeploymentcapabilities}
+	\caption{SDA switching platforms and deployment capabilities \cite{sda-designguide}}
+	\label{fig:SDA switching platforms and deployment capabilities}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/SDAroutingandwirelessplatformsanddeploymentcapabilities}
+	\caption{SDA routing and wireless platforms and deployment capabilities \cite{sda-designguide}}
+	\label{fig:SDA routing and wireless platforms and deployment capabilities}
+\end{figure}
+
+\subsubsection{Grössenüberlegungen}
+Es ist zusätzlich zu den oben in den Design Entscheidungen empfohlenen Plattformen wichtig, die nachfolgenden getesteten Werte für Cisco Validated Design (CVD) sowie die Versionshinweise zu Hardware und Software für eine Bereitstellung zu berücksichtigen.
+
+Diese Grössenüberlegungen sind besonders für grosse Unternehmen wichtig, da diese zur Zeit nur bis zur eines gewissen Anzahl von Cisco getestet wurden und im schlechtesten Fall nicht höher unterstützt werden.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-DNACmanagementofSDA}
+	\caption{DNAC management of SDA \cite{sda-designguide} }
+	\label{fig:DNAC management of SDA}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-DNACwithSDAperFabricDomain}
+	\caption{DNAC with SDA per each fabric domain \cite{sda-designguide} }
+	\label{fig:DNAC with SDA per each fabric domain}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-SDAvirtualnetworksbyplatformandrole}
+	\caption{SDA virtual networks by platform and role \cite{sda-designguide} }
+	\label{fig:SDA virtual networks by platform and role}
+\end{figure}
+
+
+\subsubsection{Skalierungen}
+Folgende maximalen Skalierungen sollten für grosse Organisationen besonders berücksichtigt werden. Diese Daten sollten bei der Auswahl von Plattformen, die während der Planung für das aktuelle und zukünftige Wachstum des Netzwerks verwendet werden, berücksichtigt werden.
+
+Die DNAC Nummern sind pro Instanz, bei denen es sich um ein DNAC mit einem einzelnen Server oder einem DNA-Cluster mit drei Servern handeln kann. Die maximalen Zahlen sind entweder die absoluten Grenzen der Plattform oder die empfohlenen Höchstgrenzen aktueller Tests einer einzelnen Plattform.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/MaxScale-DNAC}
+	\caption{DNAC Maximum Scale Recommendations \cite{sda-designguide} }
+	\label{fig:DNAC Maximum Scale RecommendationsA}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/MaxScale-EdgeNode}
+	\caption{Edge Node Maximum Scale Recommendations \cite{sda-designguide} }
+	\label{fig:Edge Node Maximum Scale RecommendationsA}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/MaxScale-BorderNode}
+	\caption{Border Node Maximum Scale Recommendations \cite{sda-designguide} }
+	\label{fig:Border Node Maximum Scale RecommendationsA}
+\end{figure}
+
+
+
+
+\subsection{Verfügbarkeit}
+Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNAC wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind.
+
+
+\subsubsection{LISP Database}
+
+\subsubsection{Radius}
+
+\subsubsection{SGT Access List}
+
+
+
+
+\subsection{Netzwerk Services}
+
+\subsubsection{NTP}
+
+
+\subsubsection{DNS}
+Der Domain Name Service (DNS) ost eine wesentliche und oft unterschätzte Komponente in einem Netzwerk. Es ist wichtig, dass DNS im Netzwerk korrekt funktioniert und jederzeit zur Verfügung steht.
+
+Es ist also von Vorteil wenn zur Verbeugung eines Ausfalls des DNS, der Server bzw. der Dienst redundant ausgelegt ist.
+
+\subsubsection{Lizenzen}
+Die Lizenzen der Geräte können über das DNAC verwaltet werden. Es muss jedoch keine Internetverbindung bestehen, da kein Lizenzenforcement besteht.
+
+\paragraph{Switches}
+Die Lizenzen für die einzelnen Switche müssen beim Kauf unbedingt beachtet werden. Jedoch können auf den Switches die Lizenzen auf einer Evaluation Basis manuell nachgerüstet werden (beispielsweise von IP Base auf IP Services).
+
+\subsection{Hardware}
+Bei der Hardware ist zu beachten, dass sowohl der Strom, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können.
+
+\paragraph{Wireless Controller}
+Die Wireless Controller müssen redundant ausgelegt sein. Es wird in der nachfolgenden Arbeit aber nicht mehr genauer auf Wireless Controller eingegangen, da diese in der Bachelorarbeit nicht integriert werden.
+
