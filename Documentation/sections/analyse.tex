@@ -173,6 +173,20 @@ Fallen alle Border Nodes einer Fabric aus, können die Clients der Fabric nur no
 
 Es können pro Fabric maximal zwei Border Nodes definiert werden. Damit kann eine Redundanz sichergestellt werden, sodass beim Ausfall eines Nodes keine Einschränkungen für die Clients entstehen. 
 
+\subsubsection{Fusion Router}
+
+\paragraph{Beschreibung}
+
+Der Fusion Router stellt die Kommunikation zwischen den verschiedenen Fabrics, sowie zwischen den Fabrics und der Aussenwelt sicher. Dies ist somit eine sehr zentrale Komponente, die für den Betrieb des Netzwerks sehr wichtig ist.
+
+\paragraph{Impact}
+
+Fällt der Fusion Router aus, ist keine Kommunikation zwischen verschiedenen Fabrics mehr möglich. Ebenfalls sind die Verbindungen zu Legacy Netzwerken und dem Internet unterbrochen. Dies kann einen sehr grossen Einfluss haben, da sich DNA Center, ISE und weitere zentrale Komponenten in Legacy Netzwerken befinden können.
+
+\paragraph{Mögliche Ansätze für mehr Krisenresistenz}
+
+Der Fusion Router sollte redundant vorhanden sein. Dabei ist zu beachten, dass die Border Nodes dann Verbindungen zu allen Fusion Routern haben sollten.
+
 \subsubsection{DHCP}
 
 \paragraph{Beschreibung}
