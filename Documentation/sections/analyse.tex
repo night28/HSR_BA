@@ -165,6 +165,25 @@ Fällt der DHCP Service aus, erhalten neue Clients keine IP Adressen mehr. Die N
 
 Infoblox kann als High-Availability Cluster mit zwei Nodes betrieben werden. Damit ist die nötige Redundanz gegeben, sodass ein Node ohne Impact ausfallen kann. Mit dem DNA Center können für Aussenstandorte separate DHCP Server konfiguriert werden, sodass diese bei einem Unterbruch zum Hauptsitz autonom funktionieren können.
 
+\subsubsection{SGT Access List}
+\paragraph{Beschreibung}
+Der Sicherheitsgruppen-Tag (SGT) weist jeder Sicherheitsgruppe eine eindeutige 16-Bit-Sicherheitsgruppennummer zu, deren Geltungsbereich in einer TrustSec-Domäne global ist. Die Nummern werden automatisch generiert, wenn eine SGT auf dem ISE erstellt wird. Die Anzahl der Sicherheitsgruppen im Switch ist auf die Anzahl der authentifizierten Netzwerkeinheiten beschränkt.
+
+Die SGT ermöglicht es dem ISE, Richtlinien für die Zugriffssteuerung durchzusetzen, indem es dem Endgerät ermöglicht, auf die SGT zu reagieren, um den Datenverkehr zu filtern.
+
+Die Sicherheitsgruppen-Zugriffssteuerungsliste (SGACL) ermöglicht die Steuerung des Zugriffs und der Berechtigungen basierend auf den zugewiesenen SGTs.
+
+Ablauf: In TrustSec-Netzwerken werden Pakete am Egress gefiltert, nicht der Eintritt in das Netzwerk. Bei der TrustSec-Endpunktauthentifizierung wird einem Host, der auf die TrustSec-Domäne (Endpunkt-IP-Adresse) zugreift, über DHCP-Snooping und IP-Geräteverfolgung ein Sicherheitsgruppen-Tag (SGT) am Zugriffsgerät zugeordnet. Das Zugriffsgerät überträgt diese Zuordnung über Hardware-fähige SXP zu TrustSec-Ausgangsgeräten, die eine kontinuierlich aktualisierte Tabelle von Quell-IP zu SGT-Bindungen verwalten. Pakete werden auf dem Ausgang durch die Hardware-fähigen TrustSec-Geräte gefiltert, indem die Sicherheitsgruppe ACLS (SGACLs) angewendet wird.
+
+\paragraph{Impact bei Ausfall}
+DNAC: Auf dem DNAC sind die Sicherheitsgruppen nicht mehr verfügbar und können auch nicht neu erstellt werden.
+
+\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+Switch-Stack
+Redundanz des ISE
+Backup, damit schneller Restore möglich
+
+
 \subsubsection{NTP}
 \paragraph{Beschreibung}
 Das Network Time Protocol (NTP) ist ein Standard zur Synchronisierung der Zeit auf den verschiedenen Systemen.
