@@ -166,22 +166,62 @@ Fällt der DHCP Service aus, erhalten neue Clients keine IP Adressen mehr. Die N
 Infoblox kann als High-Availability Cluster mit zwei Nodes betrieben werden. Damit ist die nötige Redundanz gegeben, sodass ein Node ohne Impact ausfallen kann. Mit dem DNA Center können für Aussenstandorte separate DHCP Server konfiguriert werden, sodass diese bei einem Unterbruch zum Hauptsitz autonom funktionieren können.
 
 \subsubsection{NTP}
+\paragraph{Beschreibung}
+Das Network Time Protocol (NTP) ist ein Standard zur Synchronisierung der Zeit auf den verschiedenen Systemen.
 
+\paragraph{Impact bei Ausfall}
+Zertifikate nicht mehr gültig oder Überprüfung schlägt fehl.
+Logs fehlerhaft, da Timestamps nicht richtig. Fehlersuche erschwert sich enorm.
+
+\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+Mehrere NTP-Server angeben - Cisco empfiehlt drei NTP Server anzugeben
 
 \subsubsection{DNS}
+\paragraph{Beschreibung}
 Der Domain Name Service (DNS) ost eine wesentliche und oft unterschätzte Komponente in einem Netzwerk. Es ist wichtig, dass DNS im Netzwerk korrekt funktioniert und jederzeit zur Verfügung steht.
 
 Es ist also von Vorteil wenn zur Verbeugung eines Ausfalls des DNS, der Server bzw. der Dienst redundant ausgelegt ist.
 
-\subsubsection{Lizenzen}
-Die Lizenzen der Geräte können über das DNAC verwaltet werden. Es muss jedoch keine Internetverbindung bestehen, da kein Lizenzenforcement besteht.
+\paragraph{Impact bei Ausfall}
+Namensauflösung der Geräte funktioniert nicht mehr oder ist viel zu langsam.
 
-\paragraph{Switches}
+
+\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+DNS Server redundant
+Mehrere DNS Server angeben
+
+"DNS Server IP Addresses (Required): The IP address and subnet mask for one or more of your network's preferred DNS servers. During configuration, you can specify multiple DNS server IP addresses and netmasks by entering them as a space-separated list. Note that, due to an unresolved bug, customers currently cannot change the list of DNS servers after configuration. If you find that you must change the list of DNS server IPs after configuration, contact the Cisco Technical Assistance Center (TAC)."
+
+\subsubsection{Lizenzen}
+\paragraph{Beschreibung}
+Die Lizenzen der Geräte können über das DNAC verwaltet werden. Dazu ist jedoch ein Cisco Smart Account nötig, der über alle Lizenzen verfügt. Sind die Lizenzen einmal auf dem DNAC synchronisiert und ersichtlich, so muss keine Internetverbindung bestehen, da kein Lizenzenforcement besteht.
+
 Die Lizenzen für die einzelnen Switche müssen beim Kauf unbedingt beachtet werden. Jedoch können auf den Switches die Lizenzen auf einer Evaluation Basis manuell nachgerüstet werden (beispielsweise von IP Base auf IP Services).
 
+\paragraph{Impact bei Ausfall}
+Keine, da Lizenzen nicht enforced werden und Lizenzen somit weiterlaufen.
+
+\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+Richtige Lizenzen für alle Geräte von Anfang an einplanen.
+
 \subsection{Hardware}
-Bei der Hardware ist zu beachten, dass sowohl der Strom, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können.
+\paragraph{Beschreibung}
+Die Hardware ist egal ob es das DNAC, ein anderer Server oder ein Netzwerkgerät ist, wohl die wichtigste Komponente, das ein Netzwerk reibungslos läuft.
+
+\paragraph{Impact bei Ausfall}
+DNAC, ISE, Netzwerk nicht mehr verfügbar
+
+\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+Bei der Hardware ist zu beachten, dass sowohl der Strom, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können. Ein Backup für den Notfall ist immer zu empfehlen, damit bei einem Hardwaredefekt ein schneller Restore möglich ist.
+Ersatzgeräte sind von Vorteil.
 
 \paragraph{Wireless Controller}
+\paragraph{Beschreibung}
 Die Wireless Controller müssen redundant ausgelegt sein. Es wird in der nachfolgenden Arbeit aber nicht mehr genauer auf Wireless Controller eingegangen, da diese in der Bachelorarbeit nicht integriert werden.
 
+\paragraph{Impact bei Ausfall}
+Wireless steht nicht mehr zur Verfügung. Sensoren die über Wireless laufen oder Geräte ohne Netzwerkanschluss können nicht mehr genutzt werden.
+
+\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+Wireless Controller redundant auslegen
+Ersatzgeräte, damit bei Hardwaredefekt schneller Austausch möglich
