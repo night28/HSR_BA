@@ -90,21 +90,66 @@ Die DNAC Nummern sind pro Instanz, bei denen es sich um ein DNAC mit einem einze
 
 
 
-
 \subsection{Verfügbarkeit}
 Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNAC wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind.
 
+\subsubsection{DNA Center}
 
-\subsubsection{LISP Database}
+\paragraph{Beschreibung}
 
-\subsubsection{Radius}
+Das DNA Center übernimmt verschiedene Funktionen im Netzwerk. Es verwaltet die Konfigurationen der Netzwerkgeräte, überwacht diese und stellt die Funktion der Fabrics sicher. 
 
-\subsubsection{SGT Access List}
+\paragraph{Impact}
 
+Sollte das DNA Center ausfallen oder nicht erreichbar sein, hat dies keinen direkten Einfluss auf die Funktionalität des Netzwerks. Dies, da alle nötigen Konfigurationen auf den Netzwerkgeräten vorhanden sind. Es ist allerdings nicht mehr möglich, Änderungen am Netzwerk durchzuführen. Es ist beispielsweise nicht mehr möglich, Änderungen an einer Fabric vorzunehmen, Geräte hinzuzufügen oder Access Ports zu konfigurieren. Des Weiteren kann das DNA Center den Betrieb des Netzes nicht mehr monitoren.
 
+\paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
+Um die negativen Auswirkungen während eines Ausfalls möglichst gering zu halten, können verschiedene Massnahmen getroffen werden. Dies sind:
+* DNA Center Betrieb im Cluster
+* DNA Center an verschiedenen Standorten
 
-\subsection{Netzwerk Services}
+\subsubsection{LISP Map Server / Control Plane Node}
+
+\paragraph{Beschreibung}
+
+Der LISP Map Server auf dem Control Plane Node verwaltet die RLOCs aller Clients in einer Fabric. Die entsprechenden Edge Nodes melden ihr bekannte Clients an den Control Plane Node, welche diese Information in der LISP Database speichert. Benötigt ein Edge Node die RLOC eines Clients, kann er diesen auf der LISP Database abfragen.
+
+\paragraph{Impact}
+
+Fällt der Control Plane Node aus und die LISP Database steht nicht mehr zur Verfügung, ist die Kommuikation im Netzwerk nur noch eingeschränkt möglich. Clients die sich am selben Edge Node befinden, können weiterhin ohne Einschränkung miteinander kommunizieren. Geräte an anderen Edge Nodes sind nur noch möglich, sofern sich diese im Map-Cache des Source Edge Nodes befinden. Dies gilt ebenfalls für Ziele ausserhalb der Fabric, beispielsweise der Internetzugriff.
+
+\paragraph{Mögliche Ansätze für mehr Krisenresistenz}
+
+Es ist möglich mehrer Control Plane Nodes in einer Fabric zu betreiben. Im DNA Center Release 1.2.5 sind dies bis zu sechs Nodes. Damit kann eine sehr hohe Redundanz gewährleistet werden. Solange mindestens eine Control Plane Node pro Fabric funktioniert, hat der Ausfall der restlichen keinen Einfluss auf den Netzwerkbetrieb.
+
+\subsubsection{ISE / Radius}
+
+\paragraph{Beschreibung}
+
+Die ISE, bzw. ein Radius Server übernimmt alle AAA Aufgaben im Netzwerk. Er ist dafür zuständig, dass sich Clients am Netzwerk authentifizieren können, sowie für die Authentifizierung des DNA Centers auf den Geräten.
+
+\paragraph{Impact}
+
+Fällt dieser Service aus, kann das DNA Center keine Änderungen mehr auf den Devices ausführen. Des Weiteren können sich keine neuen Clients am Netzwerk anmelden. Bereits angemeldete Clients können das Netzwerk solange nutzen, wie Ihre Authentifizierung gültig ist.
+
+\paragraph{Mögliche Ansätze für mehr Krisenresistenz}
+
+Der Radius Server oder ISE kann redundant betrieben werden. Es können mehrere Instanzen in einem Cluster betrieben werden. Des Weiteren ist denkbar, in aussenstellen eine Read-Only Kopie des Radius Servers zu betreiben, damit diese autonom funktionieren können, sollte die Verbindung zum Hauptsitz unterbrochen sein.
+
+\subsubsection{Border Node}
+
+\paragraph{Beschreibung}
+
+Der Border Node stellt die Verbindung der Fabric zu externen Netzwerken sicher. Unter anderem stellt der Border Node den Internetzugriff sicher.
+
+\paragraph{Impact}
+
+Fallen alle Border Nodes einer Fabric aus, können die Clients der Fabric nur noch innerhalb dieser Fabric kommunizieren. Es ist nicht mehr möglich, mit Devices in anderen Fabrics oder Devices ausserhalb der Fabrics, bzw. dem Internet zu kommunizieren.
+
+\paragraph{Mögliche Ansätze für mehr Krisenresistenz}
+
+Es können pro Fabric maximal zwei Border Nodes definiert werden. Damit kann eine Redundanz sichergestellt werden, sodass beim Ausfall eines Nodes keine Einschränkungen für die Clients entstehen. 
 
 \subsubsection{NTP}
 
