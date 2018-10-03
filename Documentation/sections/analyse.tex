@@ -151,6 +151,20 @@ Fallen alle Border Nodes einer Fabric aus, können die Clients der Fabric nur no
 
 Es können pro Fabric maximal zwei Border Nodes definiert werden. Damit kann eine Redundanz sichergestellt werden, sodass beim Ausfall eines Nodes keine Einschränkungen für die Clients entstehen. 
 
+\subsubsection{DHCP}
+
+\paragraph{Beschreibung}
+
+Der DHCP Service, in der Lab Umgebung ist dies Infoblox, stellt sicher, dass die Clients im Netzwerk die korrekten IP Adressen erhalten.
+
+\paragraph{Impact}
+
+Fällt der DHCP Service aus, erhalten neue Clients keine IP Adressen mehr. Die Netzwerkkommunikation ist für diese daher unmöglich. Bestehende Clients können ihre bereits bezogene IP Adresse weiter verwenden, bis die Lease Time abgelaufen ist. Danach sind auch diese Clients offline
+
+\paragraph{Mögliche Ansätze für mehr Krisenresistenz}
+
+Infoblox kann als High-Availability Cluster mit zwei Nodes betrieben werden. Damit ist die nötige Redundanz gegeben, sodass ein Node ohne Impact ausfallen kann. Mit dem DNA Center können für Aussenstandorte separate DHCP Server konfiguriert werden, sodass diese bei einem Unterbruch zum Hauptsitz autonom funktionieren können.
+
 \subsubsection{NTP}
 
 
