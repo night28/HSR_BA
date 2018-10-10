@@ -175,7 +175,6 @@ keine
 		\textbf{Was} & \textbf{Verantwortlichkeit} \\
 		\hline	
 		Analyse überarbeiten & Jessica \& Sandro  \\
-		Teil 2 vorbereiten & Jessica \& Sandro \\
 	\end{tabularx}
 	\label{tab:my-label}
 \end{table}
@@ -183,6 +182,194 @@ keine
 \paragraph{Nächster Termin}
 \begin{itemize}	
 	\item Wöchentliches Meeting: 10. Oktober 2018, 10.30 Uhr, 60 Minuten
+\end{itemize}
+
+\paragraph{Kommende Abwesenheiten} \mbox{}\\
+keine
+
+\newpage
+
+
+
+
+
+\subsection{Sitzungsprotokoll 10.10.2018}
+
+\paragraph{Sitzungsteilnehmer}
+\begin{itemize}	
+	\item Laurent Metzger 
+	\item Urs Baumann
+	\item Patrick Mosimann
+	\item Sandro Kaspar
+	\item Jessica Kalberer
+\end{itemize}
+
+\paragraph{Traktanden}
+\begin{itemize}	
+	\item Liefertermin von ECNS 5000
+	\item Besprechung der Analyse
+	\item Freischaltung Images ISR 4430 und ECNS 5000 (Service Contract Required)
+\end{itemize}
+
+\paragraph{Beschlüsse (Diskussion)}
+\begin{itemize}
+	\item Analyse Besprechnung
+	\begin{itemize}
+		\item SDA Architektur und Design
+		\begin{itemize}
+			\item Informationen mit neustem Release 1.2.5 updaten
+			\item Maximum Scale - nur 20 Fabric Domains? Es gibt mehr Kantone!
+		\end{itemize}
+		\item Cisco Severity and Escalation Guidelines implementieren
+		\begin{itemize}
+			\item Eigene Severity erstellen (Beispielsweise ist in den Cisco Guidelines der DNA Ausfall erst bei Severity 3) 
+			\item Verfügbarkeiten mit Severity ergänzen
+		\end{itemize}
+		\item Verfügbarkeiten
+		\begin{itemize}
+			\item LISP Map Server / Control Plane Node
+			\begin{itemize}
+				\item LISP abhängig von der Platzierung (ECNS Control Plane virtualisieren, gibt es Möglichkeiten?), Phyton Script das eventuell Map Cache statisch konfiguriert
+				\item Severity 1
+				\item dezentrale Lösung wenn möglich
+			\end{itemize}
+			\item ISE / Radius
+			\begin{itemize}
+				\item Was passiert mit schon bestehenden angemeldeten Personen bei Ausfall?
+				\item Annahmen treffen und diese in nächsten Teilen der Arbeit testen
+				\item Severity 1
+				\item dezentrale Lösung
+			\end{itemize}
+			\item SGT Access List
+			\begin{itemize}
+				\item Detaillierter beschreiben was in welchen Fällen passiert
+				\item Beispiel:  SGT Access Listen werden nur auf Control Node gespeichert (nur wegen SXP)
+				\item Beispiel: sobald Client weg ist, wird dieser wieder aus der SGT Access List gelöscht? Was passiert bei nächster Anmeldung? 
+				\item Severity 1
+				\item dezentrale Lösung möglich?
+			\end{itemize}
+			\item Border Node
+			\begin{itemize}
+				\item Das meiste sollte funktionieren, solange lokaler ISE/Radius etc. vorhanden
+				\item keine dezentrale Lösung nötig
+				\item Wie funktioniert die Redundanz?
+				\item Wie ist die Konvergenz (ISIS/BGP)? Gibt es eine Optimierung?
+				\item 
+			\end{itemize}
+			\item Fusion Router
+			\begin{itemize}
+				\item Kein Leaking zwischen VRFs?
+				\item Herr Metzger kennt sich mit dieser Materie sehr gut aus. Nicht zu viel Zeit verlieren und direkt mit ihm die Konfiguration anschauen.
+				\item Urs kann bei Fragen beim Orchestration Tool konsultiert werden.
+				\item dezentrale Lösung
+			\end{itemize}
+			\item DHCP, NTP, DNS
+			\begin{itemize}
+				\item DNS UND NTP können mehrere angegeben werden, so das im Notfall einfach der andere Server genommen wird
+				\item Severity 2
+			\end{itemize}
+			\item Lizenzen
+			\begin{itemize}
+				\item Severity 4 - falls diese aber enforced werden wird es Severity 1 oder Severity 2
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	\item Projektmanagement
+	\begin{itemize}
+		\item Risiken gut, aber im Bild sind R5 und R6 nicht ersichtlich
+	\end{itemize}
+	\item Liefertermin von ECNS 5000 wird noch abgeklärt
+	\item nächste Schritte
+	\begin{itemize}
+		\item Verbindungen mit VRF-Lite und Transit Fabric (VXLAN)
+		\item VRF Route Leaking einrichten (da sonst keine Kontrolle wenn alles in einer Routing Tabelle)
+		\item anpassung Architektur - Router als zweiter Legacy einrichten
+		\item Bei FUB ist die Telefonie zentral - sie müssen keine IP Connectivität haben
+	\end{itemize}
+	\item Dokument wieder an Herrn Metzger und Urs senden, damit sie Reviewen können
+\end{itemize}
+
+
+\paragraph{Offene Punkte (erledigt vor nächster Sitzung)} \mbox{}
+\begin{table}[H]
+	\rowcolors{2}{gray!25}{white}
+	\centering
+	\begin{tabularx}{\textwidth}{X | p{4.5cm}}
+		\rowcolor{gray!50}
+		\textbf{Was} & \textbf{Verantwortlichkeit} \\
+		\hline	
+		Analyse überarbeiten & Jessica \& Sandro  \\
+		Dokument für Review an Betreuer senden & Jessica \\
+		Teil 2: Absicherung vorbereiten & Jessica \& Sandro \\
+	\end{tabularx}
+	\label{tab:my-label}
+\end{table}
+
+\paragraph{Nächster Termin}
+\begin{itemize}	
+	\item Wöchentliches Meeting: 17. Oktober 2018, 10.30 Uhr, 60 Minuten
+\end{itemize}
+
+\paragraph{Kommende Abwesenheiten} \mbox{}\\
+keine
+
+\newpage
+
+
+
+
+
+\subsection{Sitzungsprotokoll 17.10.2018}
+
+\paragraph{Sitzungsteilnehmer}
+\begin{itemize}	
+	\item Laurent Metzger 
+	\item Urs Baumann
+	\item Patrick Mosimann
+	\item Sandro Kaspar
+	\item Jessica Kalberer
+\end{itemize}
+
+\paragraph{Traktanden}
+\begin{itemize}	
+	\item 
+	\item 
+	\item 
+\end{itemize}
+
+\paragraph{Beschlüsse (Diskussion)}
+\begin{itemize}	
+	\item 
+	\item 
+	\begin{itemize}
+		\item 
+		\item
+	\end{itemize}
+	\item 
+	\item 
+	\begin{itemize}
+		\item 
+		\item 
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Offene Punkte (erledigt vor nächster Sitzung)} \mbox{}
+\begin{table}[H]
+	\rowcolors{2}{gray!25}{white}
+	\centering
+	\begin{tabularx}{\textwidth}{X | p{4.5cm}}
+		\rowcolor{gray!50}
+		\textbf{Was} & \textbf{Verantwortlichkeit} \\
+		\hline	
+		 & Jessica \& Sandro  \\
+		 & Jessica \& Sandro \\
+	\end{tabularx}
+	\label{tab:my-label}
+\end{table}
+
+\paragraph{Nächster Termin}
+\begin{itemize}	
+	\item Wöchentliches Meeting: 31. Oktober 2018, 10.30 Uhr, 60 Minuten
 \end{itemize}
 
 \paragraph{Kommende Abwesenheiten} \mbox{}\\
