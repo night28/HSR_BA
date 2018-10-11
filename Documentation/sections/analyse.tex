@@ -128,7 +128,7 @@ Fällt der Control Plane Node aus und die LISP Database steht nicht mehr zur Ver
 
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
-Es ist möglich mehrere Control Plane Nodes in einer Fabric zu betreiben. Im DNA Center Release 1.2.5 sind dies bis zu sechs Nodes. Damit kann eine sehr hohe Redundanz gewährleistet werden. Solange mindestens eine Control Plane Node pro Fabric funktioniert, hat der Ausfall der restlichen keinen Einfluss auf den Netzwerkbetrieb.
+Es ist möglich mehrere Control Plane Nodes in einer Fabric zu betreiben. Im DNA Center Release 1.2.5 sind dies bis zu sechs Nodes. Damit kann eine sehr hohe Redundanz gewährleistet werden. Solange mindestens eine Control Plane Node pro Fabric funktioniert, hat der Ausfall der restlichen keinen Einfluss auf den Netzwerkbetrieb. Bei einer Fabric über mehrere Standorte ist es sinnvoll, die LISP Databases dezentral zu positionieren, also über die verschiedenen Standorte zu verteilen, sodass diese lokal noch verfügbar sind, sollte die Kommunikation zum Hauptsitz unterbrochen sein. Ebenfalls ist denkbar, die Map Caches der einzelnen Geräte zu konfigurieren, sodass der letzte funktionierende Stand auch bei einem Ausfall des Map Servers noch auf den Netzwerkgeräten vorhanden ist. 
 
 \subsubsection{ISE / Radius}
 
@@ -144,7 +144,7 @@ Fällt dieser Service aus, kann das DNA Center keine Änderungen mehr auf den De
 
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
-Der Radius Server oder ISE kann redundant betrieben werden. Es können mehrere Instanzen in einem Cluster betrieben werden. Des Weiteren ist denkbar, in Aussenstellen eine Read-Only Kopie des Radius Servers zu betreiben, damit diese autonom funktionieren können, sollte die Verbindung zum Hauptsitz unterbrochen sein.
+Der Radius Server oder ISE kann redundant betrieben werden. Es können mehrere Instanzen in einem Cluster betrieben werden. Des Weiteren ist eine dezentrale Lösung denkbar. Es kann in Aussenstellen eine Read-Only Kopie des Radius Servers betrieben werden, damit diese autonom funktionieren können, sollte die Verbindung zum Hauptsitz unterbrochen sein.
 
 \subsubsection{SGT Access List}
 \paragraph{Beschreibung}
@@ -164,7 +164,7 @@ Netzwerk: Die definierten Policies stehen nicht mehr zur Verfügung. Es werden a
 \begin{itemize}
 	\item Redundanz des ISE
 	\item Read-Only Kopien des ISE / Radius an Aussenstandorten
-	\item Default SGT für Notfallbetrieb definieren
+	\item SGT Access Lists mittels SXP auf alle Nodes statisch deployen (Limitierungen müssen abgeklärt werden)
 \end{itemize}
 
 \subsubsection{Border Node}
