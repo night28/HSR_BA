@@ -91,7 +91,7 @@ Die DNAC Nummern sind pro Instanz, bei denen es sich um ein DNAC mit einem einze
 
 
 \subsection{Verfügbarkeit}
-Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNAC wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind.
+Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNAC wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Severity gewichtet. Die Definitionen der Severities werden von den "Cisco Severity and Escalation Guidelines" übernommen. \cite{cisco-severity-guidelines}
 
 \subsubsection{DNA Center}
 
@@ -102,6 +102,8 @@ Das DNA Center übernimmt verschiedene Funktionen im Netzwerk. Es verwaltet die 
 \paragraph{Impact}
 
 Sollte das DNA Center ausfallen oder nicht erreichbar sein, hat dies keinen direkten Einfluss auf die Funktionalität des Netzwerks. Dies, da alle nötigen Konfigurationen auf den Netzwerkgeräten vorhanden sind. Es ist allerdings nicht mehr möglich, Änderungen am Netzwerk durchzuführen. Es ist beispielsweise nicht mehr möglich, Änderungen an einer Fabric vorzunehmen, Geräte hinzuzufügen oder Access Ports zu konfigurieren. Des Weiteren kann das DNA Center den Betrieb des Netzes nicht mehr monitoren.
+
+\paragraph{Severity} 3
 
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
@@ -122,6 +124,8 @@ Der LISP Map Server auf dem Control Plane Node verwaltet die RLOCs aller Clients
 
 Fällt der Control Plane Node aus und die LISP Database steht nicht mehr zur Verfügung, ist die Kommuikation im Netzwerk nur noch eingeschränkt möglich. Clients die sich am selben Edge Node befinden, können weiterhin ohne Einschränkung miteinander kommunizieren. Verbindungen zu Geräten an anderen Edge Nodes sind nur noch möglich, sofern sich diese im Map-Cache des Source Edge Nodes befinden. Dies gilt ebenfalls für Ziele ausserhalb der Fabric, beispielsweise der Internetzugriff.
 
+\paragraph{Severity} 1
+
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
 Es ist möglich mehrere Control Plane Nodes in einer Fabric zu betreiben. Im DNA Center Release 1.2.5 sind dies bis zu sechs Nodes. Damit kann eine sehr hohe Redundanz gewährleistet werden. Solange mindestens eine Control Plane Node pro Fabric funktioniert, hat der Ausfall der restlichen keinen Einfluss auf den Netzwerkbetrieb.
@@ -135,6 +139,8 @@ Die ISE, bzw. ein Radius Server übernimmt alle AAA Aufgaben im Netzwerk. Er ist
 \paragraph{Impact}
 
 Fällt dieser Service aus, kann das DNA Center keine Änderungen mehr auf den Devices ausführen. Des Weiteren können sich keine neuen Clients am Netzwerk anmelden. Bereits angemeldete Clients können das Netzwerk solange nutzen, wie Ihre Authentifizierung gültig ist.
+
+\paragraph{Severity} 1
 
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
@@ -151,6 +157,8 @@ Die Sicherheitsgruppen-Zugriffssteuerungsliste (SGACL) ermöglicht die Steuerung
 \paragraph{Impact bei Ausfall}
 DNAC: Auf dem DNAC sind die Sicherheitsgruppen nicht mehr verfügbar und können auch nicht neu erstellt werden.
 Netzwerk: Die definierten Policies stehen nicht mehr zur Verfügung. Es werden also nur noch gecachte Policies angewendet, was den Netzwerkbetrieb stark einschränkt. 
+
+\paragraph{Severity} 1
 
 \paragraph{Mögliche Ansätze für bessere krisenresistenz}
 \begin{itemize}
@@ -169,6 +177,8 @@ Der Border Node stellt die Verbindung der Fabric zu externen Netzwerken sicher. 
 
 Fallen alle Border Nodes einer Fabric aus, können die Clients der Fabric nur noch innerhalb dieser Fabric kommunizieren. Es ist nicht mehr möglich, mit Devices in anderen Fabrics oder Devices ausserhalb der Fabrics, bzw. dem Internet zu kommunizieren.
 
+\paragraph{Severity} 2
+
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
 Es können pro Fabric maximal zwei Border Nodes definiert werden. Damit kann eine Redundanz sichergestellt werden, sodass beim Ausfall eines Nodes keine Einschränkungen für die Clients entstehen. 
@@ -182,6 +192,8 @@ Der Fusion Router stellt die Kommunikation zwischen den verschiedenen Fabrics, s
 \paragraph{Impact}
 
 Fällt der Fusion Router aus, ist keine Kommunikation zwischen verschiedenen Fabrics mehr möglich. Ebenfalls sind die Verbindungen zu Legacy Netzwerken und dem Internet unterbrochen. Dies kann einen sehr grossen Einfluss haben, da sich DNA Center, ISE und weitere zentrale Komponenten in Legacy Netzwerken befinden können.
+
+\paragraph{Severity} 2
 
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
@@ -197,6 +209,8 @@ Der DHCP Service, in der Lab Umgebung ist dies Infoblox, stellt sicher, dass die
 
 Fällt der DHCP Service aus, erhalten neue Clients keine IP Adressen mehr. Die Netzwerkkommunikation ist für diese daher unmöglich. Bestehende Clients können ihre bereits bezogene IP Adresse weiter verwenden, bis die Lease Time abgelaufen ist. Danach sind auch diese Clients offline.
 
+\paragraph{Severity} 2
+
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
 Infoblox kann als High-Availability Cluster mit zwei Nodes betrieben werden. Damit ist die nötige Redundanz gegeben, sodass ein Node ohne Impact ausfallen kann. Mit dem DNA Center können für Aussenstandorte separate DHCP Server konfiguriert werden, sodass diese bei einem Unterbruch zum Hauptsitz autonom funktionieren können.
@@ -209,6 +223,8 @@ Das Network Time Protocol (NTP) ist ein Standard zur Synchronisierung der Zeit a
 \paragraph{Impact bei Ausfall}
 Bei einem Ausfall des NTP Services kann es zu Problemen bei der Validierung von Zertifikaten kommen. Zudem können auf Grund von falschen Zeiten Events oder Logeinträge fehlerhaft generiert werden. Dies kann eine spätere Fehlersuche stark erschweren.
 
+\paragraph{Severity} 3
+
 \paragraph{Mögliche Ansätze für bessere krisenresistenz}
 Es können mehrere NTP Server unabhängig voneinander betrieben werden. Um eine möglichst genaue Zeit zu erreichen, ist es sinnvoll an jedem Standort eigene NTP Server zu haben.
 
@@ -218,6 +234,8 @@ Der Domain Name System (DNS) ist eine wesentliche und oft unterschätzte Kompone
 
 \paragraph{Impact bei Ausfall}
 Namensauflösung der Geräte funktioniert nicht mehr. Dies kann dazu führen, dass Services und Geräte nicht mehr erreichbar sind, sofern der Zugriff über Domainnamen und nicht über IPs funktioniert.
+
+\paragraph{Severity} 1
 
 \paragraph{Mögliche Ansätze für bessere krisenresistenz}
 \begin{itemize}
@@ -234,6 +252,8 @@ Die Lizenzen für die einzelnen Switches müssen beim Kauf unbedingt beachtet we
 \paragraph{Impact bei Ausfall}
 Keine, da Lizenzen nicht enforced werden und Lizenzen somit weiterlaufen.
 
+\paragraph{Severity} 4
+
 \paragraph{Mögliche Ansätze für bessere krisenresistenz}
 Richtige Lizenzen für alle Geräte von Anfang an einplanen.
 
@@ -243,6 +263,8 @@ Die Hardware ist egal ob es das DNAC, ein anderer Server oder ein Netzwerkgerät
 
 \paragraph{Impact bei Ausfall}
 DNAC, ISE, Netzwerk nicht mehr verfügbar
+
+\paragraph{Severity} Abhängig von der Komponente
 
 \paragraph{Mögliche Ansätze für bessere krisenresistenz}
 Bei der Hardware ist zu beachten, dass sowohl der Strom, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können. Ein Backup für den Notfall ist immer zu empfehlen, damit bei einem Hardwaredefekt ein schneller Restore möglich ist.
@@ -254,6 +276,8 @@ Der Wireless Controller managed die Access Points und stellt den Betrieb des Wir
 
 \paragraph{Impact bei Ausfall}
 Bei einem Ausfall aller WLCs stehen keine Wireless Netzwerke mehr zur Verfügung. Die Kommunikation für drahtlose Clients ist somit nicht mehr möglich.
+
+\paragraph{Severity} 2
 
 \paragraph{Mögliche Ansätze für bessere krisenresistenz}
 \begin{itemize}
