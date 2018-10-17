@@ -91,7 +91,7 @@ Die DNAC Nummern sind pro Instanz, bei denen es sich um ein DNAC mit einem einze
 
 
 \subsection{Verfügbarkeit}
-Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNAC wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Severity gewichtet. Die Definitionen der Severities werden von den "Cisco Severity and Escalation Guidelines" übernommen. \cite{cisco-severity-guidelines}
+Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNAC wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Severity (Schweregrad) gewichtet. Die Definitionen der Severities werden von den "Cisco Severity and Escalation Guidelines" übernommen. \cite{cisco-severity-guidelines}
 
 \subsubsection{DNA Center}
 
@@ -112,6 +112,7 @@ Um die negativen Auswirkungen während eines Ausfalls möglichst gering zu halte
 \begin{itemize}
 \item DNA Center Betrieb im Cluster
 \item DNA Center an verschiedenen Standorten
+\item Backup, damit schneller Restore möglich ist
 \end{itemize}
 
 \subsubsection{LISP Map Server / Control Plane Node}
@@ -129,6 +130,29 @@ Fällt der Control Plane Node aus und die LISP Database steht nicht mehr zur Ver
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
 Es ist möglich mehrere Control Plane Nodes in einer Fabric zu betreiben. Im DNA Center Release 1.2.5 sind dies bis zu sechs Nodes. Damit kann eine sehr hohe Redundanz gewährleistet werden. Solange mindestens eine Control Plane Node pro Fabric funktioniert, hat der Ausfall der restlichen keinen Einfluss auf den Netzwerkbetrieb. Bei einer Fabric über mehrere Standorte ist es sinnvoll, die LISP Databases dezentral zu positionieren, also über die verschiedenen Standorte zu verteilen, sodass diese lokal noch verfügbar sind, sollte die Kommunikation zum Hauptsitz unterbrochen sein. Ebenfalls ist denkbar, die Map Caches der einzelnen Geräte zu konfigurieren, sodass der letzte funktionierende Stand auch bei einem Ausfall des Map Servers noch auf den Netzwerkgeräten vorhanden ist. 
+
+\paragraph{Failover}
+
+
+Es wird empfohlen, redundante eigenständige MS- und MR-Systeme mit den MS / MR-Funktionen auf demselben Gerät bereitzustellen. Wenn redundante eigenständige MS / MR implementiert werden, müssen sich alle xTRs bei beiden MS registrieren, so dass jeder eine konsistente Sicht auf den registrierten LISP EID-Namespace hat. Für Map-Resolver-Funktionalität ist die Verwendung einer Anycast-IP-Adresse wünschenswert, da dadurch die Mapping-Lookup-Leistung verbessert wird, indem der MR ausgewählt wird, der dem anfordernden ITR am nächsten ist.
+ 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Analyse/LISP-Example}
+	\caption{Redundante MS / MR Bereitstellung \cite{LISP-mobility} }
+	\label{fig:Redundante MS / MR Bereitstellung}
+\end{figure}
+
+Ein weiteres Beispiel ist die Co-Lokalisierung  von MS / MR- und xTR-Funktionalitäten. Das oben gezeigte co-lokalisierte Modell ist besonders vorteilhaft, da es die Gesamtzahl verwalteter Geräte reduziert, die zum Ausrollen einer LISP Host Mobility-Lösung erforderlich sind. Es muss beachtet werden, dass die erforderliche Konfiguration in beiden Szenarien identisch bleiben würde, indem eindeutige IP-Adressen verwendet werden, um die Map-Server und eine Anycast-IP-Adresse für den Map-Resolver zu identifizieren.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Analyse/LISP-Example2}
+	\caption{Co-Lokalisierung von MS / MR und xTR Funktionalitaeten \cite{LISP-mobility} }
+	\label{fig:Co-Lokalisierung von MS / MR und xTR Funktionalitaeten}
+\end{figure}
+
+Es kann also ein redundantes eigenständiges MS / MR-Modell bereitgestellt werden, indem dedizierte Systeme zur Durchführung dieser Mapping-Funktionen genutzt werden (siehe Abbildung 2.9) oder alternativ können die MS- und MR-Funktionen gleichzeitig auf dem Netzwerkgerät, welches bereits die xTR-Rolle ausführt, implementiert werden (siehe Abbildung 2.10).
 
 \subsubsection{ISE / Radius}
 
