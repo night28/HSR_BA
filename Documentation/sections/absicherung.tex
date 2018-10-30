@@ -38,15 +38,28 @@ Es kann also ein redundantes eigenständiges MS / MR-Modell bereitgestellt werde
 
 \subsubsection{ISE Cluster}
 
+Um die Verfügbarkeit des ISE zu erhöhen, kann diese in einem Cluster, bestehend aus einem Master und mehreren Slaves betrieben werden. Dies erhöht die Ausfallsicherheit aller Services auf dem ISE. Damit diese gewährleistet sind, wenn ein Aussenstandort die Verbindung zum Hauptsitz verliert, müsste aber an jedem Standort ein ISE Slave existieren. Bei sehr vielen Standorten ist dies auf Grund des Verwaltungsaufwands und der Kosten für viele ISE Instanzen nicht praktikabel. Ein Cluster am Hauptstandort ist aber sicherlich sinnvoll.
+
 \subsubsection{Read Only Radius Server an Aussenstandorten}
 
-In Aussenstellen wird ein Read Only Radius Server betrieben, damit die Network Access Devices auch im Falle eines Unterbruchs der Verbindung zum Hauptsitz einen Radius Server zur Verfügung haben. Hier könnte beispielsweise Freeradius eingesetzt werden.
+In Aussenstellen wird ein Read Only Radius Server betrieben, damit die Network Access Devices auch im Falle eines Unterbruchs der Verbindung zum Hauptsitz einen Radius Server zur Verfügung haben. Hier könnte beispielsweise Freeradius eingesetzt werden. Da Freeradius seine Informationen nicht direkt vom ISE beziehen kann, muss vom ISE ein externer Radius Server verwendet werden, der eine Replikation unterstützt. Dies kann beispielsweise Freeradius sein.
 
 \paragraph{ISE}
+
 
 \paragraph{Freeradius}
 
 \paragraph{Network Access Devices}
+
+Auf den Network Devices muss der Radius Server vom jeweiligen Standort konfiguriert sein. Dies kann im DNA Center unter \textit{Design $\rightarrow$ Network Settings $\rightarrow$ AAA Server} konfiguriert werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/DNA_Center_AAA-Server.png}
+	\caption{DNA Center - AAA Server }
+	\label{fig:DNA Center - AAA Server}
+\end{figure}
+
 
 \subsection{SGT Access List}
 
