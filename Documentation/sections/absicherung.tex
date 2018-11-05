@@ -13,7 +13,7 @@ Zur Bereitstellung gibt es zwei Varianten. Zum einem kann es einen redundanten g
 
 \subsubsection{Redundante MS / MR Bereitstellung}
 
-Es wird empfohlen, redundante eigenständige MS- und MR-Systeme mit den MS / MR-Funktionen auf demselben Gerät bereitzustellen. Wenn redundante eigenständige MS / MR implementiert werden, müssen sich alle xTRs bei beiden MS registrieren, so dass jeder eine konsistente Sicht auf den registrierten LISP EID-Namespace hat. Für Map-Resolver-Funktionalität ist die Verwendung einer Anycast-IP-Adresse wünschenswert, da dadurch die Mapping-Lookup-Leistung verbessert wird, indem der MR ausgewählt wird, der dem anfordernden ITR am nächsten ist.
+Es wird empfohlen, redundante Standalone MS- und MR-Systeme mit den MS / MR-Funktionen auf demselben Gerät bereitzustellen. Wenn redundante eigenständige MS / MR implementiert werden, müssen sich alle xTRs bei beiden MS registrieren, so dass jeder eine konsistente Sicht auf den registrierten LISP EID-Namespace hat. Für Map-Resolver-Funktionalität ist die Verwendung einer Anycast-IP-Adresse wünschenswert, da dadurch die Mapping-Lookup-Leistung verbessert wird, indem der MR ausgewählt wird, der dem anfordernden ITR am nächsten ist.
 
 \begin{figure}[H]
 	\centering
@@ -24,7 +24,9 @@ Es wird empfohlen, redundante eigenständige MS- und MR-Systeme mit den MS / MR-
 
 \subsubsection{Co-Lokalisierung von MS / MR und xTR Funktionalitäten}
 
-Ein weiteres Beispiel ist die Co-Lokalisierung  von MS / MR- und xTR-Funktionalitäten. Das oben gezeigte co-lokalisierte Modell ist besonders vorteilhaft, da es die Gesamtzahl verwalteter Geräte reduziert, die zum Ausrollen einer LISP Host Mobility-Lösung erforderlich sind. Es muss beachtet werden, dass die erforderliche Konfiguration in beiden Szenarien identisch bleiben würde, indem eindeutige IP-Adressen verwendet werden, um die Map-Server und eine Anycast-IP-Adresse für den Map-Resolver zu identifizieren.
+Ein weiteres Beispiel ist die Co-Lokalisierung  von MS / MR- und xTR-Funktionalitäten. Das co-lokalisierte Modell ist besonders vorteilhaft, da es die Gesamtzahl verwalteter Geräte reduziert, die zum Ausrollen einer LISP Host Mobility-Lösung erforderlich sind. 
+
+Die erforderliche Konfiguration würde aber in beiden Szenarien identisch bleiben, indem eindeutige IP-Adressen genutzt werden, um die Map-Server und eine Anycast-IP-Adresse für den Map-Resolver zu identifizieren.
 
 \begin{figure}[H]
 	\centering
@@ -73,6 +75,14 @@ Die Host Mobility ist ähnlich wie die Client Registration, da der Client sich b
 	\caption{LISP Host Mobility}
 	\label{fig:LISP Host Mobility}
 \end{figure}
+
+Wenn ein dynamischer EID zwischen Rechenzentrumsstandorten wechselt, müssen die lokalen LISP Host Mobility-xTRs ihre Existenz erkennen. 
+
+Das für LISP Host Mobility konfigurierte LISP xTR erkennt ein neues dynamisches EID-Verschiebungsereignis, wenn:
+
+\begin{itemize}
+	\item 
+\end{itemize}
 
 \subsubsection{Ausfall MSMR}
 Bei einem Ausfall des MSMR kann keine Host Registration mehr vorgenommen werden. Das heisst neue Clients können keine Verbindung zum restlichen Netzwerk aufbauen. Bestehende Clients können nur mit Clients welche am selben FE angeschlossen sind kommunizieren. Dies jedoch nur solange ihr Eintrag im lokalen Map-Cache bestehen bleibt. Der TTL der Einträge im Map-Cache beträgt per default einen Tag. 
