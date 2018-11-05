@@ -61,7 +61,7 @@ Bei einem Ping werden die initialen Pakete verworfen, bis die Host Resolution ab
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Absicherung/LISP-HostResolution}
+	\includegraphics[width=1\linewidth]{img/Absicherung/LISP-HostResolution-Fail}
 	\caption{LISP Host Resolution}
 	\label{fig:LISP Host Resolution}
 \end{figure}
@@ -71,23 +71,30 @@ Die Host Mobility ist ähnlich wie die Client Registration, da der Client sich b
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Absicherung/LISP-HostMobility}
+	\includegraphics[width=1\linewidth]{img/Absicherung/LISP-HostMobility-Fail}
 	\caption{LISP Host Mobility}
 	\label{fig:LISP Host Mobility}
 \end{figure}
 
 Wenn ein dynamischer EID zwischen Rechenzentrumsstandorten wechselt, müssen die lokalen LISP Host Mobility-xTRs ihre Existenz erkennen. 
 
-Das für LISP Host Mobility konfigurierte LISP xTR erkennt ein neues dynamisches EID-Verschiebungsereignis, wenn:
+Das für LISP Host Mobility konfigurierte xTR erkennt ein Host Mobility Ereignis wenn:
+\begin{enumerate}
+	\item Er empfängt ein IP-Datenpaket von einer Quelle (des neu eingetroffenen Workloads), die aus Routing-Sicht nicht über die Schnittstelle erreichbar ist, auf der das Paket empfangen wurde.
+	\item Die Quelle entspricht der auf die Schnittstelle angewendeten Dynamic-EID-Konfiguration.
+\end{enumerate}
 
-\begin{itemize}
-	\item 
-\end{itemize}
 
 \subsubsection{Ausfall MSMR}
 Bei einem Ausfall des MSMR kann keine Host Registration mehr vorgenommen werden. Das heisst neue Clients können keine Verbindung zum restlichen Netzwerk aufbauen. Bestehende Clients können nur mit Clients welche am selben FE angeschlossen sind kommunizieren. Dies jedoch nur solange ihr Eintrag im lokalen Map-Cache bestehen bleibt. Der TTL der Einträge im Map-Cache beträgt per default einen Tag. 
 
 Da jeder xTR seinen eigenen Map-Cache hat und kann sich sein Inhalt innerhalb derselbe LISP-Site unterscheiden. Daher können xTr leicht schwere Paketausfälle erleiden und mit LISP Control Messages geflutet werden.  
+
+\paragraph{MS}
+Es sollten mehrere Map-Server vorhanden und eingetragen sein. Sollte der erste Map-Server nicht erreichbar sein, so wird der zweite Map-Server verwendet.
+
+\paragraph{MR}
+Für den Map-Resolver sollte eine Anycast IP-Adresse verwendet werden. So werden die Pakete gesendet und über einen verfügbaren Map-Resolver zum Ziel weitergeleitet.
 
 \subsection{ISE / Radius}
 
