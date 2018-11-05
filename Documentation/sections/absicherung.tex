@@ -102,6 +102,28 @@ Für den Map-Resolver sollte eine Anycast IP-Adresse verwendet werden. So werden
 
 \subsection{Border Node}
 
+Der gesamte Verkehr der die Fabric betritt oder verlässt, durchläuft diesen Knoten. Um einen Single Point of Failure zu vermeiden, sollten immer mindestens zwei Border Nodes pro Fabric zur Verfügung stehen. Nach aktuellen Maximum Scale Recommendations können maximal 4 Border Nodes pro Fabric Domain implementiert werden.
+
+Border Nodes implementieren die folgenden Funktionen, welche bei einem Ausfall in Mitleidenschaft gezogen werden könnten\cite{sda-designguide-sept2018}:
+\begin{itemize}
+	\item Ankündigung von EID-Subnetzen
+	\item Fabric-Domänenausstiegspunkt
+	\item Mapping der LISP-Instanz auf VRF
+	\item Richtlinienzuordnung
+\end{itemize}
+
+\subsubsection{Ankündigung von EID-Subnetzten}
+SD-Access konfiguriert Border Gateway Protocol (BGP) als bevorzugtes Routingprotokoll, das für die Ankündigung der EID-Präfixe außerhalb der Fabric verwendet wird, und der für EID-Subnetze von außerhalb der Fabric bestimmte Verkehr wird durch die Grenzknoten geleitet. Diese EID-Präfixe werden nur in den Routingtabellen am Rand angezeigt. Im gesamten Rest der Fabric wird auf die EID-Informationen über die Fabric-Steuerebene zugegriffen.
+
+\subsubsection{Fabric-Domänenausstiegspunkt}
+Der externe Fabric Border ist das Gateway des letzten Auswegs für die Fabric Edge Nodes. Dies wird mithilfe der LISP Proxy Tunnel Router-Funktionalität implementiert. Möglich sind auch interne Fabric Borders, die mit Netzwerken mit einem genau definierten Satz von IP-Subnetzen verbunden sind, wodurch die Ankündigung dieser Subnetze in der Fabric hinzugefügt werden muss.
+
+\subsubsection{Mapping der LISP-Instanz auf VRF}
+Der Fabric Border Node kann die Netzwerkvirtualisierung mithilfe von externen VRF-Instanzen von innerhalb der Fabric auf die Fabric-Außenseite ausweiten, um die Virtualisierung beizubehalten.
+
+\subsubsection{Richtlinienzuordnung}
+Der Fabric Border Node bildet auch SGT-Informationen aus der Fabric ab, die beim Verlassen dieser Fabric entsprechend verwaltet werden. SGT-Informationen werden vom Fabric Border Node an das ausserhalb der Fabric liegende Netzwerk weitergegeben, indem entweder die Tags mithilfe von SGT Exchange Protocol (SXP) zu Cisco-fähigen Geräten transportiert werden, oder indem SGTs direkt in einem Cisco-Metadatenfeld in einem Paket zugeordnet werden Inline-Tagging-Funktionen für Verbindungen zum Grenzknoten implementiert.
+
 \subsection{Fusion Router}
 
 \subsection{DHCP}
