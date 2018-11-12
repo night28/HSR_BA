@@ -165,6 +165,23 @@ Die Topologie wurde analog anhand der nachfolgenden Validation Topologie von Cis
 
 \subsection{DHCP}
 
+\subsubsection{Infoblox}
+Um die Krisenresistenz am Hauptstandort zu erhöhen, wird Infoblox als Multi-Node Cluster betrieben. Dadurch kann ein einzelner Node ausfallen, ohne dass dies einen Impact auf den Betrieb am Hauptstandort hat. 
+
+\subsubsection{Aussenstellen}
+Da sich Infoblox nicht in Kombination mit 3rd Party Software in einem Cluster oder einer Failoverlösung betreiben lässt, müssen an Aussenstandorten eigenständige DHCP Server betrieben werden, um deren Autonomie sicherzustellen. Da Infoblox den isc-dhcp-server für seine DHCP Services verwendet, wird dieser auch an den Aussenstellen eingesetzt. 
+Für wichtige Aussenstandorte kann der isc-dhcp-server in einem Master-Slave Cluster betrieben werden. Somit isch an diesen Standorten ebenfalls eine Ausfallsicherheit gewährleistet.
+
+\subsubsection{DNA Center}
+Im DNA Center muss für jeden Aussenstandort der jeweilige DHCP Server konfiguriert werden. Im Falle eines DHCP Clusters können hier auch mehrere Einträge erstellt werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/DNA_Center_DHCP-Server.png}
+	\caption{DNA Center - DHCP Server }
+	\label{fig:DNA Center - DHCP Server}
+\end{figure}
+
 \subsection{DNS}
 
 \subsubsection{Infoblox HA Cluster}
