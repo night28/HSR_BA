@@ -15,22 +15,22 @@ Unsere Architektur der Lab Umgebung, welche in der Studienarbeit erarbeitet und 
 
 Die Analyse wird auf dieser Architektur aufbauen und die von der FUB gegebenen Grössenordnung berücksichtigen.
 
-Nachfolgend werden die aktuell von Cisco empfohlenen Design Entscheidungen, Grössenüberlegungen, sowie die Skalierungen gezeigt. Aktuelle und ausführliche Informationen hierzu, können direkt im SDA Design Guide von Cisco \cite{sda-designguide} eingesehen werden. 
+Nachfolgend werden die aktuell von Cisco empfohlenen Design Entscheidungen, Grössenüberlegungen, sowie die Skalierungen gezeigt. Aktuelle und ausführliche Informationen hierzu, können direkt im SDA Design Guide von Cisco \cite{sda-designguide-sept2018} eingesehen werden. 
 
-\subsubsection{Entscheidungen}
-Die Design Entscheidungen beruhen auf den aktuellen Empfehlungen von Cisco, welche sich laufend Ändern können.
+\subsubsection{Platform Entscheidungen}
+Die Design Entscheidungen beruhen auf den aktuellen Empfehlungen von Cisco, welche sich laufend Ändern können. Nachfolgende CVD Design Empfehlungen sind für die Version 1.2.5 vom September 2018, welche für die verwendeten Geräte relevant sind. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/SDAswitchingplatformsanddeploymentcapabilities}
-	\caption{SDA switching platforms and deployment capabilities \cite{sda-designguide}}
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-SDAswitchingplatformsanddeploymentcapabilities-1-2-5}
+	\caption{SDA switching platforms and deployment capabilities \cite{sda-designguide-sept2018}}
 	\label{fig:SDA switching platforms and deployment capabilities}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/SDAroutingandwirelessplatformsanddeploymentcapabilities}
-	\caption{SDA routing and wireless platforms and deployment capabilities \cite{sda-designguide}}
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-SDAroutingandwirelessplatformsanddeploymentcapabilities-1-2-5}
+	\caption{SDA routing and wireless platforms and deployment capabilities \cite{sda-designguide-sept2018}}
 	\label{fig:SDA routing and wireless platforms and deployment capabilities}
 \end{figure}
 
@@ -42,49 +42,43 @@ Diese Grössenüberlegungen sind besonders für grosse Unternehmen wichtig, da d
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-DNACmanagementofSDA}
-	\caption{DNAC management of SDA \cite{sda-designguide} }
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-DNACmanagementofSDA-1-2-5}
+	\caption{DNAC management of SDA \cite{sda-designguide-sept2018}}
 	\label{fig:DNAC management of SDA}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-DNACwithSDAperFabricDomain}
-	\caption{DNAC with SDA per each fabric domain \cite{sda-designguide} }
-	\label{fig:DNAC with SDA per each fabric domain}
-\end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-SDAvirtualnetworksbyplatformandrole}
-	\caption{SDA virtual networks by platform and role \cite{sda-designguide} }
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-SDAvirtualnetworksbyplatformandrole-1-2-5}
+	\caption{SDA virtual networks by platform and role \cite{sda-designguide-sept2018}}
 	\label{fig:SDA virtual networks by platform and role}
 \end{figure}
 
 
-\subsubsection{Skalierungen}
+\subsubsection{Maximum Skalierungen}
 Folgende maximalen Skalierungen sollten für grosse Organisationen besonders berücksichtigt werden. Diese Daten sollten bei der Auswahl von Plattformen, die während der Planung für das aktuelle und zukünftige Wachstum des Netzwerks verwendet werden, berücksichtigt werden.
 
 Die DNAC Nummern sind pro Instanz, bei denen es sich um ein DNAC mit einem einzelnen Server oder einem DNA-Cluster mit drei Servern handeln kann. Die maximalen Zahlen sind entweder die absoluten Grenzen der Plattform oder die empfohlenen Höchstgrenzen aktueller Tests einer einzelnen Plattform.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/MaxScale-DNAC}
-	\caption{DNAC Maximum Scale Recommendations \cite{sda-designguide} }
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-MaxScale-DNAC-1-2-5}
+	\caption{DNAC Maximum Scale Recommendations \cite{sda-designguide-sept2018} }
 	\label{fig:DNAC Maximum Scale RecommendationsA}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/MaxScale-EdgeNode}
-	\caption{Edge Node Maximum Scale Recommendations \cite{sda-designguide} }
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-MaxScale-EdgeNode-1-2-5}
+	\caption{Edge Node Maximum Scale Recommendations \cite{sda-designguide-sept2018} }
 	\label{fig:Edge Node Maximum Scale RecommendationsA}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/MaxScale-BorderNode}
-	\caption{Border Node Maximum Scale Recommendations \cite{sda-designguide} }
+	\includegraphics[width=1\linewidth]{img/Analyse/CVD-MaxScale-BorderNode-1-2-5}
+	\caption{Border Node Maximum Scale Recommendations \cite{sda-designguide-sept2018} }
 	\label{fig:Border Node Maximum Scale RecommendationsA}
 \end{figure}
 
