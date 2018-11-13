@@ -6,7 +6,7 @@
  - Laurent Metzger (Betreuung)
      + lmetzger@hsr.ch
  - Urs Baumann (Co-Betreuung)
-     + p1albrec@hsr.ch
+     + Urs.Baumann@ins.hsr.ch
  - Sandro Kaspar
      + skaspar@hsr.ch
  - Jessica Kalberer
