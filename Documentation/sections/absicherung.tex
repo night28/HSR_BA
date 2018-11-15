@@ -139,15 +139,32 @@ Auf den Network Devices muss der Radius Server vom jeweiligen Standort konfiguri
 
 \subsection{SGT Access List}
 Beim Erstellen von SGTs über die DNAC-Benutzeroberfläche wird die ISE-Benutzeroberfläche cross-gestartet und die Aufgabe wird dort abgeschlossen. ISE verwaltet alle skalierbaren Gruppeninformationen, die später in DNAC für die Richtlinienerstellung verwendet werden. Obwohl die Richtlinien und die entsprechenden Verträge bei DNAC erstellt werden, werden beide über die REST-API der ISE an die ISE zurückgemeldet. ISE dient dann als zentrale Anlaufstelle für SGTs, Richtlinien und Verträge (SGACLs), die dann dynamisch an die Netzwerkinfrastruktur verteilt werden.
-Die Segmentierung innerhalb der SDA wird durch die kombinierte Verwendung von virtuellen Netzwerken (VN), die mit VRFs gleichgesetzt sind, als auch TrustSec Scalable Group Tags (SGTs) ermöglicht. Während die Segmentierung durch die Verwendung von absichtsgesteuerten oder speziell dafür entwickelten virtuellen Netzwerken allein erreicht werden kann, bieten die Cisco Trustsec SGTs eine logische Segmentierung basierend auf der Gruppenmitgliedschaft. Cisco bietet eine zusätzliche Granularitätsebene, mit der mehrere SGTs innerhalb eines einzigen VN verwenden können, die eine Mikrosegmentierung innerhalb des VN ermöglicht. \cite{sda-segmentation-may2018}
+Die Segmentierung innerhalb der SDA wird durch die kombinierte Verwendung von virtuellen Netzwerken (VN), die mit VRFs gleichgesetzt sind, als auch TrustSec Scalable Group Tags (SGTs) ermöglicht. Während die Segmentierung durch die Verwendung von absichtsgesteuerten oder speziell dafür entwickelten virtuellen Netzwerken allein erreicht werden kann, bieten die Cisco Trustsec SGTs eine logische Segmentierung basierend auf der Gruppenmitgliedschaft. Cisco bietet eine zusätzliche Granularitätsebene, mit der mehrere SGTs innerhalb eines einzigen VN verwenden können, die eine Mikrosegmentierung innerhalb des VN ermöglicht. Die Segmentierung erfolgt innerhalb des SDA sowohl auf Makro- als auch auf Mikroebene durch virtuelle Netzwerke bzw. SGTs. Die Richtlinien und die damit verbundenen Verträge werden im DNAC konfiguriert und dann über die REST-API an die ISE übermittelt. ISE aktualisiert dann die Edge Nodes mit nur den Richtlinien für SGTs, die den angeschlossenen Geräten zugeordnet sind. Die Durchsetzung erfolgt beim Austritt, wenn das Ziel verbunden ist. \cite{sda-segmentation-may2018}
+
+Kurze Zusammenfassung der damit benötigten Komponenten:
+\begin{itemize}
+	\item Sicherheitsgruppe (SG) - Eine Gruppe von Benutzern, Endpunktgeräten und Ressourcen, die Zugriffssteuerungsrichtlinien gemeinsam nutzen. SGs werden vom Administrator in Cisco ISE definiert. Wenn neue Benutzer und Geräte zur TrustSec Domäne hinzugefügt werden, ordnet Cisco ISE diese neuen Entitäten den entsprechenden Sicherheitsgruppen zu.
+	\item Security Group Tag (SGT) - Der TrustSec-Dienst weist jeder Sicherheitsgruppe eine eindeutige 16-Bit-Sicherheitsgruppennummer zu, deren Gültigkeitsbereich innerhalb einer TrustSec Domäne global ist. Die Anzahl der Sicherheitsgruppen im Switch ist auf die Anzahl der authentifizierten Netzwerkentitäten beschränkt. Die Sicherheitsgruppennummern müssen nicht manuell konfigurieren. Sie werden automatisch generiert, aber es gibt auch die Möglichkeit eine Reihe von SGTs für die IP-zu-SGT-Zuordnung zu reservieren.
+	\item Security Group Access Control List (SGACL) - Mit SGACLs kann der Zugriff und die Berechtigung basierend auf den zugewiesenen SGTs gesteuert werden. Die Gruppierung von Berechtigungen in einer Rolle vereinfacht die Verwaltung von Sicherheitsrichtlinien. Beim Hinzufügen von Geräten wird einfach eine oder mehrere Sicherheitsgruppen zugewiesen und diese erhalten sofort die entsprechenden Berechtigungen. Die Sicherheitsgruppen können geändert werden, um neue Berechtigungen einzuführen oder die aktuellen Berechtigungen einzuschränken.
+	\item Security Exchange Protocol (SXP) - Das SGT Exchange Protocol (SXP) ist ein Protokoll, das für den TrustSec Dienst entwickelt wurde, um die IP-SGT-Bindungen auf Netzwerkgeräte zu übertragen, die keine SGT-fähige Hardwareunterstützung für Hardware bieten, die SGT / SGACL unterstützt.
+\end{itemize}
 
 
-Die Segmentierung erfolgt innerhalb des SDA sowohl auf Makro- als auch auf Mikroebene durch virtuelle Netzwerke bzw. SGTs. Die Richtlinien und die damit verbundenen Verträge werden im DNAC konfiguriert und dann über die REST-API an die ISE übermittelt. ISE aktualisiert dann die Edge Nodes mit nur den Richtlinien für SGTs, die den angeschlossenen Geräten zugeordnet sind. Die Durchsetzung erfolgt beim Austritt, wenn das Ziel verbunden ist.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/SGT-FusionFirewall}
+	\caption{Policy Enforcement mit einer Fusion Firewall}
+	\label{fig:Policy Enforcement mit einer Fusion Firewall}
+\end{figure}
 
+Oben dargestellte Abbildung veranschaulicht die Verwendung einer Fusion Firewall, welche für die Kommunikation zwischen virtuellen Netzwerken sowie für den Verkehr an einem anderen Ort im Netzwerk. Mithilfe von Standard ACLs oder gruppenbasierten Richtlinien mit SGTs werden Firewall-Regeln in der Fusions-Firewall definiert, die den Datenverkehr zwischen Endpunkten steuert.
+
+\subsubsection{Failover}
+Die Absicherung der Access Listen kann beispielsweise nach folgenden Beispielen erarbeitet werden, müssen jedoch noch genauer getestet werden:
 
 \begin{itemize}
 	\item Beispiel1: lokal auf 9300 SGACLs alle fünf Minuten sichern und diese bei Ausfall wieder eintragen. Nachteil: Host-Mobility funktioniert nicht, aber lokal kann weitergearbeitet werden.
-	\item Beispiel2: global komplett alle SGACLs auf alle Geräte verteilen. Vorteil: Alle Geräten haben jederzeit alle Einträge. Nachteil: Die Maximum Scale Recommendations der SGACLs sind pro Gerät anders. C3850 - 1500 SGACLs, C9300 
+	\item Beispiel2: global komplett alle SGACLs auf alle Geräte verteilen. Vorteil: Alle Geräten haben jederzeit alle Einträge. Nachteil: Die Maximum Scale Recommendations der SGACLs sind pro Gerät anders. C3850 - 1500 SGACLs, C9300 - 5000 SGACLs
 \end{itemize}
 
 Es können TrustSec SXP Speaker/Listener auf den Catalyst 3850 und C9300 definiert werden, indem die Catalyst 3850 als Gateway für die Catalyst 9300 Listener angegeben werden.
