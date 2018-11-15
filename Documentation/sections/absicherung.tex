@@ -138,6 +138,19 @@ Auf den Network Devices muss der Radius Server vom jeweiligen Standort konfiguri
 
 
 \subsection{SGT Access List}
+Beim Erstellen von SGTs über die DNAC-Benutzeroberfläche wird die ISE-Benutzeroberfläche cross-gestartet und die Aufgabe wird dort abgeschlossen. ISE verwaltet alle skalierbaren Gruppeninformationen, die später in DNAC für die Richtlinienerstellung verwendet werden. Obwohl die Richtlinien und die entsprechenden Verträge bei DNAC erstellt werden, werden beide über die REST-API der ISE an die ISE zurückgemeldet. ISE dient dann als zentrale Anlaufstelle für SGTs, Richtlinien und Verträge (SGACLs), die dann dynamisch an die Netzwerkinfrastruktur verteilt werden.
+Die Segmentierung innerhalb der SDA wird durch die kombinierte Verwendung von virtuellen Netzwerken (VN), die mit VRFs gleichgesetzt sind, als auch TrustSec Scalable Group Tags (SGTs) ermöglicht. Während die Segmentierung durch die Verwendung von absichtsgesteuerten oder speziell dafür entwickelten virtuellen Netzwerken allein erreicht werden kann, bieten die Cisco Trustsec SGTs eine logische Segmentierung basierend auf der Gruppenmitgliedschaft. Cisco bietet eine zusätzliche Granularitätsebene, mit der mehrere SGTs innerhalb eines einzigen VN verwenden können, die eine Mikrosegmentierung innerhalb des VN ermöglicht. \cite{sda-segmentation-may2018}
+
+
+Die Segmentierung erfolgt innerhalb des SDA sowohl auf Makro- als auch auf Mikroebene durch virtuelle Netzwerke bzw. SGTs. Die Richtlinien und die damit verbundenen Verträge werden im DNAC konfiguriert und dann über die REST-API an die ISE übermittelt. ISE aktualisiert dann die Edge Nodes mit nur den Richtlinien für SGTs, die den angeschlossenen Geräten zugeordnet sind. Die Durchsetzung erfolgt beim Austritt, wenn das Ziel verbunden ist.
+
+
+\begin{itemize}
+	\item Beispiel1: lokal auf 9300 SGACLs alle fünf Minuten sichern und diese bei Ausfall wieder eintragen. Nachteil: Host-Mobility funktioniert nicht, aber lokal kann weitergearbeitet werden.
+	\item Beispiel2: global komplett alle SGACLs auf alle Geräte verteilen. Vorteil: Alle Geräten haben jederzeit alle Einträge. Nachteil: Die Maximum Scale Recommendations der SGACLs sind pro Gerät anders. C3850 - 1500 SGACLs, C9300 
+\end{itemize}
+
+Es können TrustSec SXP Speaker/Listener auf den Catalyst 3850 und C9300 definiert werden, indem die Catalyst 3850 als Gateway für die Catalyst 9300 Listener angegeben werden.
 
 \subsection{Border Node}
 
