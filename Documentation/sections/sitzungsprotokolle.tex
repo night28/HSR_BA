@@ -468,6 +468,7 @@ keine
 \begin{itemize}	
 	\item Laurent Metzger
 	\item Urs Baumann
+	\item Patrick Mosimann
 	\item Sandro Kaspar
 	\item Jessica Kalberer
 \end{itemize}
@@ -481,28 +482,36 @@ keine
 	\begin{itemize}
 		\item ISE / Radius Absicherung Vorschläge?
 		\item SGT ACL Absicherung Vorschläge?
-		\item DHCP
 	\end{itemize}
 	\item Nächste Schritte
 	\item Zwischenpräsentation 
 	\begin{itemize}
 		\item Wünsche und Anregungen für Inhalt
 	\end{itemize}
-	\item Endtermin BA - wird abgeklärt
+	\item Endtermin BA
 	\item Use Cases für Teil 3 ausstehend
 \end{itemize}
 
 \paragraph{Beschlüsse (Diskussion)}
 \begin{itemize}	
-	\item 
-	\item 
+	\item Erweiterte Module für ISR4431 erhalten, schon eingebaut und alles verkabelt
+	\item ECNS 5000 noch ausstehend
+	\item BA Endtermin formell noch ausstehend, aber wahrscheinlich bis Mitte Januar verlängert	
+	\item ISE / Radius Absicherung ähnlich wie DHCP
+	\item SGT ACL Absicherung - sinnvolle Replizierung?
 	\begin{itemize}
-		\item 
-		\item 
-		\item 
+		\item bleiben nach Timeout nur zwei Minuten auf Gerät
+		\item Beispiel1: lokal auf 9300 SGACLs alle fünf Minuten sichern und diese bei Ausfall wieder eintragen. Nachteil: Host-Mobility funktioniert nicht, aber lokal kann weitergearbeitet werden.
+		\item Beispiel2: global komplett alle SGACLs auf alle Geräte verteilen. Vorteil: Alle Geräten haben jederzeit alle Einträge. Nachteil: Die Maximum Scale Recommendations der SGACLs sind pro Gerät anders. C3850 - 1500 SGACLs, C9300 
+		\item TrustSec SXP Speaker/Listener auf C3850 und C9300 definieren
+		\item 3850 als Gateway  für 9300 Listener definieren
 	\end{itemize}
-	\item 
-	\item 
+	\item Aktuellstes Dokument bis Donnerstagabend an Betreuer senden, Feedback erfolgt nächste Woche
+	\item Bewertungsraster der Studienarbeit erhalten wir noch, damit eventuelle Verbesserungen noch in Zwischenpräsentation einfliessen können
+	\item Use Cases werden von unseren Betreuern festgelegt
+	\begin{itemize}
+		\item Use Case 0 aus Aufgabenstellung: wenn zwei VRFs zusammen kommunizieren, werden die Fabric und der Fusion Router gleichzeitig konfiguriert.
+	\end{itemize}
 \end{itemize}
 
 \paragraph{Offene Punkte (erledigt vor nächster Sitzung)} \mbox{}
@@ -516,6 +525,7 @@ keine
 		Transit Fabric einrichten & Jessica \& Sandro  \\
 		VRF Route Leaking & Jessica \& Sandro \\
 		Teil2: Absicherung abschliessen / umsetzen & Jessica \& Sandro \\
+		Dokument an Betreuer senden & Jessica \\
 	\end{tabularx}
 	\label{tab:my-label}
 \end{table}
