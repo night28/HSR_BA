@@ -1,6 +1,18 @@
 \section{Absicherung}
 
 \subsection{Architektur und Design}
+Die SDA Topologie sollte nach den gleichen Designprinzipien und Best Practices aufgebaut werden, welche auch ein Campus-Design verfolgt. Das folgende Beispiel zeigt die physikalische Topologie eines dreistufigen Campus-Designs, bei dem alle Komponenten innerhalb der Fabric redundant sind.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/SDA-Architektur}
+	\caption{SDA Topologie \cite{sda-designguide-sept2018} }
+	\label{fig:SDA Topologie}
+\end{figure}
+
+Analog zu dieser wurde die von der Studienarbeit übernommene Architektur weiter angepasst und wenn möglich die Komponenten inklusive Verkabelung redundant ausgelegt (siehe Abbildung \ref{fig:Architektur}: Architektur). \\
+
+Wie in der Analyse festgestellt, sind in der Version 1.2.5 lediglich zwei Control Plane Node unterstützt. Border Nodes könnten maximal vier implementiert werden. Ebenfalls zu beachten sind die Deployment Capabilities, welche als Border und Control Plane Node die Catalyst 3850 empfehlen. Darum werden in der Architektur die Catalyst 9300 als Intermediate oder Edge Nodes eingesetzt.
 
 \subsection{LISP Map Server}
 Es gibt zwei Betriebsarten für einen LISP Map-Server(MS): 
