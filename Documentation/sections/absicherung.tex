@@ -170,6 +170,7 @@ Die Absicherung der Access Listen kann beispielsweise nach folgenden Beispielen 
 Es können TrustSec SXP Speaker/Listener auf den Catalyst 3850 und C9300 definiert werden, indem die Catalyst 3850 als Gateway für die Catalyst 9300 Listener angegeben werden.
 
 Der Timeout der SGACL Caches beträgt per default zwei Minuten. Dieser könnte auch unendlich viel höher gesetzt werden, jedoch würde man nicht mehr merken, wenn ein Ausfall eines Gerätes vorliegt. Die Suche nach der Fehlerquelle würde sich enorm erschweren.
+Dieser Ablauf funktioniert folgendermassen: Nachdem ein Peer eine SXP-Verbindung beendet hat, startet ein interner Holddown-Timer. Wenn sich der Peer erneut verbindet, bevor der interne Holddown-Timer abläuft, wird der Timer für die SXP-Abgleichperiode gestartet. Während der Timer für den SXP-Abgleichzeitraum aktiv ist, wird die von der vorherigen Verbindung gelernten SGT-Zuordnungseinträge beibehalten und ungültige Einträge entfernt. Der Standardwert ist 120 Sekunden (2 Minuten). Wenn Sie den SXP-Abstimmungszeitraum auf 0 Sekunden setzen, wird der Timer deaktiviert und alle Einträge der vorherigen Verbindung werden entfernt.
 
 \subsection{Border Node}
 
