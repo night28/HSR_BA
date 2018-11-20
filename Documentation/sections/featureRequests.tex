@@ -1,0 +1,111 @@
+\section{Feature Requests und Bugs}
+Im Folgenden werden Feature Requests und Bugs aufgeführt, die während dieser Arbeit aufgetreten sind. Diese wurden mittesl "Make a Wish" Funktion des DNA Centers an Cisco gemeldet. Alle erwähnten Punkte beziehen sich auf das DNA Center in Version 1.2.5.
+
+
+\newcommand{\bugreport}[9]{
+\subsection{#1}
+	\begin{table}[H]
+		\rowcolors{2}{gray!25}{white}
+		\centering
+		\begin{tabularx}{\textwidth}{| l | X |}
+			\hline
+			Komponente   & #2       \\
+			\hline
+			Priorität   & #3       \\
+			\hline
+			Beschreibung   & #4  \\ 
+			\hline
+			Konsequenzen   & #5  \\ 
+			\hline
+			Workaround & #6 \\
+			\hline
+			Reproduzieren & #7	\\
+			\hline
+			Reporter  & #8 \\
+			\hline
+			Feedback Cisco & #9 \\
+			\hline
+		\end{tabularx}
+		\caption{Bug: #1}
+	\end{table}
+}
+
+\newcommand{\featureRequest}[5]{
+	\subsection{#1}
+	\begin{table}[H]
+		\rowcolors{2}{gray!25}{white}
+		\centering
+		\begin{tabularx}{\textwidth}{| l | X |}
+			\hline
+			Komponente   & #2       \\
+			\hline
+			Beschreibung   & #3  \\ 
+			\hline
+			Reporter  & #4 \\
+			\hline
+			Feedback Cisco & #5 \\
+			\hline
+		\end{tabularx}
+		\caption{Feature Request: #1}
+	\end{table}
+}
+
+\featureRequest
+% Titel
+{Template Zuweisung}
+% Komponente
+{\textit{Design $\rightarrow$ Network Profiles}}
+% Beschreibung
+{Templates können nur Gerätetypen (z.Bsp. Switches oder Router) zugewiesen werden. Es wäre wünschenswert, wenn diese auch verschiedenen Rollen zugewiesen werden könnten. Beispielsweise allen Border Nodes.
+}
+% Reporter
+{Sandro Kaspar}
+% Feedback Cisco
+{}
+
+\featureRequest
+% Titel
+{Template Versionierung}
+% Komponente
+{\textit{Template Editor $\rightarrow$ Create Template}}
+% Beschreibung
+{Templates können versioniert werden. Allerdings lassen sich ältere Versionen nur anschauen. Folgende Funktionen wären hilfreich:
+\begin{itemize}
+	\item Restore alter Templateversionen
+	\item Diffs zwischen verschiedenen Versionen anzeigen
+\end{itemize}
+}
+% Reporter
+{Sandro Kaspar}
+% Feedback Cisco
+{}
+
+\bugreport
+% Titel
+{Beispielbug}
+% Komponente
+{\textit{Einstellungen $\rightarrow$ System Settings $\rightarrow$ Backup \& Restore}}
+% Dringlichkeit
+{Hoch}
+% Beschreibung
+{Nach der Eingabe der Backup Server Einstellungen und dem Klick auf \textit{Apply} geschieht nichts. Nach einer Weile stürzen immer mehr Docker Container ab, bis das DNA Center nicht mehr gebraucht werden kann. Ein Neustart des DNA Centers ist erforderlich.
+\textbf{Nachtrag:} Nach mehreren Versuchen mit verschiedenen SSH Servern hat es geklappt. Über die genaue Ursache kann keine Aussage gemacht werden.
+}
+% Konsequenzen
+{Beim Ausfall der Appliance können die Einstellungen nicht wiederhergestellt werden.}
+% Workaround
+{Keiner}
+%Reproduzieren
+{
+	\begin{enumerate}
+		\item \textit{Settings $\rightarrow$ System Settings $\rightarrow$ Backup \& Restore}
+		\item Im Popup \textit{Configure} wählen. 
+		\item SSH Servereinstellungen eingeben
+		\item \textit{Apply} drücken. 
+	\end{enumerate}
+}
+% Reporter
+{Sandro Kaspar}
+% Feedback Cisco
+{}
+
