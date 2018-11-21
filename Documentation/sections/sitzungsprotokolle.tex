@@ -206,9 +206,9 @@ keine
 
 \paragraph{Traktanden}
 \begin{itemize}	
-	\item Liefertermin von ECNS 5000
+	\item Liefertermin von ENCS 5000
 	\item Besprechung der Analyse
-	\item Freischaltung Images ISR 4430 und ECNS 5000 (Service Contract Required)
+	\item Freischaltung Images ISR 4430 und ENCS 5000 (Service Contract Required)
 \end{itemize}
 
 \paragraph{Beschlüsse (Diskussion)}
@@ -229,7 +229,7 @@ keine
 		\begin{itemize}
 			\item LISP Map Server / Control Plane Node
 			\begin{itemize}
-				\item LISP abhängig von der Platzierung (ECNS Control Plane virtualisieren, gibt es Möglichkeiten?), Phyton Script das eventuell Map Cache statisch konfiguriert
+				\item LISP abhängig von der Platzierung (ENCS Control Plane virtualisieren, gibt es Möglichkeiten?), Phyton Script das eventuell Map Cache statisch konfiguriert
 				\item Severity 1
 				\item dezentrale Lösung wenn möglich
 			\end{itemize}
@@ -278,7 +278,7 @@ keine
 	\begin{itemize}
 		\item Risiken gut, aber im Bild sind R5 und R6 nicht ersichtlich
 	\end{itemize}
-	\item Liefertermin von ECNS 5000 wird noch abgeklärt
+	\item Liefertermin von ENCS 5000 wird noch abgeklärt
 	\item nächste Schritte
 	\begin{itemize}
 		\item Verbindungen mit VRF-Lite und Transit Fabric (VXLAN)
@@ -330,7 +330,7 @@ keine
 
 \paragraph{Traktanden}
 \begin{itemize}	
-	\item Liefertermin ECNS 5000
+	\item Liefertermin ENCS 5000
 	\item Besprechung aktueller Stand
 	\item Nächste Schritte
 \end{itemize}
@@ -338,7 +338,7 @@ keine
 \paragraph{Beschlüsse (Diskussion)}
 \begin{itemize}	
 	\item Analyse grösstenteils abgeschlossen
-	\item Liefertermin für ECNS 5000 war für Mitte November vorgesehen, wird aber beschleunigt
+	\item Liefertermin für ENCS 5000 war für Mitte November vorgesehen, wird aber beschleunigt
 	\item nächste Schritte
 	\begin{itemize}
 		\item zweiten Router in Betrieb nehmen
@@ -392,7 +392,7 @@ keine
 \paragraph{Traktanden}
 \begin{itemize}	
 	\item Bewertungsraster der Studienarbeit
-	\item Liefertermin ECNS 5000 (KW46)
+	\item Liefertermin ENCS 5000 (KW46)
 	\item Feedback Analyse
 	\item Besprechung aktueller Stand Absicherung
 	\begin{itemize}
@@ -416,7 +416,7 @@ keine
 	\item DNAC lässt nur einen Radius Eintrag zu - Loadbalancer
 	\item DHCP Infoblox Active / Active Setup oder Active / Passiv mit Backup Pool - Variante A und B definieren
 	\item Verlängerung Endtermin BA
-	\item ECNS 5000
+	\item ENCS 5000
 	\begin{itemize}
 		\item NTP
 		\item DHCP Backup
@@ -476,7 +476,7 @@ keine
 \paragraph{Traktanden}
 \begin{itemize}	
 	\item Bewertungsraster der Studienarbeit
-	\item Liefertermin ECNS 5000 (KW46)
+	\item Liefertermin ENCS 5000 (KW46)
 	\item Feedback Analyse noch ausstehend
 	\item Besprechung Absicherung
 	\begin{itemize}
@@ -495,7 +495,7 @@ keine
 \paragraph{Beschlüsse (Diskussion)}
 \begin{itemize}	
 	\item Erweiterte Module für ISR4431 erhalten, schon eingebaut und alles verkabelt
-	\item ECNS 5000 noch ausstehend
+	\item ENCS 5000 noch ausstehend
 	\item BA Endtermin formell noch ausstehend, aber wahrscheinlich bis Mitte Januar verlängert	
 	\item ISE / Radius Absicherung ähnlich wie DHCP
 	\item SGT ACL Absicherung - sinnvolle Replizierung?
@@ -550,6 +550,69 @@ keine
 \paragraph{Sitzungsteilnehmer}
 \begin{itemize}	
 	\item Laurent Metzger
+	\item Jessica Kalberer
+\end{itemize}
+
+\paragraph{Traktanden}
+\begin{itemize}	
+	\item Bewertungsraster der Studienarbeit
+	\item ENCS 5400 Übergabe
+	\item Feedback Analyse
+	\item Feedback Absicherung
+	\item Zwischenpräsentation 
+	\begin{itemize}
+		\item Wünsche und Anregungen für Inhalt
+		\item Dauer?
+		\item "Die mündliche Prüfung hat eine Dauer von ca. 20 Minuten pro Student. Sie kann mit einer kurzen Präsentation der Arbeit beginnen (zusätzlich ca. 10 Minuten), anschliessend werden beide Kandidaten individuell befragt. Die Prüfung erfolgt in Anwesenheit des Experten und des Gegenlesers."
+	\end{itemize}
+	\item Use Cases für Teil 3
+	\begin{itemize}
+		\item Vorschlag: Config-History mit divs
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Beschlüsse (Diskussion)}
+\begin{itemize}	
+	\item ENCS 5400 erhalten und wird diese Woche in Betrieb genommen
+	\item Besprechung wird wegen Terminkonflikten auf Donnerstag den 22.11.2018 verschoben
+\end{itemize}
+
+\paragraph{Offene Punkte (erledigt vor nächster Sitzung)} \mbox{}
+\begin{table}[H]
+	\rowcolors{2}{gray!25}{white}
+	\centering
+	\begin{tabularx}{\textwidth}{X | p{4.5cm}}
+		\rowcolor{gray!50}
+		\textbf{Was} & \textbf{Verantwortlichkeit} \\
+		\hline
+		ENCS in Betrieb nehmen & Jessica \& Sandro \\	
+		Transit Fabric einrichten & Jessica \& Sandro  \\
+		VRF Route Leaking & Jessica \& Sandro \\
+		Teil2: Absicherung abschliessen / umsetzen & Jessica \& Sandro \\
+	\end{tabularx}
+	\label{tab:my-label}
+\end{table}
+
+\paragraph{Nächster Termin}
+\begin{itemize}	
+	\item Wöchentliches Meeting: 22. November 208
+\end{itemize}
+
+\paragraph{Kommende Abwesenheiten} \mbox{}\\
+keine
+
+
+
+
+
+
+
+
+\subsection{Sitzungsprotokoll 22.11.2018}
+
+\paragraph{Sitzungsteilnehmer}
+\begin{itemize}	
+	\item Laurent Metzger
 	\item Urs Baumann
 	\item Patrick Mosimann
 	\item Sandro Kaspar
@@ -559,14 +622,12 @@ keine
 \paragraph{Traktanden}
 \begin{itemize}	
 	\item Bewertungsraster der Studienarbeit
-	\item ECNS 5400 Übergabe
 	\item Feedback Analyse
 	\item Feedback Absicherung
 	\item Zwischenpräsentation 
 	\begin{itemize}
 		\item Wünsche und Anregungen für Inhalt
-		\item Dauer?
-		\item "Die mündliche Prüfung hat eine Dauer von ca. 20 Minuten pro Student. Sie kann mit einer kurzen 
+		\item Dauer? "Die mündliche Prüfung hat eine Dauer von ca. 20 Minuten pro Student. Sie kann mit einer kurzen 
 		Präsentation der Arbeit beginnen (zusätzlich ca. 10 Minuten), anschliessend werden beide 
 		Kandidaten individuell befragt. Die Prüfung erfolgt in Anwesenheit des Experten und des 
 		Gegenlesers."
@@ -618,3 +679,8 @@ keine
 
 \paragraph{Kommende Abwesenheiten} \mbox{}\\
 keine
+
+
+
+
+
