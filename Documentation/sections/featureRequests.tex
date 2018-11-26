@@ -82,26 +82,26 @@ Im Folgenden werden Feature Requests und Bugs aufgeführt, die während dieser A
 
 \bugreport
 % Titel
-{Beispielbug}
+{Upload Image}
 % Komponente
-{\textit{Einstellungen $\rightarrow$ System Settings $\rightarrow$ Backup \& Restore}}
+{\textit{Design $\rightarrow$ Image Repository $\rightarrow$ Import}}
 % Dringlichkeit
 {Hoch}
 % Beschreibung
-{Nach der Eingabe der Backup Server Einstellungen und dem Klick auf \textit{Apply} geschieht nichts. Nach einer Weile stürzen immer mehr Docker Container ab, bis das DNA Center nicht mehr gebraucht werden kann. Ein Neustart des DNA Centers ist erforderlich.
-\textbf{Nachtrag:} Nach mehreren Versuchen mit verschiedenen SSH Servern hat es geklappt. Über die genaue Ursache kann keine Aussage gemacht werden.
+{Nach dem Uploaden eines Images, wird dieses nicht im WebGui angezeigt. Erst nach mehreren Minuten erscheint das zuvor hochgeladene Image.
 }
 % Konsequenzen
-{Beim Ausfall der Appliance können die Einstellungen nicht wiederhergestellt werden.}
+{Der User geht davon aus, dass der Upload fehlgeschlagen ist und versucht dies erneut.}
 % Workaround
 {Keiner}
 %Reproduzieren
 {
 	\begin{enumerate}
-		\item \textit{Settings $\rightarrow$ System Settings $\rightarrow$ Backup \& Restore}
-		\item Im Popup \textit{Configure} wählen. 
-		\item SSH Servereinstellungen eingeben
-		\item \textit{Apply} drücken. 
+		\item \textit{Design $\rightarrow$ Image Repository $\rightarrow$ Import}
+		\item File auswählen
+		\item Warten bis der Upload abgeschlossen ist
+		\item Image wird nicht angezeigt
+		\subitem Nach mehreren Minuten erscheint das Image
 	\end{enumerate}
 }
 % Reporter
