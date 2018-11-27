@@ -86,7 +86,7 @@ Im Folgenden werden Feature Requests und Bugs aufgeführt, die während dieser A
 % Komponente
 {\textit{Design $\rightarrow$ Image Repository $\rightarrow$ Import}}
 % Dringlichkeit
-{Hoch}
+{Mittel}
 % Beschreibung
 {Nach dem Uploaden eines Images, wird dieses nicht im WebGui angezeigt. Erst nach mehreren Minuten erscheint das zuvor hochgeladene Image.
 }
@@ -109,3 +109,29 @@ Im Folgenden werden Feature Requests und Bugs aufgeführt, die während dieser A
 % Feedback Cisco
 {}
 
+When a device first appears in inventory, information like hostname or OS Version are displayed as "null". Show correct data or something like "not available".
+
+\bugreport
+% Titel
+{Claim Device}
+% Komponente
+{\textit{Provision $\rightarrow$ Inventory}}
+% Dringlichkeit
+{Niedrig}
+% Beschreibung
+{Nach dem Hinzufügen oder Claimen eines Devices werden verschiedene Informationen als "null" angezeigt. Hier sollten die korrekten Informationen oder falls noch nicht verfügbar einfach nichts angezeigt werden.
+}
+% Konsequenzen
+{Unschoönes UI}
+% Workaround
+{Keiner}
+%Reproduzieren
+{
+	\begin{enumerate}
+		\item \textit{Provision $\rightarrow$ Inventory $\rightarrow$ Unclaimed Devices $\rightarrow$ Clain Device}
+	\end{enumerate}
+}
+% Reporter
+{Sandro Kaspar}
+% Feedback Cisco
+{}
