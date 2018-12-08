@@ -14,6 +14,20 @@ Analog zu dieser wurde die von der Studienarbeit übernommene Architektur weiter
 
 Wie in der Analyse festgestellt, sind in der Version 1.2.5 lediglich zwei Control Plane Node unterstützt. Border Nodes könnten maximal vier implementiert werden. Ebenfalls zu beachten sind die Deployment Capabilities, welche als Border und Control Plane Node die Catalyst 3850 empfehlen. Darum werden in der Architektur die Catalyst 9300 als Intermediate oder Edge Nodes eingesetzt.
 
+\subsection{DNA Center}
+Das DNA Center unterstützt eine Clusterkonfiguration mit einem oder drei Hosts. Im optimal Fall sollte das DNA Center in einem Cluster mit 3 Nodes installiert werden. Der drei Host Cluster bietet sowohl Software als auch Hardware mit hoher Verfügbarkeit. Das DNA Center bietet einen Mechanismus zum Verteilen der Verarbeitung und Datenbankreplikation auf mehrere Hosts. Durch das Clustering werden Ressourcen und Funktionen gemeinsam genutzt, und es werden hohe Verfügbarkeit und Skalierbarkeit ermöglicht. \\
+
+Die folgende Abbildung zeigt die empfohlenen Verbindungen für einen DNA Center Cluster mit drei Knoten. 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/DNAC-Cluster}
+	\caption{DNA Center Cluster \cite{DNAC-Cluster} }
+	\label{fig:DNA Center Cluster}
+\end{figure}
+Alle bis auf eine der Verbindungen für jeden Knoten im drei Nodes Cluster sind die gleichen wie für den einzelnen Node und verwenden dieselben Ports. Die Ausnahme ist der Cluster-Port (Port 2, enp10so, Network Adapter 1), der erforderlich ist, damit jeder Host im Cluster mit drei Knoten mit den anderen kommunizieren kann. \\
+
+Für Clusterbereitstellungen mit mehreren Knoten müssen sich alle Cluster Nodes im selben Netzwerk und am selben Standort befinden. Die Appliance unterstützt keine Verteilung von Knoten über mehrere Netzwerke oder Standorte. Diese Limitierung der Bereitstellung, sowie auch die maximale Anzahl der unterstützen Nodes wird sich hoffentlich in Zukunft noch ändern.
+
 \subsection{LISP Map Server}
 Es gibt zwei Betriebsarten für einen LISP Map-Server(MS): 
 \begin{itemize}
