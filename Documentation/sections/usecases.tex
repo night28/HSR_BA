@@ -1,10 +1,141 @@
 \section{Use Cases} \label{usecases}
 
 \subsection{Use Cases Brief}
-\subsubsection{UC01: }
 
+\subsubsection{UC01: Network Orchestration}
+Ein Administrator kann in einem Web Interface Netzwerke erstellen und verwalten. Des Weiteren ist die Möglichkeit gegeben, Policies, welche die Kommunikation zwischen diesen Netzen regeln zu erstellen. Die entsprechenden Konfigurationen werden auf allen beteiligten Geräten automatisch via APIs erstellt.
 
+\subsubsection{UC02: ENCS Virtual Machine Management}
+Ein Administrator kann in einem Web Interface die VMs auf einem ENCS System verwalten.
+
+\subsubsection{UC03: Configuration History}
+Ein Web Interface bietet die Möglichkeit, die Konfigurationen aller Geräte innerhalb einer Fabric anzuzeigen. Des weiteren kann die aktuelle Konfiguration mit älteren Versionen der Konfiguration verglichen werden.
 
 \subsection{Use Cases Fully Dressed}
-\subsubsection{UC01: }
 
+\subsubsection{UC01: Network Orchestration}
+\begin{table}[H]
+	\rowcolors{2}{gray!25}{white}
+	\centering
+	\begin{tabularx}{\textwidth}{l | X}
+		Primary Actor      & Administrator        \\
+		\hline
+		Beschreibung       & Ein Administrator kann in einem Web Interface Netzwerke erstellen und verwalten. Des Weiteren ist die Möglichkeit gegeben, Policies, welche die Kommunikation zwischen diesen Netzen regeln zu erstellen. Die entsprechenden Konfigurationen werden auf allen beteiligten Geräten automatisch via APIs erstellt. \\ 
+		\hline
+		Stakeholders       &  
+		\begin{itemize}	
+			\item Administrator
+			\item User
+		\end{itemize}              \\
+		\hline
+		Preconditions      & 
+		\begin{itemize}	
+			\item DNA Center komplett konfiguriert
+			\item Die Fabric läuft ohne Einschränkung
+			\item Web Interface steht zur Verfügung
+		\end{itemize}  \\
+		\hline
+		Postconditions     & 
+		\begin{itemize}	
+			\item Änderungen an Netzen wurden auf den Netzwerkdevices umgesetzt
+			\item Policies sind korrekt umgesetzt
+		\end{itemize}  \\
+		\hline
+		Main Success Story & 
+		\begin{enumerate}
+			\item Ein Netzwerk wird erstellt
+			\item Die Software erstellt das Netzwerk auf allen nötigen Netzwerkgeräten
+			\item Eine Policy für die Kommunikation mit anderen Netzen wird definiert
+			\item Die Konfiguration für die Policy wird automatisch auf allen nötigen Netzwerkgeräten erstellt
+		\end{enumerate}
+		\\
+		\hline
+		Alternative Flows  & 
+		\begin{itemize}
+			\item[1a.] Ein Netzwerk wird gelöscht
+			\item[1b.] Eine Policy wird verändert
+		\end{itemize}
+	\end{tabularx}
+	\caption{UC01 Fully Dressed}
+	\label{tab:UC01}
+\end{table}
+
+\subsubsection{UC02: ENCS Virtual Machine Management}
+\begin{table}[H]
+	\rowcolors{2}{gray!25}{white}
+	\centering
+	\begin{tabularx}{\textwidth}{l | X}
+		Primary Actor      & Administrator        \\
+		\hline
+		Beschreibung       & Ein Administrator kann in einem Web Interface die VMs auf einem ENCS System verwalten. \\ 
+		\hline
+		Stakeholders       &  
+		\begin{itemize}	
+			\item Administrator
+		\end{itemize}              \\
+		\hline
+		Preconditions      & 
+		\begin{itemize}	
+			\item ENCS ist konfiguriert und mit dem DNA Center verbunden
+			\item VM Profile existieren
+		\end{itemize}  \\
+		\hline
+		Postconditions     & 
+		\begin{itemize}	
+			\item VMs befinden sich im gewünschten Zustand
+		\end{itemize}  \\
+		\hline
+		Main Success Story & 
+		\begin{enumerate}
+			\item Eine VM wird erstellt
+			\item Eine VM wird gestartet
+			\item VM wird einem Netzwerk zugewiesen
+		\end{enumerate}
+		\\
+		\hline
+		Alternative Flows  & 
+		\begin{itemize}
+			\item[1a.] VM wird gelöscht
+		\end{itemize}
+	\end{tabularx}
+	\caption{UC02 Fully Dressed}
+	\label{tab:UC02}
+\end{table}
+
+\subsubsection{UC03: Configuration History}
+\begin{table}[H]
+	\rowcolors{2}{gray!25}{white}
+	\centering
+	\begin{tabularx}{\textwidth}{l | X}
+		Primary Actor      & Administrator        \\
+		\hline
+		Beschreibung       & Ein Web Interface bietet die Möglichkeit, die Konfigurationen aller Geräte innerhalb einer Fabric anzuzeigen. Des weiteren kann die aktuelle Konfiguration mit älteren Versionen der Konfiguration verglichen werden. \\ 
+		\hline
+		Stakeholders       &  
+		\begin{itemize}	
+			\item Administrator
+		\end{itemize}              \\
+		\hline
+		Preconditions      & 
+		\begin{itemize}	
+			\item Netzwerkgeräte sind erreichbar
+		\end{itemize}  \\
+		\hline
+		Postconditions     & 
+		\begin{itemize}	
+			\item Konfiguration wird angezeigt
+		\end{itemize}  \\
+		\hline
+		Main Success Story & 
+		\begin{enumerate}
+			\item Ein Netzwerkgerät wird gewählt
+			\item Ein Zeitpunkt wird gewählt
+			\item Konfiguration zum gewählten Zeitpunkt kann mit der aktuellen Version verglichen werden
+		\end{enumerate}
+		\\
+		\hline
+		Alternative Flows  & 
+	\end{tabularx}
+	\caption{UC03 Fully Dressed}
+	\label{tab:UC03}
+\end{table}
