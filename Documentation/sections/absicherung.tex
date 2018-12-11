@@ -170,8 +170,9 @@ Die nachfolgenden Tabellen zeigen die Performance und Scalability Metriken für 
 
 
 \paragraph{ISE}
+An einem Hauptstandort wird der primäre ISE Node und ein Dedicates ISE syslog oder Logging Node betrieben. In einem grossen zentralisierten Netzwerk sollte ein Load Balancer verwendet werden, der die Bereitstellung von AAA-Clients vereinfacht. Die Verwendung eines Load Balancers erfordert nur einen einzigen Eintrag für die AAA-Server und der Load Balancer optimiert das Routing von AAA-Anfragen an die verfügbaren Server. Um einen Single Point of Failure zu vermeiden, sollten zwei Load Balancer eingesetzt werden. Für diese Konfiguration müssen jedoch auf den erforderlichen Geräten zwei AAA-Server-Einträge engerichtet werden.
 
-
+Weitere verteilte grosse Standorte können über eine eigene AAA-Infrastruktur für eine optimale AAA-Performance verfügen. Ein zentralisiertes Verwaltungsmodell hilft bei der Aufrechterhaltung einer konsistenten, synchronisierten AAA-Richtlinie. Ein zentralisiertes Konfigurationsmodell verwendet einen primären Cisco ISE Node mit einem sekundären Cisco ISE Node. Cisco empfiehlt für jeden Standort eine separate Monitoring Persona auf dem Cisco ISE Node, aber jeder entfernte Standort sollte seine eigenen einzigartigen Netzwerkanforderungen beibehalten.
 
 
 \paragraph{Freeradius}
