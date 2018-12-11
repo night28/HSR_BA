@@ -12,10 +12,10 @@ Die SDA Topologie sollte nach den gleichen Designprinzipien und Best Practices a
 
 Analog zu dieser wurde die von der Studienarbeit übernommene Architektur weiter angepasst und wenn möglich die Komponenten inklusive Verkabelung redundant ausgelegt (siehe Abbildung \ref{fig:Architektur}: Architektur). \\
 
-Wie in der Analyse festgestellt, sind in der Version 1.2.5 lediglich zwei Control Plane Node unterstützt. Border Nodes könnten maximal vier implementiert werden. Ebenfalls zu beachten sind die Deployment Capabilities, welche als Border und Control Plane Node die Catalyst 3850 empfehlen. Darum werden in der Architektur die Catalyst 9300 als Intermediate oder Edge Nodes eingesetzt.
+Ebenfalls zu beachten sind die Deployment Capabilities, welche als Border und Control Plane Node die Catalyst 3850 empfehlen. Darum werden in der Architektur die Catalyst 9300 als Intermediate oder Edge Nodes eingesetzt.
 
 \subsection{DNA Center}
-Das DNA Center unterstützt eine Clusterkonfiguration mit einem oder drei Hosts. Im optimal Fall sollte das DNA Center in einem Cluster mit 3 Nodes installiert werden. Der drei Host Cluster bietet sowohl Software als auch Hardware mit hoher Verfügbarkeit. Das DNA Center bietet einen Mechanismus zum Verteilen der Verarbeitung und Datenbankreplikation auf mehrere Hosts. Durch das Clustering werden Ressourcen und Funktionen gemeinsam genutzt, und es werden hohe Verfügbarkeit und Skalierbarkeit ermöglicht. \\
+Das DNA Center unterstützt eine Clusterkonfiguration mit einem oder drei Hosts. Im Optimalfall sollte das DNA Center in einem Cluster mit drei3Nodes installiert werden. Der drester bietet sowohl Software als auch Hardware mit hoher Verfügbarkeit. Das DNA Center bietet einen Mechanismus zum Verteilen der Verarbeitung und Datenbankreplikation auf mehrere Hosts. Durch das Clustering werden Ressourcen und Funktionen gemeinsam genutzt, und es werden hohe Verfügbarkeit und Skalierbarkeit ermöglicht. \\
 
 Die folgende Abbildung zeigt die empfohlenen Verbindungen für einen DNA Center Cluster mit drei Knoten. 
 \begin{figure}[H]
@@ -117,10 +117,10 @@ Bei einem Ausfall des MSMR kann keine Host Registration mehr vorgenommen werden.
 Da jeder xTR seinen eigenen Map-Cache hat und kann sich sein Inhalt innerhalb derselbe LISP-Site unterscheiden. Daher können xTr leicht schwere Paketausfälle erleiden und mit LISP Control Messages geflutet werden.  
 
 \paragraph{MS}
-Es sollten mehrere Map-Server vorhanden und eingetragen sein. Sollte der erste Map-Server nicht erreichbar sein, so wird der zweite Map-Server verwendet.
+Es sollten mehrere Map-Server vorhanden und eingetragen sein. Optimalerweise ist mindestens ein Map-Server pro Site vorhanden. Sollte der erste Map-Server nicht erreichbar sein, so wird der zweite Map-Server verwendet.
 
 \paragraph{MR}
-Für den Map-Resolver sollte eine Anycast IP-Adresse verwendet werden. So werden die Pakete gesendet und über einen verfügbaren Map-Resolver zum Ziel weitergeleitet.
+Für den Map-Resolver sollte eine Anycast IP-Adresse verwendet werden. So werden die Pakete gesendet und über einen verfügbaren Map-Resolver zum Ziel weitergeleitet. Auch hier ist es sinnvoll, mindestens einen Map-Resolver pro Site bereitzustellen.
 
 \subsection{ISE / Radius}
 
@@ -133,6 +133,41 @@ Um die Verfügbarkeit des ISE zu erhöhen, kann diese in einem Cluster, bestehen
 In Aussenstellen wird ein Read Only Radius Server betrieben, damit die Network Access Devices auch im Falle eines Unterbruchs der Verbindung zum Hauptsitz einen Radius Server zur Verfügung haben. Hier könnte beispielsweise Freeradius eingesetzt werden. Da Freeradius seine Informationen nicht direkt vom ISE beziehen kann, muss vom ISE ein externer Radius Server verwendet werden, der eine Replikation unterstützt. Dies kann beispielsweise Freeradius sein.
 
 \paragraph{ISE}
+
+
+***********************************************************
+
+
+
+\subsubsection{Deployment Size and Scaling Recommendations
+}
+
+Die folgende Tabelle zeigt wie die Bereitstellung der ISE Nodes für einen grossen Deployment Typ aussehen kann, basierend auf der Anzahl der aktiven Sessions in dem Netzwerk.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-SizeScalingRec}
+	\caption{ISE - Size and Scaling Recommendation}
+	\label{fig:ISE - Size and Scaling Recommendation}
+\end{figure}
+
+Die folgende Tabelle enthält eine Empfehlung für den Gerätetyp, welcher für einen dedizierten Policy Service Node benötigt wird. Dies ist basierend auf der maximalen Anzahl aktiver Sessions zu den Node Services.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-PolicyServiceNodeSizeRec}
+	\caption{ISE - Policy Service Node Size Recommendations}
+	\label{fig:ISE - Policy Service Node Size Recommendations}
+\end{figure}
+
+Die folgende Tabelle gibt einen Überblick über den Gerätetyp, der für einen dedizierten pxGrid-Node benötigt wird, basierend auf der Anzahl der maximal aktiven Sessions, die der Knoten bedient.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-pxGridSizingRec}
+	\caption{ISE - pxGrid Node Sizing Recommendations}
+	\label{fig:ISE - pxGrid Node Sizing Recommendations}
+\end{figure}
 
 
 \paragraph{Freeradius}
@@ -185,7 +220,7 @@ Es können TrustSec SXP Speaker/Listener auf den Catalyst 3850 und C9300 definie
 
 \subsection{Border Node}
 
-Der gesamte Verkehr der die Fabric betritt oder verlässt, durchläuft diesen Knoten. Um einen Single Point of Failure zu vermeiden, sollten immer mindestens zwei Border Nodes pro Fabric zur Verfügung stehen. Nach aktuellen Maximum Scale Recommendations können maximal 4 Border Nodes pro Fabric Domain implementiert werden.
+Der gesamte Verkehr der die Fabric betritt oder verlässt, durchläuft diesen Knoten. Um einen Single Point of Failure zu vermeiden, sollten immer mindestens zwei Border Nodes pro Site zur Verfügung stehen. Nach den aktuellen Maximum Scale Recommendations können maximal 4 Border Nodes Site implementiert werden.
 
 Border Nodes implementieren die folgenden Funktionen, welche bei einem Ausfall in Mitleidenschaft gezogen werden könnten\cite{sda-designguide-sept2018}:
 \begin{itemize}
@@ -273,4 +308,4 @@ Zusätzlich kann auf dem Master konfiguriert werden, dass alle Slaves mittels "N
 
 \paragraph{Clients}
 
-Auf den Cliens ist es wichtig, dass alle nötigen DNS Server in der korrekten Reihenfolge konfiguriert werden. Als erster Server soll der Master, also Infoblox eingetragen werden. Sofern Infoblox als Cluster betrieben wird, können auch alle Instanzen des Clusters verwendet werden. Danach der Slave am jeweiligen Standort. Dies sorgt dafür, dass der Slave nur dann verwendet wird, wenn die Kommunikation zum Master nicht funktioniert.
+Auf den Cliens ist es wichtig, dass alle nötigen DNS Server in der korrekten Reihenfolge konfiguriert werden. Als erster Server soll der DNS Server am jeweiligen Standort eingetragen werden, um Antwortzeiten möglichst gering zu halten. Sollte dieser ausfallen, kann auf Infoblox oder weitere DNS Server zurückgegriffen werden.
