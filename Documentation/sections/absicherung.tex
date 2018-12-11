@@ -14,6 +14,75 @@ Analog zu dieser wurde die von der Studienarbeit übernommene Architektur weiter
 
 Ebenfalls zu beachten sind die Deployment Capabilities, welche als Border und Control Plane Node die Catalyst 3850 empfehlen. Darum werden in der Architektur die Catalyst 9300 als Intermediate oder Edge Nodes eingesetzt.
 
+\subsection{ENCS 5400}
+
+Um mit möglichst kleinem Hardwareeinsatz eine maximale Autonomie der Aussenstandorte zu ermöglichen, wird pro Aussenstelle ein oder mehrere ENCS 5400 eingesetzt. 
+Dabei handelt es sich um eine Virtualisierungsplattform basierend auf KVM. Des Weiteren beinhaltet die Appliance einen Switch. 
+Auf diesem System können virtuelle Router, Firewalls, WLCs und mittels Third Party Images viele weitere Dienste betrieben werden. Für spezifische Anwendungen können eigene Images erstellt werden, wodurch die Plattform enorm vielseitig einsetzbar ist.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS_Architecture.jpg}
+	\caption{ENCS Architecturee \cite{enterprise-network-functions-virtualization-faq} }
+	\label{fig:ENCS Architecture}
+\end{figure}
+
+\subsubsection{Image erstellen}
+
+In einem ersten Schritt muss ein Disk Image für den gewünschten Service vorliegen. In unserem Fall wurde diese via Virtualbox erstellt, sodass alle nötigen Pakete bereits installiert werden konnten. Da das Image im Format qcow2 vorliegen muss, wird das vdi Image entsprechend konvertiert.
+
+\begin{lstlisting}[language=bash]
+qemu-img convert -f vdi -O qcow2 Ubuntu18.04_Branch.vdi \
+Ubuntu18.04_Branch.qcow2
+\end{lstlisting}
+
+\paragraph{Image Packaging}
+
+Damit das Image verwendet werden kann, muss ein Package erstellt werden. Dabei handelt es sich um ein Archiv, bestehend aus dem Disk Image, sowie einem XML File, in welchem Metadaten, wie die Hardwareanforderungen und die verschiedenen Profile definiert sind.
+Das Package kann manuell oder mittels NFVIS Web Interface erstellt werden.
+
+Im Web-Interface wird dies unter \textit{VM Life Cycle $\rightarrow$ Image Repository $\rightarrow$ Image Packaging} erstellt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS-Image-Packaging.png}
+	\caption{ENCS Image Packaging}
+	\label{fig:ENCS Image Packaging}
+\end{figure}
+
+\paragraph{Image Konfiguration}
+
+Anschliessend werden die Metadaten für das Image definiert. Diese sind schlussendlich im XML File zu finden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS-Image-Creation.png}
+	\caption{ENCS Image Konfiguration}
+	\label{fig:ENCS Image Konfiguration}
+\end{figure}
+
+Des Weiteren werden die verschiedenen Profile definiert. Diese können später beim Deployment ausgewählt weden, sodass für verschiedene Grössen eines Branches ein passendes Profil ausgewählt werden kann.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS-Image-Profile.png}
+	\caption{ENCS Image Profile}
+	\label{fig:ENCS Image Profile}
+\end{figure}
+
+\paragraph{Image Deployment}
+
+Das Deployment des Images soll via DNA Center funktionieren. Aus diesem Grund muss das zuvor erstellte Archiv heruntergeladen und anschliessend ins DNA Center importiert werden. \textit{Design $\rightarrow$ Image Repository $\rightarrow$ Virtual $\rightarrow$ Import}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/DNA-Center-Image-Import.png}
+	\caption{DNA Center Image Import}
+	\label{fig:DNA Center Image Import}
+\end{figure}
+
+
+
 \subsection{DNA Center}
 Das DNA Center unterstützt eine Clusterkonfiguration mit einem oder drei Hosts. Im Optimalfall sollte das DNA Center in einem Cluster mit drei Nodes installiert werden. Der Cluster bietet sowohl Software als auch Hardware mit hoher Verfügbarkeit. Das DNA Center bietet einen Mechanismus zum Verteilen der Verarbeitung und Datenbankreplikation auf mehrere Hosts. Durch das Clustering werden Ressourcen und Funktionen gemeinsam genutzt, und es werden hohe Verfügbarkeit und Skalierbarkeit ermöglicht. \\
 
