@@ -109,7 +109,6 @@ Im Folgenden werden Feature Requests und Bugs aufgeführt, die während dieser A
 % Feedback Cisco
 {}
 
-When a device first appears in inventory, information like hostname or OS Version are displayed as "null". Show correct data or something like "not available".
 
 \bugreport
 % Titel
@@ -122,13 +121,38 @@ When a device first appears in inventory, information like hostname or OS Versio
 {Nach dem Hinzufügen oder Claimen eines Devices werden verschiedene Informationen als "null" angezeigt. Hier sollten die korrekten Informationen oder falls noch nicht verfügbar einfach nichts angezeigt werden.
 }
 % Konsequenzen
-{Unschoönes UI}
+{Unschönes UI}
 % Workaround
 {Keiner}
 %Reproduzieren
 {
 	\begin{enumerate}
-		\item \textit{Provision $\rightarrow$ Inventory $\rightarrow$ Unclaimed Devices $\rightarrow$ Clain Device}
+		\item \textit{Provision $\rightarrow$ Inventory $\rightarrow$ Unclaimed Devices $\rightarrow$ Claim Device}
+	\end{enumerate}
+}
+% Reporter
+{Sandro Kaspar}
+% Feedback Cisco
+{}
+
+\bugreport
+% Titel
+{Image Checksum}
+% Komponente
+{\textit{Design $\rightarrow$ Image Repository}}
+% Dringlichkeit
+{Mittel}
+% Beschreibung
+{Wird auf ein Image geklickt, sodass die Detailinformationen angezeigt werden, wird die Checksumme vom "Make a Wish" Button überdeckt. Dies tritt bei FullHD Auflösung oder kleiner auf.
+}
+% Konsequenzen
+{Checksumme nicht lesbar}
+% Workaround
+{Grössere Auflösung}
+%Reproduzieren
+{
+	\begin{enumerate}
+		\item \textit{Design $\rightarrow$ Image Repository $\rightarrow$ Auf Image klicken}
 	\end{enumerate}
 }
 % Reporter
