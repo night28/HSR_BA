@@ -310,3 +310,27 @@ Zusätzlich kann auf dem Master konfiguriert werden, dass alle Slaves mittels "N
 \paragraph{Clients}
 
 Auf den Cliens ist es wichtig, dass alle nötigen DNS Server in der korrekten Reihenfolge konfiguriert werden. Als erster Server soll der DNS Server am jeweiligen Standort eingetragen werden, um Antwortzeiten möglichst gering zu halten. Sollte dieser ausfallen, kann auf Infoblox oder weitere DNS Server zurückgegriffen werden.
+
+
+\subsection{Scheduled Software Updates}
+Alle Netzwerk Devices die über das DNA Center verwaltet werden, erhalten ihre aktuellsten Software Images auch von diesem. Die Images haben teils sehr unterschiedliche Grössen (von 200 MB bis zu 1 GB), weshalb es wichtig ist, dass sich diese schon vor einem Upgrade auf den Geräten befinden. 
+
+
+\subsubsection{Provision Software Images}
+Bevor ein Software Image auf ein Gerät übertragen wird, überprüft das DNA Center auf den einzelnen Geräten, ob dieses auch bereit für ein Update ist. Dazu gehören zum Beispiel das Überprüfen des Geräteverwaltungsstatus, Überprüfung der SCP- und HTTPS-Dateiübertragung, Festplattenspeicher usw. Wenn eine Vorprüfung fehlschlägt, kann die Aktualisierung des Software Images nicht durchgeführt werden. \\
+
+Nun kann das Verteilen der Software Images nach folgendem Ablauf gestartet werden:
+\begin{enumerate}
+	\item Das Verteilen der Software Images kann im DNA Center unter \textit{Provision} konfiguriert werden.
+	\item Nun kann das Gerät, welches aktualisiert werden soll, ausgewählt werden. (Wenn der pre-check erfolgreich war, weisst der Link "Outdatet" in der Spalte "OS Image" ein grünes Häckchen auf.)
+	\item In der Dropdown-Liste unter \textit{Actions  $\rightarrow$ Update OS Image} wählen
+	\begin{enumerate}
+		\item Distribute: Mit einem Klick auf \textit{Now} wird das Verteilen des Images sofort gestartet, oder es wird mit einem Klick auf \textit{Later} an einem spezifischen Zeitpunkt ausgeführt. (Wenn sich das Image bereits auf dem ausgewählten Gerät befindet, wird der Distribute-Vorgang übersprungen und das Image kann direkt aktiviert werden.)
+		\item Activate: Mit einem Klick auf \textit{Now} wird die Aktivierung sofort gestartet, oder es wird mit einem Klick auf \textit{Later} an einem spezifischen Zeitpunkt ausgeführt. (Dieser Schritt kann übersprungen werden, wenn zum jetzigen Zeitpunkt nur das Image auf das Gerät verteilt werden sollte.)
+		\item Confirm: Mit einem Klick auf \textit{Confirm} wird das Update bestätigt.
+	\end{enumerate}
+	\item Nun kann unter \textit{Upgrade Status} der aktuelle Vorgang des Image Upgrades beobachtet werden.
+\end{enumerate}
+
+Sollte das Verteilen des Software Images nicht funktionieren, in dem es Beispielsweise die Übertragung immer wieder abbricht, so kann das Image auch manuell auf das Gerät kopiert werden. So würde dies bei dem vorher beschriebenen Vorgang \textit{Distribute} automatisch erkennt werden, dass sich das Image schon auf dem Gerät befindet.
+
