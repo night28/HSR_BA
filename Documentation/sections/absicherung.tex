@@ -132,42 +132,46 @@ Um die Verfügbarkeit des ISE zu erhöhen, kann diese in einem Cluster, bestehen
 
 In Aussenstellen wird ein Read Only Radius Server betrieben, damit die Network Access Devices auch im Falle eines Unterbruchs der Verbindung zum Hauptsitz einen Radius Server zur Verfügung haben. Hier könnte beispielsweise Freeradius eingesetzt werden. Da Freeradius seine Informationen nicht direkt vom ISE beziehen kann, muss vom ISE ein externer Radius Server verwendet werden, der eine Replikation unterstützt. Dies kann beispielsweise Freeradius sein.
 
-\paragraph{ISE}
-
-
-***********************************************************
-
-
-
 \subsubsection{Deployment Size and Scaling Recommendations
 }
 
 Die folgende Tabelle zeigt wie die Bereitstellung der ISE Nodes für einen grossen Deployment Typ aussehen kann, basierend auf der Anzahl der aktiven Sessions in dem Netzwerk.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-SizeScalingRec}
-	\caption{ISE - Size and Scaling Recommendation}
-	\label{fig:ISE - Size and Scaling Recommendation}
-\end{figure}
 
-Die folgende Tabelle enthält eine Empfehlung für den Gerätetyp, welcher für einen dedizierten Policy Service Node benötigt wird. Dies ist basierend auf der maximalen Anzahl aktiver Sessions zu den Node Services.
+Die nachfolgenden Tabellen zeigen die Performance und Scalability Metriken für Radius Sessions, Passive Identity, Easy Connect, pxGrid und ISE Services.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-PolicyServiceNodeSizeRec}
-	\caption{ISE - Policy Service Node Size Recommendations}
-	\label{fig:ISE - Policy Service Node Size Recommendations}
+	\includegraphics[width=1\linewidth]{img/Absicherung/ISE-MaxRadiusScaling}
+	\caption{ISE - Maximum RADIUS Scaling by Deployment with Maximum Passive Identity/Easy Connect Scaling by Deployment Size \cite{ise-scale}}
+	\label{fig:ISE - Maximum RADIUS Scaling}
 \end{figure}
-
-Die folgende Tabelle gibt einen Überblick über den Gerätetyp, der für einen dedizierten pxGrid-Node benötigt wird, basierend auf der Anzahl der maximal aktiven Sessions, die der Knoten bedient.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-pxGridSizingRec}
-	\caption{ISE - pxGrid Node Sizing Recommendations}
-	\label{fig:ISE - pxGrid Node Sizing Recommendations}
+	\includegraphics[width=1\linewidth]{img/Absicherung/ISE-pxGridServicesScalability}
+	\caption{ISE - Scalability with pxGrid Services \cite{ise-scale}}
+	\label{fig:ISE - Scalability with pxGrid Service}
 \end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/ISE-PlatformpxGridV2Scaling}
+	\caption{ISE - pxGrid v2 Scaling per Dedicated pxGrid Node \cite{ise-scale}}
+	\label{fig:ISE - pxGrid v2 Scaling per Dedicated pxGrid Node}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{img/Absicherung/ISE-pxGridV2}
+	\caption{ISE - Platform eXchange Grid (pxGrid v2) Scaling \cite{ise-scale}}
+	\label{fig:ISE - Platform eXchange Grid (pxGrid v2) Scaling}
+\end{figure}
+
+
+\paragraph{ISE}
+
+
 
 
 \paragraph{Freeradius}
