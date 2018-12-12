@@ -159,3 +159,57 @@ Im Folgenden werden Feature Requests und Bugs aufgeführt, die während dieser A
 {Sandro Kaspar}
 % Feedback Cisco
 {}
+
+
+\bugreport
+% Titel
+{Provision Status "Failed"}
+% Komponente
+{\textit{ Provision $\rightarrow$ Devices $\rightarrow$ Inventory}}
+% Dringlichkeit
+{Niedrig}
+% Beschreibung
+{Der Provision Status wird als "Failed" angezeigt, auch wenn die Provisionierung funktioniert hat. Dies wird zur Zeit auf ewig so angezeigt, sollte im Verlauf irgendwann einmal etwas fehlgeschlagen sein. Dazu kommt, dass wenn man auf See Details klickt, die Einträge mit Success angezeigt werden. Zuerst muss also herausgefunden werden, bei welchem Workflow dies aufgetreten ist. Mit erneutem Klick auf See Details auf dem Workflow, werden die einzelnen Schritte des Workflows angezeigt.
+}
+% Konsequenzen
+{Verwirrung das Problem vorhanden, obwohl keines besteht}
+% Workaround
+{Keiner}
+%Reproduzieren
+{
+	
+}
+% Reporter
+{Jessica Kalberer}
+% Feedback Cisco
+{}
+
+
+\bugreport
+% Titel
+{Provision Template Status Failed}
+% Komponente
+{\textit{ Provision $\rightarrow$ Devices $\rightarrow$ Inventory}}
+% Dringlichkeit
+{Niedrig}
+% Beschreibung
+{Der Status des Schrittes im Workflow des Provisioning wird als Failed angezeigt, weil der Name schon gesetzt wurde. Es wird die Meldung "Template IOS Banner Template:2 is already deployed with same params,. Not deploying it." angezeigt. Der Name wurde zwar schon einmal mit dem Template deployed, jedoch handelte es sich nicht um den gleichen.
+}
+% Konsequenzen
+{Verwirrung das Problem vorhanden, obwohl keines besteht}
+% Workaround
+{Keiner}
+%Reproduzieren
+{
+	\begin{enumerate}
+		\item \textit{Provision $\rightarrow$ Devices $\rightarrow$ Inventory}
+		\item Gewünsched Device auswählen
+		\item \textit{Actions $\rightarrow$ Provision}
+		\item Template für Namensänderung wählen
+		\item \textit{Provision}
+	\end{enumerate}
+}
+% Reporter
+{Jessica Kalberer}
+% Feedback Cisco
+{}
