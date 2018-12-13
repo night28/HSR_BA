@@ -203,7 +203,7 @@ Im Folgenden werden Feature Requests und Bugs aufgeführt, die während dieser A
 {
 	\begin{enumerate}
 		\item \textit{Provision $\rightarrow$ Devices $\rightarrow$ Inventory}
-		\item Gewünsched Device auswählen
+		\item Gewünschtes Device auswählen
 		\item \textit{Actions $\rightarrow$ Provision}
 		\item Template für Namensänderung wählen
 		\item \textit{Provision}
@@ -211,5 +211,60 @@ Im Folgenden werden Feature Requests und Bugs aufgeführt, die während dieser A
 }
 % Reporter
 {Jessica Kalberer}
+% Feedback Cisco
+{}
+
+\bugreport
+% Titel
+{Fabric Custom View}
+% Komponente
+{\textit{ Provision $\rightarrow$ Fabric $\rightarrow$ Layout}}
+% Dringlichkeit
+{Mittel}
+% Beschreibung
+{Wenn eine Custom View erstellt wird und diese ausgewählt wird, werden die Devices nicht mehr als Teil der Fabric angezeigt. 
+}
+% Konsequenzen
+{Fabric lässt sich in der Custom View nicht bearbeiten}
+% Workaround
+{Keiner}
+%Reproduzieren
+{
+	\begin{enumerate}
+		\item \textit{Provision $\rightarrow$ Fabric $\rightarrow$ Layout}
+		\item Custom View erstellen
+		\item Custom View anzeigen
+	\end{enumerate}
+}
+% Reporter
+{Sandro Kaspar}
+% Feedback Cisco
+{}
+
+\bugreport
+% Titel
+{Fabric Default View}
+% Komponente
+{\textit{ Provision $\rightarrow$ Fabric $\rightarrow$ Layout}}
+% Dringlichkeit
+{Niedrig}
+% Beschreibung
+{Wenn eine Custom View erstellt wird und anschliessend als Default View definiert wird, hat dies keinen Einfluss auf die Default View. Es wird weiterhin die Default View von Cisco angezeigt
+}
+% Konsequenzen
+{Custom Views sind nutzlos, wenn jedes Mal die gewünschte View gewählt werden muss.}
+% Workaround
+{Keiner}
+%Reproduzieren
+{
+	\begin{enumerate}
+		\item \textit{Provision $\rightarrow$ Fabric $\rightarrow$ Layout}
+		\item Custom View erstellen
+		\item Custom View als Default setzen
+		\item Reload
+	\end{enumerate}
+}
+% Reporter
+{Sandro Kaspar}
 % Feedback Cisco
 {}
