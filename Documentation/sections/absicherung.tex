@@ -93,6 +93,8 @@ Das Deployment des Images soll via DNA Center funktionieren. Aus diesem Grund mu
 
 
 
+
+
 \subsection{DNA Center}
 Das DNA Center unterstützt eine Clusterkonfiguration mit einem oder drei Hosts. Im Optimalfall sollte das DNA Center in einem Cluster mit drei Nodes installiert werden. Der Cluster bietet sowohl Software als auch Hardware mit hoher Verfügbarkeit. Das DNA Center bietet einen Mechanismus zum Verteilen der Verarbeitung und Datenbankreplikation auf mehrere Hosts. Durch das Clustering werden Ressourcen und Funktionen gemeinsam genutzt und es werden hohe Verfügbarkeit und Skalierbarkeit ermöglicht. \\
 
@@ -108,6 +110,9 @@ Alle bis auf eine der Verbindungen für jeden Node im drei Nodes Cluster sind di
 Für Clusterbereitstellungen mit mehreren Nodes müssen sich alle Cluster Nodes im selben Netzwerk und am selben Standort befinden. Die Appliance unterstützt keine Verteilung von Knoten über mehrere Netzwerke oder Standorte. Diese Limitierung der Bereitstellung, sowie auch die maximale Anzahl der unterstützen Nodes wird sich hoffentlich in Zukunft noch ändern.
 
 Wenn ein Node innerhalb einer Multi-Host-Cluster-Konfiguration ausfällt, beträgt die Zeit für die Wiederherstellung des Clusters in der Regel 20 Minuten. Fällt in einem Multi-Host Cluster mit drei Nodes aus irgendeinem Grund ein einzelner Host aus und es fällt ein zweiter Host aus, so fällt auch der letzte Host sofort aus. Es müssen immer zwei der drei Nodes im Cluster laufen, damit ein funktionsfähiger Cluster noch gewährleistet werden kann.
+
+
+
 
 
 \subsection{LISP Map Server / Control Plane Node}
@@ -205,13 +210,55 @@ Es sollten mehrere Map-Server vorhanden und eingetragen sein. Optimalerweise ist
 \paragraph{MR}
 Für den Map-Resolver sollte eine Anycast IP-Adresse verwendet werden. So werden die Pakete gesendet und über einen verfügbaren Map-Resolver zum Ziel weitergeleitet. Auch hier ist es sinnvoll, mindestens einen Map-Resolver pro Site bereitzustellen.
 
-\subsubsection{Umsetzung}
+\subsubsection{Analyse mittels LISP Commands}
+Es gibt viele LISP Befehle, welche die Analyse vereinfachen können. Nachfolgend zeigen wir einige LISP Commands, zusammen mit den ihren Ausgaben. \cite{lisp-commands}
+
+\paragraph{LISP EID-Table}
+Auf einem Control Plane kann die EID-Tabelle mit folgendem Befehl ausgegeben werden:
+
+\begin{lstlisting}[language=bash]
+show lisp eid-table vrf <VRF Name> ipv4 map-cache
+\end{lstlisting}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/lisp_eid-table}
+	\caption{LISP EID-Table}
+	\label{fig:LISP EID-Table}
+\end{figure}
 
 
 
 
+\paragraph{LISP EID-Table Map Cahe Entry}
+Ein Eintrag in der EID-Table im Map Cache kann mit folgender Abfrage detaillierter angezeigt werden:
+
+\begin{lstlisting}[language=bash]
+show lisp eid-table vrf <VRF Name> ipv4 map-cache <IP>
+\end{lstlisting}
 
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/lisp_eid-table-entry}
+	\caption{LISP EID-Table Map Cache Entry}
+	\label{fig:LISP EID-Table Map Cache Entry}
+\end{figure}
+
+\paragraph{LISP Database EID-Table}
+Der folgende Befehl kann verwendet werden, um die Egress Tunnel Router (ETR) konfigurierten lokalen IPv4-EID-Präfixes und der zugehörigen Locator-Sets auszugeben:
+
+\begin{lstlisting}[language=bash]
+show ip lisp database eid-table <VRF Name>
+\end{lstlisting}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/lisp_eid-table-database-rloc}
+	\caption{LISP Database EID-zu-RLOC}
+	\label{fig:LISP Database EID-zu-RLOC}
+\end{figure}
 
 
 
