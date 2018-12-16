@@ -4,16 +4,16 @@ Nachfolgend werden alle kritischen Elemente der SDA Lösung analysiert. Dazu geh
 Das Ziel ist die komplette Analyse der SDA Lösung und die Identifizierung der kritischen Elemente der Verfügbarkeit (LISP Database, Radius, SGT Access-list etc.) und der Network Services (NTP, DNS, Lizenzen etc.).
 
 \subsection{SDA Architektur und Design}
-Unsere Architektur der Lab Umgebung, welche in der Studienarbeit erarbeitet und nun in der Bachelorarbeit noch erweitert wurde, sieht zur Zeit wie folgend aus:
+Die Architektur der Lab Umgebung, welche in der Studienarbeit erarbeitet wurde, sah folgendermassen aus:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Architecture/LabNetworkArchitecture-17-10}
-	\caption{Architektur}
-	\label{fig:Architektur}
+	\includegraphics[width=1\linewidth]{img/Architecture/LabNetworkArchitecture_SA}
+	\caption{Architektur Studienarbeit}
+	\label{fig:Architektur Studienarbeit}
 \end{figure}
 
-Die Analyse wird auf dieser Architektur aufbauen und die von der FUB gegebenen Grössenordnung berücksichtigen.
+Die Analyse wird auf dieser Architektur aufbauen und die von der FUB gegebenen Grössenordnung berücksichtigen. \\
 
 Nachfolgend werden die aktuell von Cisco empfohlenen Design Entscheidungen, Grössenüberlegungen, sowie die Skalierungen gezeigt. Aktuelle und ausführliche Informationen hierzu, können direkt im SDA Design Guide von Cisco \cite{sda-designguide-sept2018} eingesehen werden. 
 
