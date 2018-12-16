@@ -386,6 +386,20 @@ Der Fabric Border Node kann die Netzwerkvirtualisierung mithilfe von externen VR
 \subsubsection{Richtlinienzuordnung}
 Der Fabric Border Node bildet auch SGT-Informationen aus der Fabric ab, die beim Verlassen dieser Fabric entsprechend verwaltet werden. SGT-Informationen werden vom Fabric Border Node an das ausserhalb der Fabric liegende Netzwerk weitergegeben, indem entweder die Tags mithilfe von SGT Exchange Protocol (SXP) zu Cisco-fähigen Geräten transportiert werden, oder indem SGTs direkt in einem Cisco-Metadatenfeld in einem Paket zugeordnet werden Inline-Tagging-Funktionen für Verbindungen zum Grenzknoten implementiert.
 
+\subsubsection{Ausfall Test}
+Bei einem Tests mit einem Ping von einem Client nach extern, wurde während diesem Vorgang das Interface auf dem vorher zuständigen Border down genommen. Es gingen insgesamt ungefähr 27 Pings à je 0.1 Sekunden verloren, dass heisst es resultierte ein Unterbruch von ungefähr 2.7 Sekunden, bevor die Verbindung über den anderen Border wieder aufgenommen wurde.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/border-ausfall-test}
+	\caption{Border Ausfall Test}
+	\label{fig:Border Ausfall Test}
+\end{figure}
+
+
+
+
 \subsection{Fusion Router}
 Die Fusion Router stellen die Verbindungen zwischen den einzelnen Fabrics, dem Internet, sowie die Verbindung zum Legacy Netzwerk in dem sich beispielsweise das DNAC und der ISE befinden.Es werden mehrere Fusion Router verwendet, um die nötige Ausfallsicherheit zu gewährleisten. Die Fusion Router und Border Nodes sind im Optimalfall in einem Full-Mesh verkabelt. Für das Routing zwischen den Fusion Routern, sowie den Border Nodes kommt BGP zum Einsatz.
 
