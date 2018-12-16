@@ -323,17 +323,52 @@ Die Topologie wurde analog anhand der nachfolgenden Validation Topologie von Cis
 	\label{fig:Fusion Router Validation Topology}
 \end{figure}
 
+\subsection{Infoblox}
 
-\subsection{DHCP}
+Infoblox stellt kritische Dienste wie DHCP, DNS und NTP für Netzwerkgeräte und Clients zur Verfügung. Aus diesem Grund muss die Verfügbarkeit dieser Services immer gewährleistet sein.
 
-\subsubsection{Infoblox}
+\subsubsection{HA-Pairs}
+Zwei Infoblox Instanzen können in einem High-Availability Pair betrieben werden. Damit sind alle Services redundant und ein Ausfall einer einzelnen Instanz hat keinen Einfluss auf den Betrieb. 
+
+\subsubsection{Grid}
+Infoblox kann in einem Grid betrieben werden. Dies bedeutet, es gibt einen Grid Master und mehrere Grid Member. Alle Konfigurationen werden auf dem Grid Master definiert. Des weiteren kann definiert werden, welche Member für spezifische Services zuständig sind. Somit kann sichergestellt werden, dass an Aussenstandorten nur die Services betrieben werden, die dort auch nötig sind. Um die Ausfallsicherheit weiter zu erhöhen, können Grid Master und Member zusätzlich als High-Availability Pair betrieben werden.
+
+\paragraph{Grid Member hinzufügen}
+
+Ein neuer Grid Member kann im UI von Infoblox unter \textit{Grid $\rightarrow$ Grid Manager $\rightarrow$ Members} hinzugefügt werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/Infoblox_Add_Grid_Member.png}
+	\caption{Infoblox - Add Grid Member}
+	\label{fig:Infoblox - Add Grid Member}
+\end{figure}
+
+\paragraph{Member Assignment}
+
+Sobald die Grid Member hinzugefügt wurden, kann definiert werden, für welche Services diese zuständig sind. Dies kann sehr granular definiert werden. Beispielsweise kann für eine einzelne DNS Zone oder einen einzelnen DHCP Pool definiert werden, welche Member zuständig sind.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/Infoblox_Member_Assignment.png}
+	\caption{Infoblox - Member Assignment}
+	\label{fig:Infoblox - Member Assignment}
+\end{figure}
+
+\subsection{Third Party Software}
+
+Alternativ zu Infoblox Instanzen an allen Standorten können die Services auch mittels Third-Party Software angeboten werden.
+
+\subsubsection{DHCP}
+
+\paragraph{Infoblox}
 Um die Krisenresistenz am Hauptstandort zu erhöhen, wird Infoblox als Multi-Node Cluster betrieben. Dadurch kann ein einzelner Node ausfallen, ohne dass dies einen Impact auf den Betrieb am Hauptstandort hat. 
 
-\subsubsection{Aussenstellen}
+\paragraph{Aussenstellen}
 Da sich Infoblox nicht in Kombination mit 3rd Party Software in einem Cluster oder einer Failoverlösung betreiben lässt, müssen an Aussenstandorten eigenständige DHCP Server betrieben werden, um deren Autonomie sicherzustellen. Da Infoblox den isc-dhcp-server für seine DHCP Services verwendet, wird dieser auch an den Aussenstellen eingesetzt. 
 Für wichtige Aussenstandorte kann der isc-dhcp-server in einem Master-Slave Cluster betrieben werden. Somit isch an diesen Standorten ebenfalls eine Ausfallsicherheit gewährleistet.
 
-\subsubsection{DNA Center}
+\paragraph{DNA Center}
 Im DNA Center muss für jeden Aussenstandort der jeweilige DHCP Server konfiguriert werden. Im Falle eines DHCP Clusters können hier auch mehrere Einträge erstellt werden.
 
 \begin{figure}[H]
@@ -343,12 +378,9 @@ Im DNA Center muss für jeden Aussenstandort der jeweilige DHCP Server konfiguri
 	\label{fig:DNA Center - DHCP Server}
 \end{figure}
 
-\subsection{DNS}
+\subsubsection{DNS}
 
-\subsubsection{Infoblox HA Cluster}
-
-
-\subsubsection{Read Only DNS Server an Aussenstandorten}
+\paragraph{Read Only DNS Server an Aussenstandorten}
 	
 Damit Aussenstellen nicht auf DNS Server des Hauptstandortes angewiesen sind, kann in jedem Standort ein Read-Only Server betrieben werden. Somit funktioniert die Namensauflösung auch im Falle eines Kommunikationsverlusts zum Hauptstandort. 
 
@@ -370,6 +402,10 @@ Dies wird in Infoblox via \textit{Grid $\rightarrow$ DNS $\rightarrow$ Infoblox 
 	\caption{Infoblox Zone Transfer}
 	\label{fig:Infoblox Zone Transfer}
 \end{figure}
+
+\paragraph{Infoblox Slave}
+
+Als DNS Slave kann Infoblox verwendet werden. Dazu wird an jedem Standort eine Infoblox Instanz betrieben. In unserem Fall ist dies eine virtuelle Instanz auf dem ENCS 5400. Diese wird zum Infoblox Grid hinzugefügt.
 
 \paragraph{DNS Slaves}
 
