@@ -10,9 +10,19 @@ Die SDA Topologie sollte nach den gleichen Designprinzipien und Best Practices a
 	\label{fig:SDA Topologie}
 \end{figure}
 
-Analog zu dieser wurde die von der Studienarbeit übernommene Architektur weiter angepasst und wenn möglich die Komponenten inklusive Verkabelung redundant ausgelegt (siehe Abbildung \ref{fig:Architektur}: Architektur). \\
+Analog zu dieser wurde die von der Studienarbeit übernommene Architektur (siehe Abbildung \ref{fig:Architektur Studienarbeit}: Architektur Studienarbeit) weiter angepasst und wenn möglich die Komponenten inklusive Verkabelung redundant ausgelegt. Ebenfalls zu beachten sind die Deployment Capabilities, welche als Border und Control Plane Node die Catalyst 3850 empfehlen. Darum werden in der Architektur die Catalyst 9300 als Intermediate oder Edge Nodes eingesetzt. Extended Nodes wie der C3560CX werden zudem nur unterstützt, wenn sie an einem C9300 Edge angeschlossen sind. \\
+Diese neu erarbeitete Architektur (siehe Abbildung \ref{fig:Architektur Bachelorarbeit}: Architektur Bachelorarbeit) verfügt über eine grosse Fabric \textit{Deutschschweiz}, welche die zwei Sites \textit{Dübendorf} und \textit{Emmen} beinhaltet. Der Standort \textit{Dübendorf} beinhaltet ein Gebäude der \textit{Luftwaffe}. Der Standort \textit{Emmen} beinhaltet den \textit{Flugplatz}, sowie eine \textit{Kaserne}.
 
-Ebenfalls zu beachten sind die Deployment Capabilities, welche als Border und Control Plane Node die Catalyst 3850 empfehlen. Darum werden in der Architektur die Catalyst 9300 als Intermediate oder Edge Nodes eingesetzt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Architecture/LabNetworkArchitecture-11-12}
+	\caption{Architektur Bachelorarbeit}
+	\label{fig:Architektur Bachelorarbeit}
+\end{figure}
+
+
+
 
 \subsection{ENCS 5400}
 
@@ -22,8 +32,8 @@ Auf diesem System können virtuelle Router, Firewalls, WLCs und mittels Third Pa
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS_Architecture.jpg}
-	\caption{ENCS Architecturee \cite{enterprise-network-functions-virtualization-faq} }
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS_Architecture.png}
+	\caption{ENCS Architecture \cite{enterprise-network-functions-virtualization-faq} }
 	\label{fig:ENCS Architecture}
 \end{figure}
 
@@ -83,6 +93,8 @@ Das Deployment des Images soll via DNA Center funktionieren. Aus diesem Grund mu
 
 
 
+
+
 \subsection{DNA Center}
 Das DNA Center unterstützt eine Clusterkonfiguration mit einem oder drei Hosts. Im Optimalfall sollte das DNA Center in einem Cluster mit drei Nodes installiert werden. Der Cluster bietet sowohl Software als auch Hardware mit hoher Verfügbarkeit. Das DNA Center bietet einen Mechanismus zum Verteilen der Verarbeitung und Datenbankreplikation auf mehrere Hosts. Durch das Clustering werden Ressourcen und Funktionen gemeinsam genutzt und es werden hohe Verfügbarkeit und Skalierbarkeit ermöglicht. \\
 
@@ -90,18 +102,25 @@ Die folgende Abbildung zeigt die empfohlenen Verbindungen für einen DNA Center 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{img/Absicherung/DNAC-Cluster}
-	\caption{DNA Center Cluster \cite{DNAC-Cluster} }
+	\caption{DNA Center Cluster \cite{dnac-cluster} }
 	\label{fig:DNA Center Cluster}
 \end{figure}
-Alle bis auf eine der Verbindungen für jeden Knoten im drei Nodes Cluster sind die gleichen wie für den einzelnen Node und verwenden dieselben Ports. Die Ausnahme ist der Cluster-Port (Port 2, enp10so, Network Adapter 1), der erforderlich ist, damit jeder Host im Cluster mit drei Knoten mit den anderen kommunizieren kann. \\
+Alle bis auf eine der Verbindungen für jeden Node im drei Nodes Cluster sind die gleichen wie für den einzelnen Node und verwenden dieselben Ports. Die Ausnahme ist der Cluster-Port (Port 2, enp10so, Network Adapter 1), der erforderlich ist, damit jeder Node im Cluster mit den anderen kommunizieren kann. \\
 
-Für Clusterbereitstellungen mit mehreren Knoten müssen sich alle Cluster Nodes im selben Netzwerk und am selben Standort befinden. Die Appliance unterstützt keine Verteilung von Knoten über mehrere Netzwerke oder Standorte. Diese Limitierung der Bereitstellung, sowie auch die maximale Anzahl der unterstützen Nodes wird sich hoffentlich in Zukunft noch ändern.
+Für Clusterbereitstellungen mit mehreren Nodes müssen sich alle Cluster Nodes im selben Netzwerk und am selben Standort befinden. Die Appliance unterstützt keine Verteilung von Knoten über mehrere Netzwerke oder Standorte. Diese Limitierung der Bereitstellung, sowie auch die maximale Anzahl der unterstützen Nodes wird sich hoffentlich in Zukunft noch ändern.
 
-\subsection{LISP Map Server}
-Es gibt zwei Betriebsarten für einen LISP Map-Server(MS): 
+Wenn ein Node innerhalb einer Multi-Host-Cluster-Konfiguration ausfällt, beträgt die Zeit für die Wiederherstellung des Clusters in der Regel 20 Minuten. Fällt in einem Multi-Host Cluster mit drei Nodes aus irgendeinem Grund ein einzelner Host aus und es fällt ein zweiter Host aus, so fällt auch der letzte Host sofort aus. Es müssen immer zwei der drei Nodes im Cluster laufen, damit ein funktionsfähiger Cluster noch gewährleistet werden kann.
+
+
+
+
+
+\subsection{LISP Map Server / Control Plane Node}
+Der Control Plane Node ermöglicht LISP und enthält folgende Funktionen:
 \begin{itemize}
-	\item als Map-Resolver(MR), der Map-Requests von einem ITR entgegennimmt und das EID-zu-RLOC-Mapping mit Hilfe der verteilten Mapping-Datenbank auflöst
-	\item als Map-Server(MS), der autoritative EID-zu-RLOC-Mappings von einem ETR lernt und in der Datenbank veröffentlicht
+	\item einen Map Resolver (MR), der Map-Requests von einem ITR entgegennimmt und das EID-zu-RLOC-Mapping mit Hilfe der verteilten Mapping-Datenbank auflöst
+	\item einen Map Server (MS), der autoritative EID-zu-RLOC-Mappings von einem ETR lernt und in der Datenbank veröffentlicht
+	\item eine Host Tracking Database (HTDB), welche ein zentrales Repository für die EID-zu-Fabric-Edge-Nodes Bindings beinhaltet.
 \end{itemize}
 
 Zur Bereitstellung gibt es zwei Varianten. Zum einem kann es einen redundanten globalen MSMR geben, oder es werden pro Fabric ein MSMR implementiert.
@@ -190,6 +209,61 @@ Es sollten mehrere Map-Server vorhanden und eingetragen sein. Optimalerweise ist
 
 \paragraph{MR}
 Für den Map-Resolver sollte eine Anycast IP-Adresse verwendet werden. So werden die Pakete gesendet und über einen verfügbaren Map-Resolver zum Ziel weitergeleitet. Auch hier ist es sinnvoll, mindestens einen Map-Resolver pro Site bereitzustellen.
+
+\subsubsection{Analyse mittels LISP Commands}
+Es gibt viele LISP Befehle, welche die Analyse vereinfachen können. Nachfolgend zeigen wir einige LISP Commands, zusammen mit den ihren Ausgaben. \cite{lisp-commands}
+
+\paragraph{LISP EID-Table}
+Auf einem Control Plane kann die EID-Tabelle mit folgendem Befehl ausgegeben werden:
+
+\begin{lstlisting}[language=bash]
+show lisp eid-table vrf <VRF Name> ipv4 map-cache
+\end{lstlisting}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/lisp_eid-table}
+	\caption{LISP EID-Table}
+	\label{fig:LISP EID-Table}
+\end{figure}
+
+
+
+
+\paragraph{LISP EID-Table Map Cahe Entry}
+Ein Eintrag in der EID-Table im Map Cache kann mit folgender Abfrage detaillierter angezeigt werden:
+
+\begin{lstlisting}[language=bash]
+show lisp eid-table vrf <VRF Name> ipv4 map-cache <IP>
+\end{lstlisting}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/lisp_eid-table-entry}
+	\caption{LISP EID-Table Map Cache Entry}
+	\label{fig:LISP EID-Table Map Cache Entry}
+\end{figure}
+
+\paragraph{LISP Database EID-Table}
+Der folgende Befehl kann verwendet werden, um die Egress Tunnel Router (ETR) konfigurierten lokalen IPv4-EID-Präfixes und der zugehörigen Locator-Sets auszugeben:
+
+\begin{lstlisting}[language=bash]
+show ip lisp database eid-table <VRF Name>
+\end{lstlisting}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/lisp_eid-table-database-rloc}
+	\caption{LISP Database EID-zu-RLOC}
+	\label{fig:LISP Database EID-zu-RLOC}
+\end{figure}
+
+
+
+
+
 
 \subsection{ISE / Radius}
 
