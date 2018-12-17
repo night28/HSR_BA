@@ -265,15 +265,7 @@ show ip lisp database eid-table <VRF Name>
 
 
 
-\subsection{ISE / Radius}
-
-\subsubsection{ISE Cluster}
-
-Um die Verfügbarkeit des ISE zu erhöhen, kann diese in einem Cluster, bestehend aus einem Master und mehreren Slaves betrieben werden. Dies erhöht die Ausfallsicherheit aller Services auf dem ISE. Damit diese gewährleistet sind, wenn ein Aussenstandort die Verbindung zum Hauptsitz verliert, müsste aber an jedem Standort ein ISE Slave existieren. Bei sehr vielen Standorten ist dies auf Grund des Verwaltungsaufwands und der Kosten für viele ISE Instanzen nicht praktikabel. Ein Cluster am Hauptstandort ist aber sicherlich sinnvoll.
-
-\subsubsection{Read Only Radius Server an Aussenstandorten}
-
-In Aussenstellen wird ein Read Only Radius Server betrieben, damit die Network Access Devices auch im Falle eines Unterbruchs der Verbindung zum Hauptsitz einen Radius Server zur Verfügung haben. Hier könnte beispielsweise Freeradius eingesetzt werden. Da Freeradius seine Informationen nicht direkt vom ISE beziehen kann, muss vom ISE ein externer Radius Server verwendet werden, der eine Replikation unterstützt. Dies kann beispielsweise Freeradius sein.
+\subsection{ISE / Radius / SGT}
 
 \subsubsection{Deployment Size and Scaling Recommendations}
 
@@ -307,12 +299,102 @@ Die nachfolgenden Tabellen zeigen die Performance und Scalability Metriken für 
 	\label{fig:ISE - Platform eXchange Grid (pxGrid v2) Scaling}
 \end{figure}
 
+\subsubsection{ISE Cluster}
+
+Um die Verfügbarkeit des ISE zu erhöhen, kann diese in einem Cluster, bestehend aus einem Primary Node und einem Secondary Node, betrieben werden. Dies erhöht die Ausfallsicherheit aller Services auf dem ISE.
+
+\subsubsection{Distributed Deployment}
+
+Damit Aussenstandorte auch gegen einen Ausfall der Verbindung zum Hauptstandort abgesichert sind, macht ein Distributed Deployment Sinn. Dies bedeutet, dass an jedem Standort mindestens ein ISE Server betrieben wird. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-Distributed-Deployment.png}
+	\caption{ISE - Distributed Deployment \cite{ise-install-guide}}
+	\label{fig:ISE - Distributed Deployment}
+\end{figure}
+
+Alle Informationen des Primary Node werden auf die Secondary Nodes an den Aussenstandorten repliziert. Network Access Devices und Clients an diesen Standorten können also die lokale Instanz verwenden.  Für wichtige Standorte kann die Ausfallsicherheit und Performance weiter erhöht werden, indem dort mehrere Instanzen betrieben werden.
+
+\paragraph{Installation auf dem ENCS 5400}
+
+Die Installation des ISE auf dem ENCS 5400 funktioniert ähnlich, wie dies bereits in Kapitel 4.2 beschrieben wurde. Daher werden hier nur die Besonderheiten des ISE beschrieben.
+
+\subparagraph{Image Upload}
+Für den ISE kann kein komplettes Disk Image importiert werden. Daher wird in diesem Fall das ISO auf den ENCS kopiert. Auf Grund der Grösse des ISOs kann dies aber nicht über das Web-Interface gemacht werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS-Upload-Limit.png}
+	\caption{ENCS - Upload Limit}
+	\label{fig:ENCS - Upload Limit}
+\end{figure}
+
+Ein Image oder ISO über 6GB muss daher via USB, SCP oder NFS auf den ENCS kopiert werden. 
+
+\begin{lstlisting}[language=bash]
+nfvis# scp root@10.22.0.15:/root/isos/ise-2.3.iso intdatastore:
+\end{lstlisting}
+
+Nach dem Upload muss das ISO noch registriert werden. \textit{VM Life Cycle $\rightarrow$ Image Repository $\rightarrow$ Browse Datastore $\rightarrow$ Register}
+
+\subparagraph{Image Deployment}
+
+Falls noch kein passendes Profil existiert, muss dieses wie in Kapitel 4 beschrieben erstellt werden. Hierbei sind die sehr hohen Hardwareanforderungen der ISE zu beachten. Die bei uns verwendete Version 2.3 stellt folgende Anforderungen:
+
+\begin{table}[H]
+	\rowcolors{2}{gray!25}{white}
+	\centering
+	\begin{tabularx}{\textwidth}{l | X}
+		CPU & 4 Cores mit je 1.8 GHz        \\
+		\hline
+		Memory & 6GB \\
+		\hline
+		Hard Disk & 100 GB (Write IO 50MB/s, Read IO 300MB/s) \\
+	\end{tabularx}
+	\caption{ISE Requirements}
+	\label{tab:ISE Requirements}
+\end{table}
+
+Die VM kann nun unter \textit{VM Life Cycle $\rightarrow$ Deploy} erstellt werden. Es wird eine VM vom Typ \textit{OTHER} benötigt. Es muss ein Name, das Image und ein Profil definiert werden. Zudem muss die VM mit allen nötigen Netzwerken verbunden werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS-ISE-Deployment.png}
+	\caption{ENCS - ISE Deployment}
+	\label{fig:ENCS - ISE Deployment}
+\end{figure}
+
+\subparagraph{ISE Konfiguration}
+
+Sobald die VM deployed ist, wird das Setup gestartet. Es müssen grundlegende Informationen wie Hostname und Netzwerkeinstellungen konfiguriert werden.  
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-Setup.png}
+	\caption{ISE-Setup}
+	\label{fig:ISE-Setup}
+\end{figure}
+
+\subparagraph{Distributed Deployment}
+
+Sobald die Installation des zweiten Nodes abgeschlossen ist, kann diese auf dem Primary Node als Secondary Node hinzugefügt werden.
+
+TODO
+
+\subsubsection{Third Party Software}
+
+Alternativ zum Distributed Deployment der ISEs kann eine Replikation der Services auch mittels Third Party Software erreicht werden. 
+
+\subsubsection{Read Only Radius Server an Aussenstandorten}
+
+In Aussenstellen wird ein Read Only Radius Server betrieben, damit die Network Access Devices auch im Falle eines Unterbruchs der Verbindung zum Hauptsitz einen Radius Server zur Verfügung haben. Hier könnte beispielsweise Freeradius eingesetzt werden. Da Freeradius seine Informationen nicht direkt vom ISE beziehen kann, muss vom ISE ein externer Radius Server verwendet werden, der eine Replikation unterstützt. 
+
 
 \paragraph{ISE}
-An einem Hauptstandort wird der primäre ISE Node und ein Dedicates ISE Syslog oder Logging Node betrieben. In einem grossen zentralisierten Netzwerk sollte ein Load Balancer verwendet werden, der die Bereitstellung von AAA-Clients vereinfacht. Die Verwendung eines Load Balancers erfordert nur einen einzigen Eintrag für die AAA-Server und der Load Balancer optimiert das Routing von AAA-Anfragen an die verfügbaren Server. Um einen Single Point of Failure zu vermeiden, sollten zwei Load Balancer eingesetzt werden. Für diese Konfiguration müssen jedoch auf den erforderlichen Geräten zwei AAA-Server-Einträge engerichtet werden.
+An einem Hauptstandort wird der primäre ISE Node und ein Dedicated ISE Syslog oder Logging Node betrieben. In einem grossen zentralisierten Netzwerk sollte ein Load Balancer verwendet werden, der die Bereitstellung von AAA-Services vereinfacht. Die Verwendung eines Load Balancers erfordert nur einen einzigen Eintrag für die AAA-Server und der Load Balancer optimiert das Routing von AAA-Anfragen an die verfügbaren Server. Um einen Single Point of Failure zu vermeiden, sollten zwei Load Balancer mit Failover IP eingesetzt werden.
 
-Weitere verteilte grosse Standorte können über eine eigene AAA-Infrastruktur für eine optimale AAA-Performance verfügen. Ein zentralisiertes Verwaltungsmodell hilft bei der Aufrechterhaltung einer konsistenten, synchronisierten AAA-Richtlinie. Ein zentralisiertes Konfigurationsmodell verwendet einen primären Cisco ISE Node mit einem sekundären Cisco ISE Node. Cisco empfiehlt für jeden Standort eine separate Monitoring Persona auf dem Cisco ISE Node, aber jeder entfernte Standort sollte seine eigenen einzigartigen Netzwerkanforderungen beibehalten.
-
+Weitere verteilte grosse Standorte können über eine eigene AAA-Infrastruktur für eine optimale AAA-Performance verfügen. Ein zentralisiertes Verwaltungsmodell hilft bei der Aufrechterhaltung einer konsistenten, synchronisierten AAA-Richtlinie. Ein zentralisiertes Konfigurationsmodell verwendet einen primären Cisco ISE Node mit einem sekundären Cisco ISE Node. 
 
 \paragraph{Freeradius}
 
@@ -331,8 +413,9 @@ Auf den Network Devices muss der Radius Server vom jeweiligen Standort konfiguri
 
 
 \subsection{SGT Access List}
-Beim Erstellen von SGTs über die DNAC-Benutzeroberfläche wird die ISE-Benutzeroberfläche cross-gestartet und die Aufgabe wird dort abgeschlossen. ISE verwaltet alle skalierbaren Gruppeninformationen, die später in DNAC für die Richtlinienerstellung verwendet werden. Obwohl die Richtlinien und die entsprechenden Verträge bei DNAC erstellt werden, werden beide über die REST-API der ISE an die ISE zurückgemeldet. ISE dient dann als zentrale Anlaufstelle für SGTs, Richtlinien und Verträge (SGACLs), die dann dynamisch an die Netzwerkinfrastruktur verteilt werden.
-Die Segmentierung innerhalb der SDA wird durch die kombinierte Verwendung von virtuellen Netzwerken (VN), die mit VRFs gleichgesetzt sind, als auch TrustSec Scalable Group Tags (SGTs) ermöglicht. Während die Segmentierung durch die Verwendung von absichtsgesteuerten oder speziell dafür entwickelten virtuellen Netzwerken allein erreicht werden kann, bieten die Cisco Trustsec SGTs eine logische Segmentierung basierend auf der Gruppenmitgliedschaft. Cisco bietet eine zusätzliche Granularitätsebene, mit der mehrere SGTs innerhalb eines einzigen VN verwenden können, die eine Mikrosegmentierung innerhalb des VN ermöglicht. Die Segmentierung erfolgt innerhalb des SDA sowohl auf Makro- als auch auf Mikroebene durch virtuelle Netzwerke bzw. SGTs. Die Richtlinien und die damit verbundenen Verträge werden im DNAC konfiguriert und dann über die REST-API an die ISE übermittelt. ISE aktualisiert dann die Edge Nodes mit nur den Richtlinien für SGTs, die den angeschlossenen Geräten zugeordnet sind. Die Durchsetzung erfolgt beim Austritt, wenn das Ziel verbunden ist. \cite{sda-segmentation-may2018}
+Beim Erstellen von SGTs über die DNAC-Benutzeroberfläche wird auf die ISE-Benutzeroberfläche weitergeleitet und die Aufgabe wird dort abgeschlossen. ISE verwaltet alle Gruppeninformationen, die später in DNAC für die Richtlinienerstellung verwendet werden. Obwohl die Richtlinien und die entsprechenden Contracts bei DNAC erstellt werden, werden beide über die REST-API der ISE an die ISE zurückgemeldet. ISE dient dann als zentrale Anlaufstelle für SGTs, Richtlinien und SGACLs, die dann dynamisch an die Netzwerkinfrastruktur verteilt werden.
+Die Segmentierung innerhalb der SDA wird durch die kombinierte Verwendung von virtuellen Netzwerken (VN), die mit VRFs gleichgesetzt sind, als auch TrustSec Scalable Group Tags (SGTs) ermöglicht. Während die Segmentierung durch die Verwendung von absichtsgesteuerten oder speziell dafür entwickelten virtuellen Netzwerken allein erreicht werden kann, bieten die Cisco Trustsec SGTs eine logische Segmentierung basierend auf der Gruppenmitgliedschaft. Cisco bietet eine zusätzliche Granularitätsebene, mit der mehrere SGTs innerhalb eines einzigen VN verwenden können, die eine Mikrosegmentierung innerhalb des VN ermöglicht. Die Segmentierung erfolgt innerhalb des SDA sowohl auf Makro- als auch auf Mikroebene durch virtuelle Netzwerke bzw. SGTs. Die Richtlinien und die damit verbundenen Contracts werden im DNAC konfiguriert und dann über die REST-API an die ISE übermittelt. ISE aktualisiert dann die Edge Nodes mit den Richtlinien für SGTs, die den angeschlossenen Geräten zugeordnet sind. 
+\cite{sda-segmentation-may2018}
 
 Kurze Zusammenfassung der damit benötigten Komponenten:
 \begin{itemize}
@@ -342,7 +425,6 @@ Kurze Zusammenfassung der damit benötigten Komponenten:
 	\item Security Exchange Protocol (SXP) - Das SGT Exchange Protocol (SXP) ist ein Protokoll, das für den TrustSec Dienst entwickelt wurde, um die IP-SGT-Bindungen auf Netzwerkgeräte zu übertragen, die keine SGT-fähige Hardwareunterstützung für Hardware bieten, die SGT / SGACL unterstützt.
 \end{itemize}
 
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{img/Absicherung/SGT-FusionFirewall}
@@ -350,10 +432,10 @@ Kurze Zusammenfassung der damit benötigten Komponenten:
 	\label{fig:Policy Enforcement mit einer Fusion Firewall}
 \end{figure}
 
-Oben dargestellte Abbildung veranschaulicht die Verwendung einer Fusion Firewall, welche für die Kommunikation zwischen virtuellen Netzwerken sowie für den Verkehr an einem anderen Ort im Netzwerk. Mithilfe von Standard ACLs oder gruppenbasierten Richtlinien mit SGTs werden Firewall-Regeln in der Fusions-Firewall definiert, die den Datenverkehr zwischen Endpunkten steuert.
+Die obige Abbildung veranschaulicht die Verwendung einer Fusion Firewall, welche für die Kommunikation zwischen virtuellen Netzwerken sowie für den Verkehr an einem anderen Ort im Netzwerk. Mit Hilfe von Standard ACLs oder gruppenbasierten Richtlinien mit SGTs werden Firewall-Regeln in der Fusions-Firewall definiert, die den Datenverkehr zwischen Endpunkten steuert.
 
 \subsubsection{Failover}
-Die Absicherung der Access Listen kann beispielsweise nach folgenden Beispielen erarbeitet werden, müssen jedoch noch genauer getestet werden:
+Die Absicherung der Access Listen kann beispielsweise nach folgenden Beispielen erarbeitet werden:
 
 \begin{itemize}
 	\item Beispiel1: lokal auf 9300 SGACLs alle fünf Minuten sichern und diese bei Ausfall wieder eintragen. Nachteil: Host-Mobility funktioniert nicht, aber lokal kann weitergearbeitet werden.
