@@ -1,0 +1,22 @@
+\section{Abstrahierung}
+Nun folgt die Entwicklung eines Operations Orchestrators für die nachfolgenden zwei bis drei beschriebenen Use Cases.
+
+\subsection{Use Cases} 
+Die Use Cases (siehe Kapitel \ref{usecases}: Use Cases) sind nach der Nummerierung priorisiert worden. Der UC01 soll auf jeden Fall umgesetzt werden. Der UC02 muss evaluiert werden, ob dies mit der API des DNA Centers im Zusammenspiel mit dem ENCS überhaupt möglich ist. Zu guter Letzt kommt der UC03, welcher nur optional ist und bei genügend verbleibender Zeit implementiert wird.
+
+
+\subsection{Technologien}
+Für das entwickeln des Orchestratortool wird Flask verwendet, welches auf Python basiert. Mit diesem soll eine Web Anwendung entwickelt werden, die auf die vorhandene API des DNA Center und wenn nötig über die API des ENCS Informationen abruft und Konfigurationen vornimmt.
+
+\subsubsection{Python}
+Python ist eine objektorientierte Programmiersprache. Die einfache und leicht erlernbare Python-Syntax hebt die Lesbarkeit hervor und reduziert dadurch die Programmwartung. Python unterstützt Module und Pakete, was die Modularität von Programmen und die Wiederverwendung von Code fördert. Der Python-Interpreter und die umfangreiche Standardbibliothek sind in Quell- oder Binärform kostenlos für alle gängigen Plattformen verfügbar und können frei verteilt werden. \cite{python}
+
+\subsubsection{Flask}
+Flask ist ein in Python geschriebenes Webframework. Der Fokus von Flask liegt auf Erweiterbarkeit und guter Dokumentation. Die einzigen Abhängigkeiten sind Jinja2, eine Template-Engine, und Werkzeug, eine Bibliothek zum Erstellen von WSGI-Anwendungen. \cite{flask}
+
+\subsubsection{DNA Center API}
+
+Die Intent-API ist eine Northbound REST API, welche bestimmte funktionen des DNA Centers verfügbar macht. Mit der RESTful Intent API des DNA Centers können die HTTP- (GET, POST, PUT, DELETE) und JSON-Syntax verwendet werden, um das Netzwerk zu analysieren und zu konfigurieren. \cite{dnac-api}
+
+\subsubsection{ENCS API}
+Überhaupt benötigt, oder sind die nötigen Einstellungen auch über DNA Center möglich?
