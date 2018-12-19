@@ -62,7 +62,7 @@ Unter \textit{Provision $\rightarrow$ Fabric} die gewünsche Fabric wählen und 
 \end{figure}
 
 \paragraph{DHCP Options}
-Damit der Extended Node beim booten nun erfolgreich mittels PnP dem DNA Center hinzugefügt wird, müssen dem IP Pool noch DHCP Options angegeben werden. Dafür im Infoblox \textit{Data Management $\rightarrow$ DHCP $\rightarrow$ Networks $\rightarrow$ Networks} den IP Pool auswählen und mit \textit{Edit} editieren. Hier unter \textit{IPv4 DHCP Options $\rightarrow$ Custom DHCP Options} folgende Option hinzufügen:
+Damit der Extended Node beim Booten nun erfolgreich mittels PnP dem DNA Center hinzugefügt wird, müssen dem IP Pool noch DHCP Options angegeben werden. Dafür im Infoblox \textit{Data Management $\rightarrow$ DHCP $\rightarrow$ Networks $\rightarrow$ Networks} den IP Pool auswählen und mit \textit{Edit} editieren. Hier unter \textit{IPv4 DHCP Options $\rightarrow$ Custom DHCP Options} folgende Option hinzufügen:
 \begin{itemize}
 	\item Option 43 (vendor-encapsulated-option): 5A1D;B2;K4;I[\textit{IP des DNA Center}];J80
 \end{itemize}
@@ -77,7 +77,40 @@ Am einfachsten ist es, wenn auf dem Extended Node die Konfiguration gelöscht un
 	\label{fig:Fabric Infrastructure}
 \end{figure}
 
+\subsection{Transit Fabric}
 
+Um die Kommunikation zwischen verschiedenen Fabric Sites innerhalb einer Fabric Domain zu ermöglichen, können Transit Fabrics eingesetzt werden. Diese verbinden die Sites und ermöglichen beispielsweise Ende-zu-Ende Segmentierung.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/Transit-Fabric.png}
+	\caption{Transit Fabric \cite{transit-fabric} }
+	\label{fig:Transit Fabric}
+\end{figure}
+
+\subsubsection{IP Transit}
+
+Im IP Transit werden traditionelle Technologien, beispielsweise MPLS oder VRF-Lite, eingesetzt. Im Gegensatz zum SD Access Transit muss diese Transit Fabric grösstenteils manuell konfiguriert werden. Das DNA Center übernimmt lediglich die Konfiguration der externen Interfaces der Border Nodes. 
+Dies bringt zum einen zusätzlichen Konfigurationsaufwand. Im Gegenzug kann die Transit Fabric aber flexibler konfiguriert werden. Zudem ist keine Control Plane nötig. Es gibt also keinen Single Point of Failure, sofern das Netzwerkdesign die nötige Redundanz aufweist.
+Ein weiterer Vorteil ist, dass alle Geräte, die die nötigen Protokolle unterstützen, verwendet werden können.
+
+\subsubsection{SD Access Transit}
+
+Im SD Access Transit wird die Kommunikation zwischen den Fabric Sites mittels Technologien wie VXLAN, LISP und CTS sichergestellt. In diesem Szenario wird eine Control Plane Node benötigt. Wie auch in einer normalen Fabric ist es ratsam, mehrere Control Plane Nodes zu definieren. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/SD-Access-Transit.png}
+	\caption{SD Access Transit \cite{transit-fabric} }
+	\label{fig:SD Access Transit}
+\end{figure}
+
+Im Gegensatz zum IP Transit können in der SD Access Transit Fabric nur unterstützte Geräte verwendet werden. Zum jetzigen Zeitpunkt sind dies:
+\begin{itemize}
+	\item C9K
+	\item ASR1K
+	\item ISR4K 
+\end{itemize}
 
 \subsection{ENCS 5400}
 
