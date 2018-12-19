@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add Virtual Network</h1>
+    <form action="/add_virtual_network_1" method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.vnname.label }}<br>
+            {{ form.vnname(size=32) }}
+        </p>
+        <p>
+            {{ form.fabric.label }}<br>
+            {{ form.fabric() }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
