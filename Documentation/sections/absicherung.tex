@@ -24,6 +24,61 @@ Diese neu erarbeitete Architektur (siehe Abbildung \ref{fig:Architektur Bachelor
 
 
 
+\subsubsection{Extended Nodes}
+In einer SDA-Lösung werden Netzwerkgeräte wie der Catalyst 3560CX als Extended Nodes bezeichnet. Der  Extended Node wird verwendet, um nachgeschaltete Nicht-Fabric Layer2 Netzwerkgeräte an die SDA-Fabric anzuschliessen und somit die Fabric zu erweitern.
+Der erweiterte Knoten ist ein Gerät wie zum Beispiel ein kleiner Switch (Compact Switch, Industrial Ethernet Switch oder Building Automation Switch), der eine Verbindung zum Fabric Edge Knoten herstellt
+über Layer 2. Geräte, die mit dem Extended Node verbunden sind, verwenden den Fabric Edge Nodes für die Kommunikation mit externen Subnetzen.  \\§
+
+Um einen Extended Node zu implementieren, sind zur Zeit noch einige manuelle Schritte notwendig.
+
+\paragraph{IP Adress Pool} Damit der Extended Node implementiert werden kann, ist ein IP Adress Pool an der dafür vorgesehenen Site notwendig. Im DNA Center unter \textit{Design $\rightarrow$ Network Settings $\rightarrow$ IP Address Pools} kann mit \textit{Reserve IP Pool} ein neuer IP Pool erstellt werden. Als Type muss unbedingt \textit{LAN} ausgewählt werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/Absicherung/ExtendedNode1}
+	\caption{Reserve IP Adress Pool}
+	\label{fig:Reserve IP Adress Pool}
+\end{figure}
+
+\paragraph{Host Onboarding für Extended Nodes} Als nächstes muss der IP Pool dem dazugehörigen VN zugeordnet werden, damit Extended Nodes am Edge Node erkannt werden. Unter \textit{Provision $\rightarrow$ Fabric} die gewünsche Fabric Domain auswählen. Anschliessend zu der Site navigieren, in welcher sich der Extended Node befinden soll und dort \textit{Host Onboarding} auswählen. Unter \textit{Virtual Networks} das \textit{Infra\_VN} auswählen und den vorher erstellten IP Adress Pool als Extended Pool Type zuweisen. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/ExtendedNode2}
+	\caption{Virtual Network IP Pool zuweisen}
+	\label{fig:Virtual Network IP Pool zuweisen}
+\end{figure}
+
+Wichtig ist das dem INFRA\_VN schon ein IP Pool mit dem Pool Type AP zugewiesen ist. Ansonsten muss noch ein IP Pool für dies erstellt und vorher dem Extended dem Infra\_VN zugewiesen werden.
+
+\paragraph{Port Assignment}
+Unter \textit{Provision $\rightarrow$ Fabric} die gewünsche Fabric wählen und zur Site navigieren. Nun kann unter \textit{Host Onboarding $\rightarrow$ Select Port Assignment} der Edge Node, an dem der Extended Node angeschlossen wird, ausgewählt werden. Das Interface auswählen und mit \textit{Assign} dem Interface einen Device Type mit dazugehörigem IP Pool zuweisen.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/ExtendedNode3}
+	\caption{Port Assignment}
+	\label{fig:Port Assignment}
+\end{figure}
+
+\paragraph{DHCP Options}
+Damit der Extended Node beim booten nun erfolgreich mittels PnP dem DNA Center hinzugefügt wird, müssen dem IP Pool noch DHCP Options angegeben werden. Dafür im Infoblox \textit{Data Management $\rightarrow$ DHCP $\rightarrow$ Networks $\rightarrow$ Networks} den IP Pool auswählen und mit \textit{Edit} editieren. Hier unter \textit{IPv4 DHCP Options $\rightarrow$ Custom DHCP Options} folgende Option hinzufügen:
+\begin{itemize}
+	\item Option 43 (vendor-encapsulated-option): 5A1D;B2;K4;I[\textit{IP des DNA Center}];J80
+\end{itemize}
+
+\paragraph{Extended Node}
+Am einfachsten ist es, wenn auf dem Extended Node die Konfiguration gelöscht und er neugestartet wird. Nun sollte der mit dem Fabric Edge Node verbundene Extended Node automatisch von einem Macro erkannt werden, welches auf dem Edge Node ausgeführt wird. Das Macro erkennt den Extended Node und startet den PnP Prozess. Nach Abschluss des Discovery Prozesses wird der neue Extended Node in der Fabric Site Topologie und natürlich auch im Provision Inventory erscheinen. Das Provision Inventory ist unter \textit{Provision $\rightarrow$ Devices $\rightarrow$ Inventory} zu erreichen. Die Site Topologie kann unter \textit{Provision $\rightarrow$ Devices $\rightarrow$ gewünschte Fabric $\rightarrow$ gewünschte Site} angezeigt werden, wie unten im Bild ersichtlich, wird der Extended Node in der Topologie mit \textit{EX} gekennzeichnet.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/ExtendedNode4}
+	\caption{Fabric Infrastructure}
+	\label{fig:Fabric Infrastructure}
+\end{figure}
+
+
+
 \subsection{ENCS 5400}
 
 Um mit möglichst kleinem Hardwareeinsatz eine maximale Autonomie der Aussenstandorte zu ermöglichen, wird pro Aussenstelle ein oder mehrere ENCS 5400 eingesetzt. 
@@ -608,4 +663,5 @@ Nun kann das Verteilen der Software Images nach folgendem Ablauf gestartet werde
 \end{enumerate}
 
 Sollte das Verteilen des Software Images nicht funktionieren, in dem es Beispielsweise die Übertragung immer wieder abbricht, so kann das Image auch manuell auf das Gerät kopiert werden. So würde dies bei dem vorher beschriebenen Vorgang \textit{Distribute} automatisch erkennt werden, dass sich das Image schon auf dem Gerät befindet.
+
 
