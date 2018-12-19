@@ -16,7 +16,7 @@
 \begin{itemize}
 	\item Besprechung genaue Aufgabenstellung und nächste Schritte
 	\item Chat für BA
-	\item Traktanden vor Meetings Liste an Betreuer? 
+	\item Traktanden falls nötig vor Meetings an Betreuer? 
 	\item ISE Lizenzen abgelaufen
 \end{itemize}
 
@@ -29,27 +29,26 @@
 		\item 10\% der Bachelorarbeit Analyse, wo kritische Stellen der Lösung sind
 		\begin{itemize}
 			\item Begrenzungen allgemein
-			\item DNAC muss keine Internetverbindung haben, da kein Lizenzenforcement bestehen
-			\item Wireless Controler erwähnen, dass diese redundant sein müssen, aber in nachfolgender Arbeit eher ausklammern.
-			\item Router mit virtuellen Maschinen (berücksichtigen für kritische Stellen, beispielsweise für Spiegelung von Radix Server)
+			\item DNAC benötigt keine Internetverbindung, da kein Lizenzenforcement
+			\item Wireless Controler nicht teil der BA
+			\item Router mit virtuellen Maschinen (berücksichtigen für kritische Stellen, beispielsweise für Spiegelung von Radius Server)
 		\end{itemize}
 		\item 45\% Analysieren wo die Lösung aufgrund der kritischen Stellen verbessert werden kann
 		\begin{itemize}
 			\item Transit Fabric oder VRF-Lite vergleichen, was ist besser einzusetzen?
 			\item Design anpassen aufgrund der Änderungen
-			\item ziemlich sicher hierachisches Modell, da mehrere Fabrics für FUB nötig
-			\item für die ganze Planung werden wahrscheinlich Docker Container verwendet
+			\item ziemlich sicher hierarchisches Modell, da mehrere Fabrics für FUB nötig
 		\end{itemize}
-		\item 45\% Implementation mit einem Business Controller (einem abstrahierten Modell)
+		\item 45\% Implementation mit Business Controller (einem abstrahierten Modell)
 		\begin{itemize}
 			\item 3-4 Use Cases, welche wir von der FUB erhalten
-			\item API Controller verwenden: Ziel der Automatisierung, damit nur noch MAC angegeben werden muss und nicht in WebGUI etliche Einstellungen vorgenommen werden können
+			\item API Controller verwenden: Ziel der Automatisierung, damit beispielsweise nur noch die MAC angegeben werden muss und nicht im Web GUI etliche Einstellungen vorgenommen werden müssen/können
 		\end{itemize}
 	\end{itemize}
 	\item Patrick wird uns bei Neuerungen informieren, welche von den Releases her für die Umsetzung der Bachelorarbeit relevant sind.
 	\item Zielsetzung vorläufig für 24. September 2018: ein laufendes DNA Center, mit allen Geräten sauber provisioned. Darum wird Patrick vor der wöchentlichen Sitzung mit uns zusammensitzen.
 	\item Detaillierte Aufgabenstellung wird noch geschrieben, von Cisco und FUB reviewt und uns nächste Woche übergeben	
-	\item Traktanden jeweils wieder im Voraus an Betreuen senden
+	\item Traktanden jeweils wieder im Voraus an Betreuen senden, wenn es eine längere Besprechung oder Vorbereitung benötigt
 \end{itemize}
 
 \paragraph{Offene Punkte (erledigt vor nächster Sitzung)} \mbox{}
@@ -125,6 +124,7 @@ keine
 		Fabric Jona abschliessen & Sandro \& Jessica \\
 		Projektplan anhand Aufgabenstellung erarbeiten & Sandro \& Jessica \\
 		Teil 1: Analyse Phase starten & Sandro \& Jessica \\
+		Aufgabenstellung & Laurent Metzger \\
 	\end{tabularx}
 	\label{tab:my-label}
 \end{table}
@@ -135,7 +135,7 @@ keine
 \end{itemize}
 
 \paragraph{Kommende Abwesenheiten} \mbox{}\\
-keine
+Urs Baumann
 
 \newpage
 
@@ -148,8 +148,6 @@ keine
 \paragraph{Sitzungsteilnehmer}
 \begin{itemize}	
 	\item Laurent Metzger 
-	\item Urs Baumann (abwesend)
-	\item Patrick Mosimann (abwesend)
 	\item Sandro Kaspar
 	\item Jessica Kalberer
 \end{itemize}
@@ -157,7 +155,7 @@ keine
 \paragraph{Traktanden}
 \begin{itemize}	
 	\item Analyse besprechen
-	\item VN für Backups ausstehend
+	\item VM für Backups ausstehend
 	\item Projektplanung
 \end{itemize}
 
@@ -174,6 +172,7 @@ keine
 		\rowcolor{gray!50}
 		\textbf{Was} & \textbf{Verantwortlichkeit} \\
 		\hline	
+		Analyse und Traktanden per Slack senden & Jessica \\
 		Analyse überarbeiten & Jessica \& Sandro  \\
 	\end{tabularx}
 	\label{tab:my-label}
@@ -253,7 +252,7 @@ keine
 				\item Das meiste sollte funktionieren, solange lokaler ISE/Radius etc. vorhanden
 				\item keine dezentrale Lösung nötig
 				\item Wie funktioniert die Redundanz?
-				\item Wie ist die Konvergenz (ISIS/BGP)? Gibt es eine Optimierung?
+				\item Wie ist die Konvergenz (IS-IS/BGP)? Gibt es eine Optimierung?
 				\item 
 			\end{itemize}
 			\item Fusion Router
@@ -283,10 +282,10 @@ keine
 	\begin{itemize}
 		\item Verbindungen mit VRF-Lite und Transit Fabric (VXLAN)
 		\item VRF Route Leaking einrichten (da sonst keine Kontrolle wenn alles in einer Routing Tabelle)
-		\item anpassung Architektur - Router als zweiter Legacy einrichten
-		\item Bei FUB ist die Telefonie zentral - sie müssen keine IP Connectivität haben
+		\item Anpassung Architektur - Router als zweiter Legacy einrichten
+		\item Bei FUB ist die Telefonie zentral - sie müssen keine IP Connectivity haben
 	\end{itemize}
-	\item Dokument wieder an Herrn Metzger und Urs senden, damit sie Reviewen können
+	\item Dokument wieder an Herrn Metzger und Urs für Review senden
 \end{itemize}
 
 
@@ -301,6 +300,10 @@ keine
 		Analyse überarbeiten & Jessica \& Sandro  \\
 		Dokument für Review an Betreuer senden & Jessica \\
 		Teil 2: Absicherung vorbereiten & Jessica \& Sandro \\
+		Router von Jona als zweiter Legacy einrichten & Jessica \& Sandro \\
+		Risiken Grafik anpassen & Sandro \\
+		Freischaltung Images ISR und ENCS & Patrick Mosimann \\
+		Liefertermin ENCS 5400 abklären & Laurent Metzger \\
 	\end{tabularx}
 	\label{tab:my-label}
 \end{table}
@@ -311,7 +314,7 @@ keine
 \end{itemize}
 
 \paragraph{Kommende Abwesenheiten} \mbox{}\\
-keine
+Jessica
 
 \newpage
 
@@ -344,7 +347,7 @@ keine
 		\item zweiten Router in Betrieb nehmen
 		\item Devices updaten
 		\item Transit Fabric einrichten
-		\item vrf Route Leaking
+		\item VRF Route Leaking
 		\item Absicherungen aus Analyse erarbeiten
 	\end{itemize}
 	\item Teil 3 kann auch parallel zu Teil 2 begonnen werden
@@ -407,7 +410,6 @@ keine
 		\item Wünsche und Anregungen für Inhalt
 		\item Termin möglichst spät im November
 	\end{itemize}
-	\item Endtermin BA - wird abgeklärt
 	\item Use Cases für Teil 3 ausstehend
 \end{itemize}
 
@@ -416,12 +418,11 @@ keine
 	\item ISE Cluster (3 Nodes) - keine autonome Standorte
 	\item DNAC lässt nur einen Radius Eintrag zu - Loadbalancer
 	\item DHCP Infoblox Active / Active Setup oder Active / Passiv mit Backup Pool - Variante A und B definieren
-	\item Verlängerung Endtermin BA
-	\item ENCS 5000
+	\item Möglichkeit für Verlängerung der BA wird abgeklärt. 
+	\item ENCS 5400
 	\begin{itemize}
 		\item NTP
 		\item DHCP Backup
-		\item Subinterfaces
 	\end{itemize}
 	\item Zwischenpräsentation
 	\begin{itemize}
@@ -440,7 +441,6 @@ keine
 		\rowcolor{gray!50}
 		\textbf{Was} & \textbf{Verantwortlichkeit} \\
 		\hline	
-		Zweiten Router in Betrieb nehmen & Jessica \& Sandro \\
 		Transit Fabric einrichten & Jessica \& Sandro  \\
 		VRF Route Leaking & Jessica \& Sandro \\
 		Teil2: Absicherung abschliessen / umsetzen & Jessica \& Sandro \\
@@ -486,24 +486,21 @@ keine
 		\item SGT ACL Absicherung Vorschläge?
 	\end{itemize}
 	\item Nächste Schritte
-	\item Zwischenpräsentation 
-	\begin{itemize}
-		\item Wünsche und Anregungen für Inhalt
-	\end{itemize}
-	\item Endtermin BA
+	\item Zwischenpräsentation: Wünsche und Anregungen für Inhalt
+	\item Endtermin BA freiwillig nach hinten verschieben Möglichkeit
 	\item Use Cases für Teil 3 ausstehend
 \end{itemize}
 
 \paragraph{Beschlüsse (Diskussion)}
 \begin{itemize}	
 	\item Erweiterte Module für ISR4431 erhalten, schon eingebaut und alles verkabelt
-	\item ENCS 5000 noch ausstehend
+	\item ENCS 5400 noch ausstehend
 	\item BA Endtermin formell noch ausstehend, aber wahrscheinlich bis Mitte Januar verlängert	
 	\item ISE / Radius Absicherung ähnlich wie DHCP
 	\item SGT ACL Absicherung - sinnvolle Replizierung?
 	\begin{itemize}
 		\item bleiben nach Timeout nur zwei Minuten auf Gerät
-		\item Beispiel1: lokal auf 9300 SGACLs alle fünf Minuten sichern und diese bei Ausfall wieder eintragen. Nachteil: Host-Mobility funktioniert nicht, aber lokal kann weitergearbeitet werden.
+		\item Beispiel1: lokal auf C9300 SGACLs alle fünf Minuten sichern und diese bei Ausfall wieder eintragen. Nachteil: Host-Mobility funktioniert nicht, aber lokal kann weitergearbeitet werden.
 		\item Beispiel2: global komplett alle SGACLs auf alle Geräte verteilen. Vorteil: Alle Geräten haben jederzeit alle Einträge. Nachteil: Die Maximum Scale Recommendations der SGACLs sind pro Gerät anders. C3850 - 1500 SGACLs, C9300 
 		\item TrustSec SXP Speaker/Listener auf C3850 und C9300 definieren
 		\item 3850 als Gateway  für 9300 Listener definieren
@@ -617,7 +614,6 @@ keine
 \begin{itemize}	
 	\item Laurent Metzger
 	\item Urs Baumann
-	\item Patrick Mosimann
 	\item Sandro Kaspar
 	\item Jessica Kalberer
 \end{itemize}
@@ -690,6 +686,71 @@ keine
 \paragraph{Kommende Abwesenheiten} \mbox{}\\
 keine
 
+
+\newpage
+
+
+
+
+
+
+\subsection{Sitzungsprotokoll 20.12.2018}
+
+\paragraph{Sitzungsteilnehmer}
+\begin{itemize}	
+	\item Laurent Metzger
+	\item Urs Baumann
+	\item Sandro Kaspar
+	\item Jessica Kalberer
+\end{itemize}
+
+\paragraph{Traktanden}
+\begin{itemize}	
+	\item Abgabe BA
+	\begin{itemize}
+		\item Wann und wo?
+		\item Anzahl gedruckte Exemplare
+		\item Abgabe per Mail oder Stick
+	\end{itemize}	
+	\item Was geschieht mit Hardware? Ist eine Übergabe notwendig?
+	\item 
+\end{itemize}
+
+\paragraph{Beschlüsse (Diskussion)}
+\begin{itemize}	
+	\item Abgabe BA
+	\begin{itemize}
+		\item 
+		\item 
+		\item 
+	\end{itemize}	
+	\item 
+	\item 
+\end{itemize}
+
+\paragraph{Offene Punkte (erledigt vor nächster Sitzung)} \mbox{}
+\begin{table}[H]
+	\rowcolors{2}{gray!25}{white}
+	\centering
+	\begin{tabularx}{\textwidth}{X | p{4.5cm}}
+		\rowcolor{gray!50}
+		\textbf{Was} & \textbf{Verantwortlichkeit} \\
+		\hline	
+		Arbeit drucken und binden & Jessica \& Sandro \\
+		Abgabe BA & Jessica \& Sandro \\
+		Vorbereitung Schlusspräsentation & Jessica \& Sandro \\
+	\end{tabularx}
+	\label{tab:my-label}
+\end{table}
+
+\paragraph{Nächster Termin}
+\begin{itemize}	
+	\item Abgabe: 21. Dezember 2018, 12 Uhr
+	\item Schlusspräsentation und mündliche Prüfung: 16. Januar 2019, 10.30 Uhr
+\end{itemize}
+
+\paragraph{Kommende Abwesenheiten} \mbox{}\\
+keine
 
 
 
