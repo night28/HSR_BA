@@ -523,7 +523,10 @@ Der Fabric Border Node kann die Netzwerkvirtualisierung mithilfe von externen VR
 \subsubsection{Richtlinienzuordnung}
 Der Fabric Border Node bildet auch SGT-Informationen aus der Fabric ab, die beim Verlassen dieser Fabric entsprechend verwaltet werden. SGT-Informationen werden vom Fabric Border Node an das ausserhalb der Fabric liegende Netzwerk weitergegeben, indem entweder die Tags mithilfe von SGT Exchange Protocol (SXP) zu Cisco-fähigen Geräten transportiert werden, oder indem SGTs direkt in einem Cisco-Metadatenfeld in einem Paket zugeordnet werden Inline-Tagging-Funktionen für Verbindungen zum Grenzknoten implementiert.
 
-\subsubsection{Ausfall Test}
+\subsubsection{Absicherung Border Node}
+Damit die Beeinträchtigung des Netzwerks bei einem Ausfall eines Border Nodes minimal ist, muss dieser redundant ausgelegt sein. Konkret bedeutet dies, dass pro Site mindestens zwei Border Nodes vorhanden sind. Des Weiteren sind diese in einem Full Mesh zu den Fusion Routern verkabelt, sodass auch der Unterbruch einzelner Verbindungen keinen direkten Einfluss auf die Netzwerkservices hat.
+
+\subsubsection{Test Stromausfall Border Node}
 Bei einem Tests mit einem Ping von einem Client nach extern, wurde während diesem Vorgang das Interface auf dem vorher zuständigen Border down genommen. Es gingen insgesamt ungefähr 27 Pings à je 0.1 Sekunden verloren, dass heisst es resultierte ein Unterbruch von ungefähr 2.7 Sekunden, bevor die Verbindung über den anderen Border wieder aufgenommen wurde.
 
 
@@ -545,7 +548,14 @@ Die Topologie wurde analog anhand der nachfolgenden Validation Topologie von Cis
 	\label{fig:Fusion Router Validation Topology}
 \end{figure}
 
-\subsection{Infoblox}
+\subsubsection{Absicherung Fusion Router}
+Wie auch beim Border Node ist darauf zu achten, dass pro Site mindestens zwei Fusion Router vorhanden sind. Dies ist insbesondere dann wichtig, wenn die Kommunkation zwischen den verschiedenen VNs gewährleistet sein muss. Um auch gegen einen Ausfall einer Verbindung abgesichert zu sein, müssen Verbindungen zu den Border Nodes, aber auch zu externen Netzwerken redundant ausgelegt sein.
+
+\subsubsection{Test Ausfall Fusion Router}
+
+Ein Ausfall eines Fusion Routers führt wie ein Ausfall eines Border Nodes zu einem teilweisen Verbindungsunterbruch im Bereich von wenigen Sekunden. In dieser Zeit kann BGP auf die neue Topologie reagieren und alle Pfade wiederherstellen.
+
+\subsection{Absicherung Infoblox}
 
 Infoblox stellt kritische Dienste wie DHCP, DNS und NTP für Netzwerkgeräte und Clients zur Verfügung. Aus diesem Grund muss die Verfügbarkeit dieser Services immer gewährleistet sein.
 
@@ -553,7 +563,7 @@ Infoblox stellt kritische Dienste wie DHCP, DNS und NTP für Netzwerkgeräte und
 Zwei Infoblox Instanzen können in einem High-Availability Pair betrieben werden. Damit sind alle Services redundant und ein Ausfall einer einzelnen Instanz hat keinen Einfluss auf den Betrieb. 
 
 \subsubsection{Grid}
-Infoblox kann in einem Grid betrieben werden. Dies bedeutet, es gibt einen Grid Master und mehrere Grid Member. Alle Konfigurationen werden auf dem Grid Master definiert. Des weiteren kann definiert werden, welche Member für spezifische Services zuständig sind. Somit kann sichergestellt werden, dass an Aussenstandorten nur die Services betrieben werden, die dort auch nötig sind. Um die Ausfallsicherheit weiter zu erhöhen, können Grid Master und Member zusätzlich als High-Availability Pair betrieben werden.
+Infoblox kann in einem Grid betrieben werden. Dies bedeutet, es gibt einen Grid Master und mehrere Grid Member. Alle Konfigurationen werden auf dem Grid Master definiert. Des Weiteren kann definiert werden, welche Member für spezifische Services zuständig sind. Somit kann sichergestellt werden, dass an Aussenstandorten nur die Services betrieben werden, die dort auch nötig sind. Um die Ausfallsicherheit weiter zu erhöhen, können Grid Master und Member zusätzlich als High-Availability Pair betrieben werden.
 
 \paragraph{Grid Member hinzufügen}
 
@@ -577,21 +587,26 @@ Sobald die Grid Member hinzugefügt wurden, kann definiert werden, für welche S
 	\label{fig:Infoblox - Member Assignment}
 \end{figure}
 
-\subsection{Third Party Software}
+\paragraph{Infoblox Services}
 
-Alternativ zu Infoblox Instanzen an allen Standorten können die Services auch mittels Third-Party Software angeboten werden.
+Damit alle Services, die Infoblox zur Verfügung stellt, stets an allen Standorten verfügbar sind, müssen die Clients primär die lokale Instanz von Infoblox verwenden. Diese kann auf einem ENCS 5000 oder einer anderen Virtualisierungsplattform betrieben werden.
 
-\subsubsection{DHCP}
+\subparagraph{DNS}
 
-\paragraph{Infoblox}
-Um die Krisenresistenz am Hauptstandort zu erhöhen, wird Infoblox als Multi-Node Cluster betrieben. Dadurch kann ein einzelner Node ausfallen, ohne dass dies einen Impact auf den Betrieb am Hauptstandort hat. 
+Werden an den Aussenstandorten Infoblox Instanzen verwendet, kann auf dem Grid Master definiert welche Instanzen was für Zonen zur Verfügung stellen. Somit können Clients an Aussenstellen alle nötigen Zonen auflösen.
+Im DNA Center müssen unter \textit{Design $\rightarrow$ Network Settings} jeweils die DNS Server vom entsprechenden Standort konfiguriert werden. Der Server am Hauptstandort kann als zweiter Server eingetragen werden.
+Auch die Clients müssen die korrekten Server verwenden. Dies hat den Vorteil, dass die Antwortzeiten möglichst kurz sind und DNS auch im Falle eines Unterbruchs zum Hauptstandort zur Verfügung steht. Sofern diese ihre IP Adresse mittels DHCP beziehen, kann der DNS Server entsprechend gesetzt werden. Ansonsten muss diese Konfiguration manuell vorgenommen werden.
 
-\paragraph{Aussenstellen}
-Da sich Infoblox nicht in Kombination mit 3rd Party Software in einem Cluster oder einer Failoverlösung betreiben lässt, müssen an Aussenstandorten eigenständige DHCP Server betrieben werden, um deren Autonomie sicherzustellen. Da Infoblox den isc-dhcp-server für seine DHCP Services verwendet, wird dieser auch an den Aussenstellen eingesetzt. 
-Für wichtige Aussenstandorte kann der isc-dhcp-server in einem Master-Slave Cluster betrieben werden. Somit isch an diesen Standorten ebenfalls eine Ausfallsicherheit gewährleistet.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{img/Absicherung/Infoblox_DHCP_DNS_Server.png}
+	\caption{Infoblox - DNS Server}
+	\label{fig:Infoblox - DNS Server}
+\end{figure}
 
-\paragraph{DNA Center}
-Im DNA Center muss für jeden Aussenstandort der jeweilige DHCP Server konfiguriert werden. Im Falle eines DHCP Clusters können hier auch mehrere Einträge erstellt werden.
+\subparagraph{DHCP}
+
+Wie auch bei DNS ist es wichtig, dass an Aussenstandorten stets der lokale DHCP Server verwendet wird. Dies kann im DNA Center unter \textit{Design $\rightarrow$ Network Settings} für jeden Standort konfiguriert werden. 
 
 \begin{figure}[H]
 	\centering
@@ -599,6 +614,24 @@ Im DNA Center muss für jeden Aussenstandort der jeweilige DHCP Server konfiguri
 	\caption{DNA Center - DHCP Server }
 	\label{fig:DNA Center - DHCP Server}
 \end{figure}
+
+Ist an einem Standort eine Hochverfügbarkeit des DHCP Services nötig, wird empfohlen, an diesem Standort ein High-Availability Pair zu betreiben.
+
+\subparagraph{NTP}
+
+Für NTP ist es besonders wichtig, dass dieser Dienst stets verfügbar und möglichst nahe beim Client ist. Wird der NTP Dienst also an jedem Standort mit Infoblox betrieben kann die nötige Verfügbarkeit gewährleistet werden und die Zeitabweichungen sind minimal.
+Auch hier, kann der NTP Server für die Netzwerkgeräte im DNA Center unter \textit{Design $\rightarrow$ Network Settings} individuell für jeden Standort konfiguriert werden. Für die Clients empfiehlt sich die DHCP Option 42. Mit dieser können den Clients die korrekten NTP Server mitgeteilt werden.
+Die NTP Server an den Aussenstandorten verwenden als primäre Quelle die NTP Server am Hauptstandort. Um einen Ausfall der Verbindung zu diesem abzusichern, sollte aber auch mindestens ein externen NTP Server konfiguriert werden.
+
+\subsection{Third Party Software}
+
+Alternativ zu Infoblox Instanzen an allen Standorten können die Services auch mittels Third-Party Software angeboten werden.
+
+\subsubsection{DHCP}
+
+\paragraph{Aussenstellen}
+Da sich Infoblox nicht in Kombination mit 3rd Party Software in einem Cluster oder einer Failoverlösung betreiben lässt, müssen an Aussenstandorten eigenständige DHCP Server betrieben werden, um deren Autonomie sicherzustellen. Da Infoblox den isc-dhcp-server für seine DHCP Services verwendet, sollte auch dieser an Aussenstandorten eingesetzt werden. Dieser kann auf einem Linux Server, optimalerweise virtualisiert auf dem ENCS 5400, betrieben werden.
+Für wichtige Aussenstandorte kann der isc-dhcp-server in einem Master-Slave Cluster betrieben werden. Somit ist an diesen Standorten ebenfalls eine Ausfallsicherheit gewährleistet.
 
 \subsubsection{DNS}
 
@@ -612,6 +645,7 @@ Damit Aussenstellen nicht auf DNS Server des Hauptstandortes angewiesen sind, ka
 	\caption{DNS Sequenzdiagramm}
 	\label{fig:DNS Sequenzdiagramm}
 \end{figure}
+
 \paragraph{Infoblox}
 
 Damit die Read-Only Server stets über die aktuellsten DNS Zonen verfügen, müssen die Informationen von Infoblox auf diese repliziert werden. In diesem Fall wird dafür der Zone Transfer verwendet. Dazu muss dies in Infoblox für alle Slave Server erlaubt werden. 
@@ -625,19 +659,11 @@ Dies wird in Infoblox via \textit{Grid $\rightarrow$ DNS $\rightarrow$ Infoblox 
 	\label{fig:Infoblox Zone Transfer}
 \end{figure}
 
-\paragraph{Infoblox Slave}
-
-Als DNS Slave kann Infoblox verwendet werden. Dazu wird an jedem Standort eine Infoblox Instanz betrieben. In unserem Fall ist dies eine virtuelle Instanz auf dem ENCS 5400. Diese wird zum Infoblox Grid hinzugefügt.
-
 \paragraph{DNS Slaves}
 
 Auf den Slaves an den jeweiligen Aussenstandorten müssen die Zonen als Slave Zonen konfiguriert sein und Infoblox muss als Master konfiguriert werden. Dadurch können die Zonen vom Master auf den Slave transferiert werden. Der Slave aktualisiert alle Slave Zonen in regelmässigen Abständen. Dieser Intervall wird in der Zone im SOA Record mit dem "Refresh" Parameter definiert.
 Zusätzlich kann auf dem Master konfiguriert werden, dass alle Slaves mittels "Notify" informiert werden, sobald sich eine Zone ändert, worauf der Slave die aktuellsten Informationen für diese Zone abruft. Somit ist sichergestellt, dass alle Server an Aussenstandorten stets über eine aktuelle Konfiguration verfügen.
-
-\paragraph{Clients}
-
-Auf den Cliens ist es wichtig, dass alle nötigen DNS Server in der korrekten Reihenfolge konfiguriert werden. Als erster Server soll der DNS Server am jeweiligen Standort eingetragen werden, um Antwortzeiten möglichst gering zu halten. Sollte dieser ausfallen, kann auf Infoblox oder weitere DNS Server zurückgegriffen werden.
-
+Auf Grund der grossen Verbreitung sollte bind verwendet werden. Auch Infoblox setzt dieses Produkt ein. Dieses kann, wie auch der isc-dhcp-server auf einem Linux Server betrieben werden.
 
 \subsection{Scheduled Software Updates}
 Alle Netzwerk Devices die über das DNA Center verwaltet werden, erhalten ihre aktuellsten Software Images auch von diesem. Die Images haben teils sehr unterschiedliche Grössen (von 200 MB bis zu 1 GB), weshalb es wichtig ist, dass sich diese schon vor einem Upgrade auf den Geräten befinden. 
