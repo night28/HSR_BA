@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="starter-template">
+        <p class="lead">Virtual Networks</p>
+    </div>
+
+    <table class="table">
+        <thead>
+        <th>
+            Network Name
+        </th>
+        <th>
+            Secure Group
+        </th>
+        <th>
+            Secure Group Tag
+        </th>
+        </thead>
+        <tbody>
+        {% for network in virtual_networks %}
+            <tr>
+                <td>
+                    {{ network.name }}
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            {% if network.scalable_groups %}
+                {% for scalable_group in network.scalable_groups %}
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            {{ scalable_group.name }}
+                        </td>
+                        <td>
+                            {{ scalable_group.securityGroupTag }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tr>
+        {% endfor %}
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+            <a href="/add_virtual_network_1">Add Virtual Network</a>
+        </td>
+        </tbody>
+    </table>
+{% endblock %}
