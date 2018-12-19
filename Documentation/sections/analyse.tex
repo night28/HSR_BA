@@ -43,8 +43,8 @@ Diese Grössenüberlegungen sind besonders für grosse Unternehmen wichtig, da d
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{img/Analyse/CVD-DNACmanagementofSDA-1-2-5}
-	\caption{DNAC management of SDA \cite{sda-designguide-sept2018}}
-	\label{fig:DNAC management of SDA}
+	\caption{DNA Center management of SDA \cite{sda-designguide-sept2018}}
+	\label{fig:DNA Center management of SDA}
 \end{figure}
 
 
@@ -59,13 +59,13 @@ Diese Grössenüberlegungen sind besonders für grosse Unternehmen wichtig, da d
 \subsubsection{Maximum Skalierungen}
 Folgende maximalen Skalierungen sollten für grosse Organisationen besonders berücksichtigt werden. Diese Daten sollten bei der Auswahl von Plattformen, die während der Planung für das aktuelle und zukünftige Wachstum des Netzwerks verwendet werden, berücksichtigt werden.
 
-Die DNAC Nummern sind pro Instanz, bei denen es sich um ein DNAC mit einem einzelnen Server oder einem DNA-Cluster mit drei Servern handeln kann. Die maximalen Zahlen sind entweder die absoluten Grenzen der Plattform oder die empfohlenen Höchstgrenzen aktueller Tests einer einzelnen Plattform.
+Die DNA Center Anzahlen sind pro Instanz, bei denen es sich um ein DNA Center mit einem einzelnen Server oder einem DNA Center Cluster mit drei Servern handeln kann. Die maximalen Zahlen sind entweder die absoluten Grenzen der Plattform oder die empfohlenen Höchstgrenzen aktueller Tests einer einzelnen Plattform.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{img/Analyse/CVD-MaxScale-DNAC-1-2-5}
-	\caption{DNAC Maximum Scale Recommendations \cite{sda-designguide-sept2018} }
-	\label{fig:DNAC Maximum Scale RecommendationsA}
+	\caption{DNA Center Maximum Scale Recommendations \cite{sda-designguide-sept2018} }
+	\label{fig:DNA Center Maximum Scale RecommendationsA}
 \end{figure}
 
 \begin{figure}[H]
@@ -85,7 +85,7 @@ Die DNAC Nummern sind pro Instanz, bei denen es sich um ein DNAC mit einem einze
 
 
 \subsection{Verfügbarkeit}
-Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNAC wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Severity (Schweregrad) gewichtet. Die Definitionen der Severities werden von den "Cisco Severity and Escalation Guidelines" übernommen. \cite{cisco-severity-guidelines}
+Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNA Center wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Severity (Schweregrad) gewichtet. Die Definitionen der Severities werden von den \textit{Cisco Severity and Escalation Guidelines} übernommen. \cite{cisco-severity-guidelines}
 
 \subsubsection{DNA Center}
 
@@ -144,19 +144,19 @@ Der Radius Server oder ISE kann redundant betrieben werden. Es können mehrere I
 
 \subsubsection{SGT Access List}
 \paragraph{Beschreibung}
-Der Sicherheitsgruppen-Tag (SGT) weist jeder Sicherheitsgruppe eine eindeutige 16-Bit-Sicherheitsgruppennummer zu, deren Geltungsbereich in einer TrustSec-Domäne global ist. Die Nummern werden automatisch generiert, wenn eine SGT auf dem ISE erstellt wird. Die Anzahl der Sicherheitsgruppen im Switch ist auf die Anzahl der authentifizierten Netzwerkeinheiten beschränkt.
+Der Sicherheitsgruppen Tag (SGT) weist jeder Sicherheitsgruppe eine eindeutige 16-Bit-Sicherheitsgruppennummer zu, deren Geltungsbereich in einer TrustSec-Domäne global ist. Die Nummern werden automatisch generiert, wenn eine SGT auf dem ISE erstellt wird. Die Anzahl der Sicherheitsgruppen im Switch ist auf die Anzahl der authentifizierten Netzwerkeinheiten beschränkt.
 
 Die SGT ermöglicht es dem ISE, Richtlinien für die Zugriffssteuerung durchzusetzen, indem es dem Endgerät ermöglicht, auf die SGT zu reagieren, um den Datenverkehr zu filtern.
 
 Die Sicherheitsgruppen-Zugriffssteuerungsliste (SGACL) ermöglicht die Steuerung des Zugriffs und der Berechtigungen basierend auf den zugewiesenen SGTs.
 
 \paragraph{Impact bei Ausfall}
-DNAC: Auf dem DNAC sind die Sicherheitsgruppen nicht mehr verfügbar und können auch nicht neu erstellt werden.
+DNA Center: Auf dem DNA Center sind die Sicherheitsgruppen nicht mehr verfügbar und können auch nicht neu erstellt werden.
 Netzwerk: Die definierten Policies stehen nicht mehr zur Verfügung. Es werden also nur noch gecachte Policies angewendet, was den Netzwerkbetrieb stark einschränkt. 
 
 \paragraph{Severity} 1
 
-\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+\paragraph{Mögliche Ansätze für bessere Krisenresistenz}
 \begin{itemize}
 	\item Redundanz des ISE
 	\item Read-Only Kopien des ISE / Radius an Aussenstandorten
@@ -221,7 +221,7 @@ Bei einem Ausfall des NTP Services kann es zu Problemen bei der Validierung von 
 
 \paragraph{Severity} 3
 
-\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+\paragraph{Mögliche Ansätze für bessere Krisenresistenz}
 Es können mehrere NTP Server unabhängig voneinander betrieben werden. Um eine möglichst genaue Zeit zu erreichen, ist es sinnvoll an jedem Standort eigene NTP Server zu haben.
 
 \subsubsection{DNS}
@@ -233,7 +233,7 @@ Namensauflösung der Geräte funktioniert nicht mehr. Dies kann dazu führen, da
 
 \paragraph{Severity} 1
 
-\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+\paragraph{Mögliche Ansätze für bessere Krisenresistenz}
 \begin{itemize}
 	\item Redundante DNS Server im Infoblox HA Cluster
 	\item Read-Only DNS Server an Aussenstandorten z.Bsp. mittels Zone Transfer
@@ -241,7 +241,7 @@ Namensauflösung der Geräte funktioniert nicht mehr. Dies kann dazu führen, da
 
 \subsubsection{Lizenzen}
 \paragraph{Beschreibung}
-Die Lizenzen der Geräte können über das DNAC verwaltet werden. Dazu ist jedoch ein Cisco Smart Account nötig, der über alle Lizenzen verfügt. Sind die Lizenzen einmal auf dem DNAC synchronisiert und ersichtlich, so muss keine Internetverbindung bestehen, da kein Lizenzenforcement besteht.
+Die Lizenzen der Geräte können über das DNA Center verwaltet werden. Dazu ist jedoch ein Cisco Smart Account nötig, der über alle Lizenzen verfügt. Sind die Lizenzen einmal auf dem DNA Center synchronisiert und ersichtlich, so muss keine Internetverbindung bestehen, da kein Lizenzenforcement besteht.
 
 Die Lizenzen für die einzelnen Switches müssen beim Kauf unbedingt beachtet werden.
 
@@ -250,19 +250,19 @@ Keine, da Lizenzen nicht enforced werden und Lizenzen somit weiterlaufen.
 
 \paragraph{Severity} 4
 
-\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+\paragraph{Mögliche Ansätze für bessere Krisenresistenz}
 Richtige Lizenzen für alle Geräte von Anfang an einplanen.
 
 \subsubsection{Hardware}
 \paragraph{Beschreibung}
-Die Hardware ist egal ob es das DNAC, ein anderer Server oder ein Netzwerkgerät ist, wohl die wichtigste Komponente, das ein Netzwerk reibungslos läuft.
+Die Hardware ist egal ob es das DNA Center, ein anderer Server oder ein Netzwerkgerät ist, wohl die wichtigste Komponente, das ein Netzwerk reibungslos läuft.
 
 \paragraph{Impact bei Ausfall}
-DNAC, ISE, Netzwerk nicht mehr verfügbar
+DNA Center, ISE, Netzwerk nicht mehr verfügbar
 
 \paragraph{Severity} Abhängig von der Komponente
 
-\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+\paragraph{Mögliche Ansätze für bessere Krisenresistenz}
 Bei der Hardware ist zu beachten, dass sowohl der Strom, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können. Ein Backup für den Notfall ist immer zu empfehlen, damit bei einem Hardwaredefekt ein schneller Restore möglich ist.
 Ersatzgeräte sind von Vorteil.
 
@@ -275,7 +275,7 @@ Bei einem Ausfall aller WLCs stehen keine Wireless Netzwerke mehr zur Verfügung
 
 \paragraph{Severity} 2
 
-\paragraph{Mögliche Ansätze für bessere krisenresistenz}
+\paragraph{Mögliche Ansätze für bessere Krisenresistenz}
 \begin{itemize}
 	\item Wireless Controller redundant auslegen
 	\item Ersatzgeräte bereithalten
