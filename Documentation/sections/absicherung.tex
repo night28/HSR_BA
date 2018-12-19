@@ -589,14 +589,14 @@ Sobald die Grid Member hinzugefügt wurden, kann definiert werden, für welche S
 
 \paragraph{Infoblox Services}
 
-Damit alle Services, die Infoblox zur Verfügung stellt, stets an allen Standorten verfügbar sind, müssen die Clients primär die lokale Instanz von Infoblox verwenden. Diese kann auf einem ENCS 5000 oder einer anderen Virtualisierungsplattform betrieben werden.
+Damit alle Services, die Infoblox zur Verfügung stellt, stets an allen Standorten verfügbar sind, müssen die Clients primär die lokale Instanz von Infoblox verwenden. Diese kann auf einem ENCS 5400 oder einer anderen Virtualisierungsplattform betrieben werden.
 
 \subparagraph{DNS}
 
 Werden an den Aussenstandorten Infoblox Instanzen verwendet, kann auf dem Grid Master definiert welche Instanzen was für Zonen zur Verfügung stellen. Somit können Clients an Aussenstellen alle nötigen Zonen auflösen.
 Im DNA Center müssen unter \textit{Design $\rightarrow$ Network Settings} jeweils die DNS Server vom entsprechenden Standort konfiguriert werden. Der Server am Hauptstandort kann als zweiter Server eingetragen werden.
 Auch die Clients müssen die korrekten Server verwenden. Dies hat den Vorteil, dass die Antwortzeiten möglichst kurz sind und DNS auch im Falle eines Unterbruchs zum Hauptstandort zur Verfügung steht. Sofern diese ihre IP Adresse mittels DHCP beziehen, kann der DNS Server entsprechend gesetzt werden. Ansonsten muss diese Konfiguration manuell vorgenommen werden.
-DNA Center - DHCP Server
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{img/Absicherung/Infoblox_DHCP_DNS_Server.png}
