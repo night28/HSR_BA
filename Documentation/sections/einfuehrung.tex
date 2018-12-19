@@ -1,6 +1,8 @@
 \section{Einführung}
 
-Wie schon erwähnt ist diese Bachelorarbeit eine Folgearbeit der Studienarbeit Software-Defined Netzwerk im Campus Bereich \cite{studienarbeit}, was bedeutet das in dieser Arbeit nicht mehr auf die grundlegenden Technologien eingegangen wird. Es werden jedoch Technologien, welche für das krisenresistente Netzwerk besonders relevant sind, detaillierter analysiert und beschrieben. \\
+Wie schon erwähnt ist diese Bachelorarbeit eine Folgearbeit der Studienarbeit Software-Defined Netzwerk im Campus Bereich \cite{studienarbeit}, was bedeutet das in dieser Arbeit nicht mehr auf die grundlegenden Technologien eingegangen wird. Es werden jedoch Technologien, welche für das krisenresistente Netzwerk besonders relevant sind, detaillierter analysiert und beschrieben. 
+
+\subsection{Erkenntnisse aus der Studienarbeit}
 
 In der Studienarbeit hat sich relativ klar herauskristallisiert, dass bei einem so grossen Organisation wie der FUB, ein besonderes Augenmerk auf die Skalierbarkeit gelegt werden muss. Auf Grund der aufgetretenen Probleme und Bugs, konnten diese Anforderungen jedoch nur kurz angeschnitten werden. Im Verlauf der Studienarbeit wurde eine laufende Fabric mit der höchsten Priorität definiert. Darauf folgend konnten die vom Industriepartner definierten Use Cases wenn möglich praktisch und sonst theoretisch abgedeckt werden. Die Use Cases lauteten folgendermaßen \cite{studienarbeit}:
 
@@ -13,17 +15,14 @@ In der Studienarbeit hat sich relativ klar herauskristallisiert, dass bei einem 
 	\item Anbindung an externe Systeme, wie ISE und Infoblox
 \end{itemize}
 
+
 Wie bei neuerer Software üblich, waren auch in DNA Center noch verhältnismässig viele
 Bugs vorhanden. Die Bugs wurden in der Studienarbeit dokumentiert und jeweils an die Cisco
-Experten weitergeleitet. Teilweise konnten die Bugs durch neue Releases schon behoben werden, wiederum andere sind noch ausstehend.
-
-\subsection{Erkentnisse aus der Studienarbeit}
-Erkentnisse aus der Studienarbeit - Anforderungen welche in der Studienarbeit
+Experten weitergeleitet. Teilweise konnten die Bugs durch neue Releases schon behoben werden, wiederum andere sind noch ausstehend. 
 
 
 \subsection{Krisenresistentes Software Defined Netzwerk}
-Nun soll in dieser Bachelorarbeit ein krisenrstistentes Netzwerk erstellt werden, welches Technologien wie das DNA Center, ISE, Infoblox, LISP
-
+Nun soll in dieser Bachelorarbeit ein krisenresistentes Netzwerk erstellt werden, welches mit Hilfe des DNA Centers und Technologien wie VXLAN und LISP einsetzt, welche in der Studienarbeit genauer dokumentiert wurden \cite{studienarbeit}. In der Bachelorarbeit wird zum einen eine möglichst krisenresistentes Netzwerk erstellt und für dies eine Empfehlung für das Deployment vorgestellt. Zum anderen sollen die API des DNA Centers genauer untersucht und in einem eigen entwickelten Orchestrierungstool verwendet werden. In der Studienarbeit waren bis dato nur wenige Informationen zu der API verfügbar, welche nun mit dem Release 1.2.5 aber relativ gut abgedeckt sein sollten. In der Analyse der ganzen SDA Lösung sollen nun auch die Skalierbarkeit genauer untersucht werden, ob dies mit den aktuellen Empfehlungen von Cisco, für so eine grosse Organisation wie der FUB überhaupt in umgesetzt werden kann. Mit einem ECNS 5400 soll zudem ein autonomer Standort mit den nötigen Diensten wie Radius, DHCP, DNS und NTP simuliert werden können.
 
 
 
