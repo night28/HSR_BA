@@ -621,6 +621,14 @@ Ist an einem Standort eine Hochverfügbarkeit des DHCP Services nötig, wird emp
 
 Für NTP ist es besonders wichtig, dass dieser Dienst stets verfügbar und möglichst nahe beim Client ist. Wird der NTP Dienst also an jedem Standort mit Infoblox betrieben kann die nötige Verfügbarkeit gewährleistet werden und die Zeitabweichungen sind minimal.
 Auch hier, kann der NTP Server für die Netzwerkgeräte im DNA Center unter \textit{Design $\rightarrow$ Network Settings} individuell für jeden Standort konfiguriert werden. Für die Clients empfiehlt sich die DHCP Option 42. Mit dieser können den Clients die korrekten NTP Server mitgeteilt werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Absicherung/Infoblox_NTP_Server.png}
+	\caption{Infoblox - NTP Server }
+	\label{fig:Infoblox - NTP Server}
+\end{figure}
+
 Die NTP Server an den Aussenstandorten verwenden als primäre Quelle die NTP Server am Hauptstandort. Um einen Ausfall der Verbindung zu diesem abzusichern, sollte aber auch mindestens ein externen NTP Server konfiguriert werden.
 
 \subsection{Third Party Software}
