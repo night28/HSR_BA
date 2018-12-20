@@ -18,7 +18,7 @@ Die Analyse wird auf dieser Architektur aufbauen und die von der FUB gegebenen G
 Nachfolgend werden die aktuell von Cisco empfohlenen Design Entscheidungen, Grössen\-über\-legungen, sowie die Skalierungen gezeigt. Aktuelle und ausführliche Informationen hierzu, können direkt im SDA Design Guide von Cisco \cite{sda-designguide-sept2018} eingesehen werden. 
 
 \subsubsection{Platform Entscheidungen}
-Die Design Entscheidungen beruhen auf den aktuellen Empfehlungen von Cisco, welche sich laufend Ändern können. Nachfolgende CVD Design Empfehlungen sind für die Version 1.2.5 vom September 2018, welche für die verwendeten Geräte relevant sind. 
+Die Design Entscheidungen beruhen auf den aktuellen Empfehlungen von Cisco, welche sich jedoch laufend ändern können. Nachfolgende Cisco Validated Design (CVD) Empfehlungen sind für die Version 1.2.5 vom September 2018, welche für die zu verwendenden Geräte relevant sind. Ein Catalyst 9300 sollte zum Beispiel nicht als Border oder Control Plane Node verwendet werden. Im Verlauf der Implementation der einzelnen Geräte ist es ausserdem auch wichtig die darauf zu achten, welche genauen IOS Versionen unterstützt werden. 
 
 \begin{figure}[H]
 	\centering
@@ -35,9 +35,7 @@ Die Design Entscheidungen beruhen auf den aktuellen Empfehlungen von Cisco, welc
 \end{figure}
 
 \subsubsection{Grössenüberlegungen}
-Es ist zusätzlich zu den oben in den Design Entscheidungen empfohlenen Plattformen wichtig, die nachfolgenden getesteten Werte für Cisco Validated Design (CVD) sowie die Versionshinweise zu Hardware und Software für eine Bereitstellung zu berücksichtigen.
-
-Diese Grössenüberlegungen sind besonders für grosse Unternehmen wichtig, da diese zur Zeit nur bis zur eines gewissen Anzahl von Cisco getestet wurden und im schlechtesten Fall nicht höher unterstützt werden.
+Diese Grössenüberlegungen sind besonders für grosse Organisationen wichtig, da diese zur Zeit nur bis zu einer gewissen Anzahl von Cisco in der Praxis getestet wurden.
 
 
 \begin{figure}[H]
@@ -85,7 +83,7 @@ Die DNA Center Anzahlen sind pro Instanz, bei denen es sich um ein DNA Center mi
 
 
 \subsection{Verfügbarkeit}
-Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNA Center wichtig, um die volle Funktion des Netzwerkes bereitzustellen. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Severity (Schweregrad) gewichtet. Die Definitionen der Severities werden von den \textit{Cisco Severity and Escalation Guidelines} übernommen. \cite{cisco-severity-guidelines}
+Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNA Center wichtig, um die volle Funktion des Netzwerkes bereitstellen zu können. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Severity (Schweregrad) gewichtet. Die Definitionen der Severities werden von den \textit{Cisco Severity and Escalation Guidelines} übernommen. \cite{cisco-severity-guidelines}
 
 \subsubsection{DNA Center}
 
@@ -222,7 +220,7 @@ Bei einem Ausfall des NTP Services kann es zu Problemen bei der Validierung von 
 \paragraph{Severity} 3
 
 \paragraph{Mögliche Ansätze für bessere Krisenresistenz}
-Es können mehrere NTP Server unabhängig voneinander betrieben werden. Um eine möglichst genaue Zeit zu erreichen, ist es sinnvoll an jedem Standort eigene NTP Server zu haben.
+Es können mehrere NTP Server unabhängig voneinander betrieben werden. Um eine möglichst genaue Zeit zu erreichen, ist es sinnvoll, an jedem Standort eigene NTP Server zu haben.
 
 \subsubsection{DNS}
 \paragraph{Beschreibung}
@@ -255,7 +253,7 @@ Richtige Lizenzen für alle Geräte von Anfang an einplanen.
 
 \subsubsection{Hardware}
 \paragraph{Beschreibung}
-Die Hardware ist egal ob es das DNA Center, ein anderer Server oder ein Netzwerkgerät ist, wohl die wichtigste Komponente, das ein Netzwerk reibungslos läuft.
+Bei der Hardware handelt es sich, abhängig vom Dienst der darauf bereitgestellt wird, um eines der wichtigsten Komponenten. Läuft die Hardware nicht mehr, so können auch die Dienste welche darauf laufen nicht mehr ausgeführt werden. 
 
 \paragraph{Impact bei Ausfall}
 DNA Center, ISE, Netzwerk nicht mehr verfügbar
@@ -263,8 +261,7 @@ DNA Center, ISE, Netzwerk nicht mehr verfügbar
 \paragraph{Severity} Abhängig von der Komponente
 
 \paragraph{Mögliche Ansätze für bessere Krisenresistenz}
-Bei der Hardware ist zu beachten, dass sowohl der Strom, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können. Ein Backup für den Notfall ist immer zu empfehlen, damit bei einem Hardwaredefekt ein schneller Restore möglich ist.
-Ersatzgeräte sind von Vorteil.
+Bei der Hardware ist zu beachten, dass sowohl der Strom, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können. Ein Backup für den Notfall ist immer zu empfehlen, damit bei einem Hardwaredefekt ein schneller Restore möglich ist. Ersatzgeräte sind von Vorteil.
 
 \paragraph{Wireless Controller}
 \paragraph{Beschreibung}
