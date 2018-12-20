@@ -14,9 +14,23 @@ Python ist eine objektorientierte Programmiersprache. Die einfache und leicht er
 \subsubsection{Flask}
 Flask ist ein in Python geschriebenes Webframework. Der Fokus von Flask liegt auf Erweiterbarkeit und guter Dokumentation. Die einzigen Abhängigkeiten sind Jinja2, eine Template-Engine, und Werkzeug, eine Bibliothek zum Erstellen von WSGI-Anwendungen. \cite{flask}
 
-\subsubsection{DNA Center API}
+\subsubsection{DNA Center Platform}
+Cisco hat seit dem Sommer 2018 eine DNA Center Plattform zur Verfügung gestellt, über die nun auf den API Katalog und andere Ressourcen zugegriffen werden kann. So können beispielsweise die Plattform Funktionen auch verwendet werden, um die Bereitstellung und Verwaltung von Netzwerken zu vereinfachen.
 
-Die Intent-API ist eine Northbound REST API, welche bestimmte funktionen des DNA Centers verfügbar macht. Mit der RESTful Intent API des DNA Centers können die HTTP- (GET, POST, PUT, DELETE) und JSON-Syntax verwendet werden, um das Netzwerk zu analysieren und zu konfigurieren. \cite{dnac-api}
+
+So soll das DNA Center nun eine 360 Grad Erweiterbarkeit durch vier verschiedene Plattform Funktionen bereitstellen. Dazu gehören die Intent-based APIs, Process adapters, Domain adapters, sowie SDKs. \cite{dnac-platform}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Abstrahierung/dnac-platform}
+	\caption{DNA Center Plattform \cite{dnac-platform}}
+	\label{fig:DNA Center Plattform}
+\end{figure}
+
+
+\paragraph{DNA Center Intent-API}
+
+Die Intent-API ist eine Northbound REST API, welche bestimmte funktionen des DNA Centers verfügbar macht. Mit der RESTful Intent API des DNA Centers können die HTTP- (GET, POST, PUT, DELETE) und JSON-Syntax verwendet werden, um das Netzwerk zu analysieren und zu konfigurieren. \cite{dnac-platform}
 
 \subsubsection{ENCS API}
-Überhaupt benötigt, oder sind die nötigen Einstellungen auch über DNA Center möglich?
+Der ENCS beziehungsweise die NFVIS, welche auf dem ENCS läuft, stellt ebenfalls eine programmierbare API für Service Orchestration mittels REST- und NETCONF-API bereit. Über eine VM Lifecycle Management API können beispielsweise die VMs verwaltet werden.

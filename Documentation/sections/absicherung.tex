@@ -11,6 +11,7 @@ Die SDA Topologie sollte nach den gleichen Designprinzipien und Best Practices a
 \end{figure}
 
 Analog zu dieser wurde die von der Studienarbeit übernommene Architektur (siehe Abbildung \ref{fig:Architektur Studienarbeit}: Architektur Studienarbeit) weiter angepasst und wenn möglich die Komponenten inklusive Verkabelung redundant ausgelegt. Ebenfalls zu beachten sind die Deployment Capabilities, welche als Border und Control Plane Node die Catalyst 3850 empfehlen. Darum werden in der Architektur die Catalyst 9300 als Intermediate oder Edge Nodes eingesetzt. Extended Nodes wie der C3560CX werden zudem nur unterstützt, wenn sie an einem C9300 Edge angeschlossen sind. \\
+
 Diese neu erarbeitete Architektur (siehe Abbildung \ref{fig:Architektur Bachelorarbeit}: Architektur Bachelorarbeit) verfügt über eine grosse Fabric \textit{Deutschschweiz}, welche die zwei Sites \textit{Dübendorf} und \textit{Emmen} beinhaltet. Der Standort \textit{Dübendorf} beinhaltet ein Gebäude der \textit{Luftwaffe}. Der Standort \textit{Emmen} beinhaltet den \textit{Flugplatz}, sowie eine \textit{Kaserne}.
 
 
@@ -317,8 +318,6 @@ show lisp eid-table vrf <VRF Name> ipv4 map-cache
 \end{figure}
 
 
-
-
 \paragraph{LISP EID-Table Map Cahe Entry}
 Ein Eintrag in der EID-Table im Map Cache kann mit folgender Abfrage detaillierter angezeigt werden:
 
@@ -333,6 +332,7 @@ show lisp eid-table vrf <VRF Name> ipv4 map-cache <IP>
 	\caption{LISP EID-Table Map Cache Entry}
 	\label{fig:LISP EID-Table Map Cache Entry}
 \end{figure}
+
 
 \paragraph{LISP Database EID-Table}
 Der folgende Befehl kann verwendet werden, um die Egress Tunnel Router (ETR) konfigurierten lokalen IPv4-EID-Präfixes und der zugehörigen Locator-Sets auszugeben:
