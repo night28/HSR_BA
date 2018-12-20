@@ -1,11 +1,11 @@
 \section{Ergebnisdiskussion}
 
+Analyse der kritischen Komponenten abgeschlossen und diese identifiziert. Dazu wurden diese kritischen Komponenten nach der Wichtigkeit der Verfügbarkeit nach Severities gewichtet. 
 
-\subsection{Zielsetzungen}
+Während der Absicherung wurden die kritischen Komponenten genauer analysiert, die Möglichkeiten abgewägt und eine Empfehlung für ein krisensicheres Deployment erarbeitet. Anschliessend wurden die Empfehlungen wo möglich im eigenen Lab angewendet und somit die meisten Komponenten, sowie Verbindungen redundant ausgelegt.
 
+Die Abstrahierung konnte teils umgesetzt werden, jedoch sind bei der Entwicklung des eigenen Operation Orchestrator Tools einige Unstimmigkeiten aufgetaucht, was die Dokumentation der DNA Center API angelangt. Dies hatte zur Folge, dass die Entwicklung des Tools mehr Zeit in Anspruch nahm.
 
 \subsection{Bugs}
-
-
-
+Trotz den neuen Releases des DNA Centers sind immer noch einige Bugs vorhanden, welche auch in dieser Bachelorarbeit dokumentiert wurden (siehe Abbildung \ref{Feature Requests und Bugs}: Feature Requests und Bugs). Dies ist vor allem während der Abstrahierung in Vorschein getreten. Die API ist zum einen im DNA Center unter dem Web Development gut aufgeführt, jedoch sind die Dokumentationen veraltet und teils unvollständig. Diese verweisen meist auf die APIv1, wobei jedoch das DNA Center beim Ausführen von Aktionen die APIv2 aufruft. Bei den Dokumentationen muss allgemein ein spezielles Augenmerk auf die Versionen gelegt werden. Es kann sein das sich die Releases teilweise enorm unterscheiden und wichtige Neuerungen nicht auffallen, oder sich die Skalierungen nach unten verbessern.
 
