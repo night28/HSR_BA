@@ -28,9 +28,50 @@ So soll das DNA Center nun eine 360 Grad Erweiterbarkeit durch vier verschiedene
 \end{figure}
 
 
-\paragraph{DNA Center Intent-API}
 
-Die Intent-API ist eine Northbound REST API, welche bestimmte funktionen des DNA Centers verfügbar macht. Mit der RESTful Intent API des DNA Centers können die HTTP- (GET, POST, PUT, DELETE) und JSON-Syntax verwendet werden, um das Netzwerk zu analysieren und zu konfigurieren. \cite{dnac-platform}
+\paragraph{Intent-API}
 
-\subsubsection{ENCS API}
+Die Intent-API ist eine Northbound REST API, welche bestimmte Funktionen des DNA Centers verfügbar macht. Mit der RESTful Intent API des DNA Centers können die HTTP- (GET, POST, PUT, DELETE) und JSON-Syntax verwendet werden, um das Netzwerk zu analysieren und zu konfigurieren. \cite{dnac-platform}
+
+Diese APIs findet man im DNA Center unter \textit{Platform $\rightarrow$ Developer Toolkit $\rightarrow$ APIs}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Abstrahierung/dnac-apis}
+	\caption{DNA Center Plattform APIs}
+	\label{fig:DNA Center Plattform APIs}
+\end{figure}
+
+\subsubsection{ENCS/NFVIS API}
 Der ENCS beziehungsweise die NFVIS, welche auf dem ENCS läuft, stellt ebenfalls eine programmierbare API für Service Orchestration mittels REST- und NETCONF-API bereit. Über eine VM Lifecycle Management API können beispielsweise die VMs verwaltet werden.
+
+Die API Dokumentationen sind bei NFVIS leider nicht direkt über dessen Applikation verfügbar. Es gibt jedoch eine Dokumentation von Cisco direkt, welche unter dem Namen \textit{API Reference for Cisco Enterprise Network Function Virtualization Infrastructure Software} \cite{nfvis-api} zu finden ist.
+
+
+\subsection{Umsetzung}
+
+\subsubsection{Ablauf Erstellung Netzwerk}
+Um die Erstellung eines Netzwerkes zu vereinfachen, wird ein Wizard erstellt, mit welchem folgende einzelnen Schritte vereinfacht auszuführen sind. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/Abstrahierung/addvirtualnetwork}
+	\caption{Add Virtual Network}
+	\label{fig:Add Virtual Network}
+\end{figure}
+
+Um dies zu beginnen, kann im Orchestrationtool im Home \textit{Virtual Networks $\rightarrow$ Add Virtual Networks} ausgewählt werden. So startet der Wizard mit den in der Abbildung (siehe Abbildung \ref{fig:Add Virtual Network}: Add Virtual Network) in Abbildung aufgezeigte Wizard und man kann Step für Step die gewünschten Informationen angeben.
+
+
+\subsubsection{Virtual machine Management}
+
+
+
+
+
+\subsubsection{Configuration History}
+
+
+
+
+
