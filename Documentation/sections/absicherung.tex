@@ -1,7 +1,7 @@
 \section{Absicherung}
 
 \subsection{Architektur und Design}
-Die SDA Topologie sollte nach den gleichen Designprinzipien und Best Practices aufgebaut werden, welche auch ein Campus-Design verfolgt. Das folgende Beispiel zeigt die physikalische Topologie eines dreistufigen Campus-Designs, bei dem alle Komponenten innerhalb der Fabric redundant sind.
+Die SDA Topologie sollte nach den gleichen Designprinzipien und Best Practices aufgebaut werden, welche auch ein traditionelles Campus-Design verfolgt. Das folgende Beispiel zeigt die physikalische Topologie eines dreistufigen Campus-Designs, bei dem alle Komponenten innerhalb der Fabric redundant sind.
 
 \begin{figure}[H]
 	\centering
@@ -14,7 +14,6 @@ Analog zu dieser wurde die von der Studienarbeit übernommene Architektur (siehe
 
 Diese neu erarbeitete Architektur (siehe Abbildung \ref{fig:Architektur Bachelorarbeit}: Architektur Bachelorarbeit) verfügt über eine grosse Fabric \textit{Deutschschweiz}, welche die zwei Sites \textit{Dübendorf} und \textit{Emmen} beinhaltet. Der Standort \textit{Dübendorf} beinhaltet ein Gebäude der \textit{Luftwaffe}. Der Standort \textit{Emmen} beinhaltet den \textit{Flugplatz}, sowie eine \textit{Kaserne}.
 
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{img/Architecture/LabNetworkArchitecture-11-12}
@@ -22,17 +21,13 @@ Diese neu erarbeitete Architektur (siehe Abbildung \ref{fig:Architektur Bachelor
 	\label{fig:Architektur Bachelorarbeit}
 \end{figure}
 
-
-
-
 \subsubsection{Extended Nodes}
-In einer SDA-Lösung werden Netzwerkgeräte wie der Catalyst 3560CX als Extended Nodes bezeichnet. Der  Extended Node wird verwendet, um nachgeschaltete Nicht-Fabric Layer2 Netzwerkgeräte an die SDA-Fabric anzuschliessen und somit die Fabric zu erweitern.
-Der erweiterte Knoten ist ein Gerät wie zum Beispiel ein kleiner Switch (Compact Switch, Industrial Ethernet Switch oder Building Automation Switch), der eine Verbindung zum Fabric Edge Knoten herstellt
-über Layer 2. Geräte, die mit dem Extended Node verbunden sind, verwenden den Fabric Edge Nodes für die Kommunikation mit externen Subnetzen.  \\
+In einer SDA-Lösung werden Netzwerkgeräte wie der Catalyst 3560CX als Extended Nodes bezeichnet. Der  Extended Node wird verwendet, um Non-Fabric Layer 2 Netzwerkgeräte an die SDA-Fabric anzuschliessen und somit die Fabric zu erweitern. Extended Nodes sind dazu geeignet, Geräte wie Access Point oder IoT Geräte mit der Fabric zu verbinden.
+Der Extended Node ist ein Gerät wie zum Beispiel ein kleiner Switch (Compact Switch, Industrial Ethernet Switch oder Building Automation Switch), der eine Verbindung zum Fabric Edge Node über Layer 2 herstellt. Geräte, die mit dem Extended Node verbunden sind, verwenden den Fabric Edge Node für die Kommunikation mit externen Subnetzen.  \\
 
-Um einen Extended Node zu implementieren, sind zur Zeit noch einige manuelle Schritte notwendig.
+Um einen Extended Node zu integrieren, sind zur Zeit noch einige manuelle Schritte notwendig.
 
-\paragraph{IP Address Pool} Damit der Extended Node implementiert werden kann, ist ein IP Address Pool an der dafür vorgesehenen Site notwendig. Im DNA Center unter \textit{Design $\rightarrow$ Network Settings $\rightarrow$ IP Address Pools} kann mit \textit{Reserve IP Pool} ein neuer IP Pool erstellt werden. Als Type muss unbedingt \textit{LAN} ausgewählt werden.
+\paragraph{IP Address Pool} Damit der Extended Node implementiert werden kann, ist ein IP Address Pool an der dafür vorgesehenen Site notwendig. Im DNA Center unter \textit{Design $\rightarrow$ Network Settings $\rightarrow$ IP Address Pools} kann mit \textit{Reserve IP Pool} ein neuer IP Pool reserviert werden. Als Type muss zwingend \textit{LAN} ausgewählt werden.
 
 \begin{figure}[H]
 	\centering
@@ -41,7 +36,7 @@ Um einen Extended Node zu implementieren, sind zur Zeit noch einige manuelle Sch
 	\label{fig:Reserve IP Address Pool}
 \end{figure}
 
-\paragraph{Host Onboarding für Extended Nodes} Als nächstes muss der IP Pool dem dazugehörigen VN zugeordnet werden, damit Extended Nodes am Edge Node erkannt werden. Unter \textit{Provision $\rightarrow$ Fabric} die gewünschte Fabric Domain auswählen. Anschliessend zu der Site navigieren, in welcher sich der Extended Node befinden soll und dort \textit{Host Onboarding} auswählen. Unter \textit{Virtual Networks} das \textit{Infra\_VN} auswählen und den vorher erstellten IP Address Pool als \textit{Extended} Pool Type zuweisen. 
+\paragraph{Host Onboarding für Extended Nodes} Als nächstes muss der IP Pool dem dazugehörigen VN zugeordnet werden, damit Extended Nodes am Edge Node erkannt werden. Unter \textit{Provision $\rightarrow$ Fabric} die gewünschte Fabric Domain auswählen. Anschliessend zu der Site navigieren, in welcher sich der Extended Node befindet und dort \textit{Host Onboarding} auswählen. Unter \textit{Virtual Networks} das \textit{Infra\_VN} auswählen und den vorher erstellten IP Address Pool als \textit{Extended} Pool Type zuweisen. 
 
 \begin{figure}[H]
 	\centering
@@ -50,10 +45,10 @@ Um einen Extended Node zu implementieren, sind zur Zeit noch einige manuelle Sch
 	\label{fig:Virtual Network IP Pool zuweisen}
 \end{figure}
 
-Wichtig ist, das dem INFRA\_VN schon ein IP Pool mit dem Pool Type \textit{AP} zugewiesen ist. Ansonsten muss noch ein IP Pool für dies erstellt und dem Infra\_VN zugewiesen werden, bevor dem Infra\_VN der \textit{Extended} Pool Type zugewiesen werden kann.
+Wichtig ist, das dem INFRA\_VN schon ein IP Pool mit dem Pool Type \textit{AP} zugewiesen ist. Ansonsten muss noch ein IP Pool für dies reserviert und dem Infra\_VN zugewiesen werden, bevor dem Infra\_VN der \textit{Extended} Pool Type zugewiesen werden kann.
 
 \paragraph{Port Assignment}
-Unter \textit{Provision $\rightarrow$ Fabric} die gewünsche Fabric wählen und zur Site navigieren. Nun kann unter \textit{Host Onboarding $\rightarrow$ Select Port Assignment} der Edge Node, an dem der Extended Node angeschlossen wird, ausgewählt werden. Das Interface auswählen und mit \textit{Assign} dem Interface einen Device Type mit dazugehörigem IP Pool zuweisen.
+Unter \textit{Provision $\rightarrow$ Fabric} muss die gewünsche Fabric ausgewählt und zur Site navigiert werden. Nun kann unter \textit{Host Onboarding $\rightarrow$ Select Port Assignment} der Edge Node, an dem der Extended Node angeschlossen ist, ausgewählt werden. Anschliessend wird das Interface ausgewählt und mit \textit{Assign} wird dem Interface ein Device Type mit dazugehörigem IP Pool zugewiesen.
 
 \begin{figure}[H]
 	\centering
@@ -63,13 +58,13 @@ Unter \textit{Provision $\rightarrow$ Fabric} die gewünsche Fabric wählen und 
 \end{figure}
 
 \paragraph{DHCP Options}
-Damit der Extended Node beim Booten nun erfolgreich mittels PnP dem DNA Center hinzugefügt wird, müssen dem IP Pool noch DHCP Options angegeben werden. Dafür im Infoblox \textit{Data Management $\rightarrow$ DHCP $\rightarrow$ Networks $\rightarrow$ Networks} den IP Pool auswählen und mit \textit{Edit} editieren. Hier unter \textit{IPv4 DHCP Options $\rightarrow$ Custom DHCP Options} folgende Option hinzufügen:
+Damit der Extended Node beim Starten erfolgreich mittels PnP im DNA Center erkannt wird, müssen für den IP Pool die entsprechenden DHCP Optionen gesetzt werden. Dafür im Infoblox \textit{Data Management $\rightarrow$ DHCP $\rightarrow$ Networks $\rightarrow$ Networks} den IP Pool auswählen und mit \textit{Edit} editieren. Hier wird unter \textit{IPv4 DHCP Options $\rightarrow$ Custom DHCP Options} folgende Option hinzugefügt:
 \begin{itemize}
 	\item Option 43 (vendor-encapsulated-option): 5A1D;B2;K4;I[\textit{IP des DNA Center}];J80
 \end{itemize}
 
 \paragraph{Extended Node}
-Am einfachsten ist es, wenn auf dem Extended Node die Konfiguration gelöscht und er neu gestartet wird. Nun sollte der mit dem Fabric Edge Node verbundene Extended Node automatisch von einem Macro erkannt werden, welches auf dem Edge Node ausgeführt wird. Das Macro erkennt den Extended Node und startet den PnP Prozess. Nach Abschluss des Discovery Prozesses wird der neue Extended Node in der Fabric Site Topologie und natürlich auch im Provision Inventory erscheinen. Das Provision Inventory ist unter \textit{Provision $\rightarrow$ Devices $\rightarrow$ Inventory} zu erreichen. Die Site Topologie kann unter \textit{Provision $\rightarrow$ Devices $\rightarrow$ gewünschte Fabric $\rightarrow$ gewünschte Site} angezeigt werden, wie unten im Bild ersichtlich, wird der Extended Node in der Topologie mit \textit{EX} gekennzeichnet.
+Am einfachsten ist es, wenn auf dem Extended Node die Konfiguration gelöscht und er neu gestartet wird. Nun sollte der mit dem Fabric Edge Node verbundene Extended Node automatisch erkannt werden und der PnP Prozess wird gestartet. Nach Abschluss des Discovery Prozesses wird der neue Extended Node in der Fabric Site Topologie und auch im Inventory erscheinen. Das Provision Inventory ist unter \textit{Provision $\rightarrow$ Devices $\rightarrow$ Inventory} zu erreichen. Die Site Topologie kann unter \textit{Provision $\rightarrow$ Devices $\rightarrow$ gewünschte Fabric $\rightarrow$ gewünschte Site} angezeigt werden. Wie unten im Bild ersichtlich ist, wird der Extended Node in der Topologie mit \textit{EX} gekennzeichnet.
 
 \begin{figure}[H]
 	\centering
@@ -80,7 +75,7 @@ Am einfachsten ist es, wenn auf dem Extended Node die Konfiguration gelöscht un
 
 \subsection{Transit Fabric}
 
-Um die Kommunikation zwischen verschiedenen Fabric Sites innerhalb einer Fabric Domain zu ermöglichen, können Transit Fabrics eingesetzt werden. Diese verbinden die Sites und ermöglichen beispielsweise eine Ende-zu-Ende Segmentierung.
+Um die Kommunikation zwischen verschiedenen Fabric Sites innerhalb einer Fabric Domain zu ermöglichen, können Transit Fabrics eingesetzt werden. Diese verbinden die Sites und ermöglichen eine Ende-zu-Ende Segmentierung.
 
 \begin{figure}[H]
 	\centering
@@ -91,9 +86,9 @@ Um die Kommunikation zwischen verschiedenen Fabric Sites innerhalb einer Fabric 
 
 \subsubsection{IP Transit}
 
-Im IP Transit werden traditionelle Technologien, beispielsweise MPLS oder VRF-Lite, eingesetzt. Im Gegensatz zum SD Access Transit muss diese Transit Fabric grösstenteils manuell konfiguriert werden. Das DNA Center übernimmt lediglich die Konfiguration der externen Interfaces der Border Nodes. 
-Dies bringt zum einen zusätzlichen Konfigurationsaufwand. Im Gegenzug kann die Transit Fabric aber flexibler konfiguriert werden. Zudem ist kein Control Plane nötig. Es gibt also keinen Single Point of Failure, sofern das Netzwerkdesign die nötige Redundanz aufweist.
-Ein weiterer Vorteil ist, dass alle Geräte, die die nötigen Protokolle unterstützen, verwendet werden können.
+Im IP Transit werden traditionelle Technologien, beispielsweise MPLS, BGP oder VRF-Lite, eingesetzt. Im Gegensatz zum SD Access Transit muss diese Transit Fabric grösstenteils manuell konfiguriert werden. Das DNA Center übernimmt lediglich die Konfiguration der externen Interfaces der Border Nodes. 
+Dies bringt zum einen zusätzlichen Konfigurationsaufwand. Im Gegenzug kann die Transit Fabric aber flexibler konfiguriert werden. Zudem ist keine Control Plane nötig. Es gibt also keinen Single Point of Failure, sofern das Netzwerkdesign die nötige Redundanz bietet.
+Ein weiterer Vorteil ist, dass alle Geräte, welche die nötigen Protokolle unterstützen, verwendet werden können.
 
 \subsubsection{SD Access Transit}
 
@@ -107,6 +102,7 @@ Im SD Access Transit wird die Kommunikation zwischen den Fabric Sites mittels Te
 \end{figure}
 
 Im Gegensatz zum IP Transit können in der SD Access Transit Fabric nur unterstützte Geräte verwendet werden. Zum jetzigen Zeitpunkt sind dies:
+
 \begin{itemize}
 	\item C9K
 	\item ASR1K
@@ -115,20 +111,20 @@ Im Gegensatz zum IP Transit können in der SD Access Transit Fabric nur unterst�
 
 \subsection{ENCS 5400}
 
-Um mit möglichst kleinem Hardwareeinsatz eine maximale Autonomie der Aussenstandorte zu ermöglichen, wird pro Aussenstelle ein oder mehrere ENCS 5400 eingesetzt. 
-Dabei handelt es sich um eine Virtualisierungsplattform basierend auf KVM. Des Weiteren beinhaltet die Appliance einen Switch. 
+Um mit möglichst kleinem Hardwareeinsatz eine maximale Autonomie der Aussenstandorte zu ermöglichen, wird pro Aussenstelle ein ENCS 5400 eingesetzt. Im Produktionsbetrieb können für wichtige Aussenstellen auch mehrere ENCS 5400 eingesetzt werden um die nötige Verfügbarkeit zu gewährleisten.
+Dabei handelt es sich um eine Virtualisierungsplattform von Cisco basierend auf KVM. Des Weiteren beinhaltet die Appliance einen Switch. 
 Auf diesem System können virtuelle Router, Firewalls, WLCs und mittels Third Party Images viele weitere Dienste betrieben werden. Für spezifische Anwendungen können eigene Images erstellt werden, wodurch die Plattform enorm vielseitig einsetzbar ist.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{img/Absicherung/ENCS_Architecture.png}
+	\includegraphics[width=0.6\linewidth]{img/Absicherung/ENCS_Architecture.png}
 	\caption{ENCS Architecture \cite{enterprise-network-functions-virtualization-faq} }
 	\label{fig:ENCS Architecture}
 \end{figure}
 
 \subsubsection{Image erstellen}
 
-In einem ersten Schritt muss ein Disk Image für den gewünschten Service vorliegen. In unserem Fall wurde diese via Virtualbox erstellt, sodass alle nötigen Pakete bereits installiert werden konnten. Da das Image im Format qcow2 vorliegen muss, wird das vdi Image entsprechend konvertiert.
+In einem ersten Schritt muss ein Disk Image für den gewünschten Service vorliegen. In unserem Fall wurde dieses via Virtualbox erstellt, sodass alle nötigen Pakete bereits installiert werden konnten. Da das Image im Format qcow2 vorliegen muss, wird das vdi Image entsprechend konvertiert.
 
 \begin{lstlisting}[language=bash]
 qemu-img convert -f vdi -O qcow2 Ubuntu18.04_Branch.vdi \
@@ -137,7 +133,7 @@ Ubuntu18.04_Branch.qcow2
 
 \paragraph{Image Packaging}
 
-Damit das Image verwendet werden kann, muss ein Package erstellt werden. Dabei handelt es sich um ein Archiv, bestehend aus dem Disk Image, sowie einem XML File, in welchem Metadaten, wie die Hardwareanforderungen und die verschiedenen Profile, definiert sind.
+Damit das Image verwendet werden kann, muss ein Package erstellt werden. Dabei handelt es sich um ein Archiv, bestehend aus dem Disk Image, sowie einem XML File, in welchem Metadaten wie die Hardwareanforderungen und die verschiedenen Profile definiert sind.
 Das Package kann manuell oder mittels NFVIS Web Interface erstellt werden.
 
 Im Web-Interface wird dies unter \textit{VM Life Cycle $\rightarrow$ Image Repository $\rightarrow$ Image Packaging} erstellt.
@@ -160,7 +156,7 @@ Anschliessend werden die Metadaten für das Image definiert. Diese sind schlusse
 	\label{fig:ENCS Image Konfiguration}
 \end{figure}
 
-Des Weiteren werden die verschiedenen Profile definiert. Diese können später beim Deployment ausgewählt werden, sodass für verschiedene Grössen eines Branches ein passendes Profil ausgewählt werden kann.
+Zudem werden die verschiedenen Profile definiert. Diese können später beim Deployment ausgewählt werden, sodass für verschiedene Grössen eines Branches ein passendes Profil ausgewählt werden kann.
 
 \begin{figure}[H]
 	\centering
@@ -171,23 +167,21 @@ Des Weiteren werden die verschiedenen Profile definiert. Diese können später b
 
 \paragraph{Image Deployment}
 
-Das Deployment des Images soll via DNA Center funktionieren. Aus diesem Grund muss das zuvor erstellte Archiv heruntergeladen und anschliessend ins DNA Center importiert werden. \textit{Design $\rightarrow$ Image Repository $\rightarrow$ Virtual $\rightarrow$ Import}
+Das Deployment des Images soll via DNA Center funktionieren. Aus diesem Grund muss das zuvor erstellte Archiv heruntergeladen und anschliessend im DNA Center importiert werden. \textit{Design $\rightarrow$ Image Repository $\rightarrow$ Virtual $\rightarrow$ Import}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{img/Absicherung/DNA-Center-Image-Import.png}
+	\includegraphics[width=0.6\linewidth]{img/Absicherung/DNA-Center-Image-Import.png}
 	\caption{DNA Center Image Import}
 	\label{fig:DNA Center Image Import}
 \end{figure}
 
-
-
-
+Im Lab hat ein Deployment über das DNA Center allerdings nicht funktioniert. Der Grund war, dass das DNA Center die Images als \textit{Physical Images} und nicht als \textit{Virtual Images} erkannte. Daher konnten diese nicht für virtuelle Maschinen verwendet werden.
 
 \subsection{DNA Center}
-Das DNA Center unterstützt eine Clusterkonfiguration mit einem oder drei Hosts. Im Optimalfall sollte das DNA Center in einem Cluster mit drei Nodes installiert werden. Der Cluster bietet sowohl Software als auch Hardware mit hoher Verfügbarkeit. Das DNA Center bietet einen Mechanismus zum Verteilen der Verarbeitung und Datenbankreplikation auf mehrere Hosts. Durch das Clustering werden Ressourcen und Funktionen gemeinsam genutzt, sowie eine hohe Verfügbarkeit und Skalierbarkeit ermöglicht. \\
+Das DNA Center unterstützt den Standalone Betrieb oder eine Clusterkonfiguration mit drei Nodes. Im Optimalfall sollte das DNA Center in einem Cluster mit drei Nodes installiert werden. Der Cluster bietet sowohl Software als auch Hardware mit hoher Verfügbarkeit. Das DNA Center bietet einen Mechanismus zum Verteilen der Verarbeitung und Datenbankreplikation auf mehrere Nodes. Durch das Clustering werden Ressourcen und Funktionen gemeinsam genutzt, sowie eine hohe Verfügbarkeit und Skalierbarkeit ermöglicht. \\
 
-Die folgende Abbildung zeigt die empfohlenen Verbindungen für einen DNA Center Cluster mit drei Knoten. 
+Die folgende Abbildung zeigt die empfohlenen Verbindungen für einen DNA Center Cluster mit drei Nodes. 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{img/Absicherung/DNAC-Cluster}
@@ -196,59 +190,59 @@ Die folgende Abbildung zeigt die empfohlenen Verbindungen für einen DNA Center 
 \end{figure}
 Alle bis auf eine der Verbindungen sind für jeden Node im Cluster die gleichen, wie wenn ein Standalone Node eingesetzt werden würde. Die Ausnahme ist der Cluster-Port (Port 2, enp10so, Network Adapter 1), der erforderlich ist, damit jeder Node im Cluster mit den anderen kommunizieren kann. \\
 
-Für Clusterbereitstellungen mit mehreren Nodes müssen sich alle Cluster Nodes im selben Netzwerk und am selben Standort befinden. Die Appliance unterstützt keine Verteilung von Knoten über mehrere Netzwerke oder Standorte. Diese Limitierung der Bereitstellung, sowie auch die maximale Anzahl der unterstützen Nodes wird sich hoffentlich in Zukunft noch ändern.
+Für Clusterbereitstellungen mit mehreren Nodes müssen sich alle Cluster Nodes im selben Netzwerk und am selben Standort befinden. Die Appliance unterstützt keine Verteilung von Nodes über mehrere Netzwerke oder Standorte. Diese Limitierung der Bereitstellung, sowie auch die maximale Anzahl der unterstützen Nodes wird sich hoffentlich in Zukunft noch ändern.
 
-Wenn ein Node innerhalb einer Multi-Host-Cluster-Konfiguration ausfällt, beträgt die Zeit für die Wiederherstellung des Clusters in der Regel 20 Minuten. Fällt in einem Multi-Host Cluster mit drei Nodes aus irgendeinem Grund ein einzelner Host aus und es fällt ein zweiter Host aus, so fällt auch der letzte Host sofort aus. Es müssen immer zwei der drei Nodes im Cluster laufen, damit ein funktionsfähiger Cluster gewährleistet werden kann.
+Wenn ein Node innerhalb einer Clusterkonfiguration ausfällt, beträgt die Zeit für die Wiederherstellung des Clusters in der Regel 20 Minuten. Fällt in einem Multi-Node Cluster mit drei Nodes ein Node aus und es fällt ein zweiter Node aus, so fällt auch der letzte Node sofort aus. Es müssen immer zwei der drei Nodes im Cluster einwandfrei funktionieren, damit ein funktionsfähiger Cluster gewährleistet werden kann.
 
 
 
 
 
 \subsection{LISP Map Server / Control Plane Node}
-Der Control Plane Node ermöglicht LISP und enthält folgende Funktionen:
+Der Control Plane Node ermöglicht LISP und besteht aus folgenden Komponenten:
 \begin{itemize}
-	\item einen Map Resolver (MR), der Map-Requests von einem ITR entgegennimmt und das EID-zu-RLOC-Mapping mit Hilfe der verteilten Mapping-Datenbank auflöst
-	\item einen Map Server (MS), der autoritative EID-zu-RLOC-Mappings von einem ETR lernt und in der Datenbank veröffentlicht
-	\item eine Host Tracking Database (HTDB), welche ein zentrales Repository für die EID-zu-Fabric-Edge-Nodes Bindings beinhaltet.
+	\item Map Resolver (MR), der Map-Requests von einem ITR entgegennimmt und das EID-zu-RLOC-Mapping mit Hilfe der verteilten Mapping-Datenbank auflöst
+	\item Map Server (MS), der autoritative EID-zu-RLOC-Mappings von einem ETR lernt und in der Datenbank veröffentlicht
+	\item Host Tracking Database (HTDB), welche ein zentrales Repository für die EID-zu-Fabric-Edge-Nodes Bindings beinhaltet
 \end{itemize}
 
-Zur Bereitstellung gibt es zwei Varianten. Zum einem kann es einen redundanten globalen MSMR geben, oder es werden pro Fabric ein MSMR implementiert.
+Zur Bereitstellung gibt es zwei Varianten. Zum einem kann es einen redundanten globalen MS/MR geben, oder es wird pro Fabric Site ein MS/MR implementiert.
 
-\subsubsection{Redundante MS / MR Bereitstellung}
+\subsubsection{Redundante MS/MR Bereitstellung}
 
-Es wird empfohlen, redundante Standalone MS- und MR-Systeme mit den MS / MR-Funktionen auf demselben Gerät bereitzustellen. Wenn redundante eigenständige MS / MR implementiert werden, müssen sich alle xTRs bei beiden MS registrieren, so dass jeder eine konsistente Sicht auf den registrierten LISP EID-Namespace hat. Für MR-Funktionalität ist die Verwendung einer Anycast-IP-Adresse wünschenswert, da dadurch die Mapping-Lookup-Leistung verbessert wird, indem der MR ausgewählt wird, der dem anfordernden ITR am nächsten ist.
+Es wird empfohlen redundante Standalone MS/MR Systeme mit den MS/MR Funktionen auf demselben Gerät bereitzustellen. Wenn redundante eigenständige MS/MR implementiert werden, müssen sich alle xTRs bei beiden MS registrieren, sodass jeder eine konsistente Sicht auf den registrierten LISP EID-Namespace hat. Für die MR-Funktionalität ist die Verwendung einer Anycast-IP-Adresse wünschenswert, da dadurch die Mapping-Lookup-Leistung verbessert wird, indem der MR ausgewählt wird, der dem anfordernden ITR am nächsten ist.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Absicherung/LISP-Example}
+	\includegraphics[width=0.9\linewidth]{img/Absicherung/LISP-Example}
 	\caption{Redundante MS / MR Bereitstellung \cite{LISP-mobility} }
 	\label{fig:Redundante MS / MR Bereitstellung}
 \end{figure}
 
-\subsubsection{Co-Lokalisierung von MS / MR und xTR Funktionalitäten}
+\subsubsection{Co-Lokalisierung von MS/MR und xTR Funktionalitäten}
 
-Ein weiteres Beispiel ist die Co-Lokalisierung  von MS / MR- und xTR-Funktionalitäten. Das co-lokalisierte Modell ist besonders vorteilhaft, da es die Gesamtzahl verwalteter Geräte reduziert, die zum Ausrollen einer LISP Host Mobility-Lösung erforderlich sind. 
+Ein weiteres Beispiel ist die Co-Lokalisierung  von MS/MR- und xTR-Funktionalitäten. Das co-lokalisierte Modell ist besonders vorteilhaft, da es die Gesamtzahl verwalteter Geräte reduziert, die zum Ausrollen einer LISP Host Mobility-Lösung erforderlich sind. 
 
-Die erforderliche Konfiguration würde aber in beiden Szenarien identisch bleiben, indem eindeutige IP-Adressen genutzt werden, um die MS und eine Anycast-IP-Adresse für den MR zu identifizieren.
+Die erforderliche Konfiguration würde aber in beiden Szenarien identisch bleiben, indem eindeutige IP-Adressen genutzt werden um die MS und eine Anycast-IP-Adresse um die MR zu identifizieren.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{img/Absicherung/LISP-Example2}
-	\caption{Co-Lokalisierung von MS / MR und xTR Funktionalitäten \cite{LISP-mobility} }
-	\label{fig:Co-Lokalisierung von MS / MR und xTR Funktionalitaeten}
+	\caption{Co-Lokalisierung von MS/MR und xTR Funktionalitäten \cite{LISP-mobility} }
+	\label{fig:Co-Lokalisierung von MS/MR und xTR Funktionalitaeten}
 \end{figure}
 
-Es kann also ein redundantes eigenständiges MS / MR-Modell bereitgestellt werden, indem dedizierte Systeme zur Durchführung dieser Mapping-Funktionen genutzt werden (siehe Abbildung 2.9) oder alternativ können die MS- und MR-Funktionen gleichzeitig auf dem Netzwerkgerät, welches bereits die xTR-Rolle ausführt, implementiert werden (siehe Abbildung 2.10).
+Es kann also ein redundantes eigenständiges MS/MR-Modell bereitgestellt werden, indem dedizierte Systeme zur Bereitstellung dieser Mapping-Funktionen genutzt werden (siehe Abbildung 2.9). Alternativ können die MS/MR Funktionen gleichzeitig auf dem Netzwerkgerät, welches bereits die xTR-Rolle ausführt, implementiert werden (siehe Abbildung 2.10).
 
 \subsubsection{Anwendung}
-Damit bei einem Ausfall eines MSMR nicht alle Fabrics betroffen sind, macht es Sinn, pro Fabric einen redundanten MSMR zu implementieren. So können auf einem xTR eine oder mehrere MSMR-Adressen konfiguriert werden.
+Damit bei einem Ausfall eines MS/MR nicht alle Sites betroffen sind, macht es Sinn, pro Fabric Site einen redundanten MS/MR zu implementieren. So können auf einem xTR eine oder mehrere MS/MR-Adressen konfiguriert werden.
 
-Abfragen, die ein EID-zu-RLOC-Mapping durchführen, sind datengesteuert. Dieses Verhalten bedeutet, dass ein neuer Datentransfer zwischen LISP-Sites ein Mapping-Lookup erfordert, was dazu führt, dass der Datenversand gestoppt wird, bis ein Mapping durchgeführt wurde. Dies Verhalten ist analog zum DNS-Protokoll und ermöglicht LISP die Funktionen in einer dezentralen Datenbank mit EID-zu-RLOC-Mappings zu betreiben. 
+Abfragen, die ein EID-zu-RLOC-Mapping durchführen, sind datengesteuert. Dieses Verhalten bedeutet, dass ein neuer Datentransfer zwischen LISP-Sites einen Mapping-Lookup erfordert, was dazu führt, dass der Datenversand gestoppt wird, bis ein Mapping durch\-geführt wurde. Dieses Verhalten ist analog zum DNS-Protokoll und ermöglicht LISP die Funktionen in einer dezentralen Datenbank mit EID-zu-RLOC-Mappings zu betreiben. 
 
-Die Replikation der gesamten (potenziell umfangreichen) Datenbank ist unnötig, da auf Mappings bei Bedarf zugegriffen wird, genau wie im DNS muss ein Host nicht die komplette Domänendatenbank kennen. Tunnelrouter verwalten den Map-Cache der zuletzt verwendeten Mappings, um die Leistung des Systems zu verbessern.
+Die Replikation der gesamten, potenziell sehr umfangreichen, Datenbank ist unnötig, da nur bei Bedarf auf Mappings zugegriffen wird. Genau wie im DNS muss ein Host nicht die komplette Domänendatenbank kennen. TR verwalten den Map-Cache der zuletzt verwendeten Mappings, um die Performance des Systems zu verbessern.
 
 \paragraph{LISP Client Registration}
-Wird ein noch unbekannter neuer Client an die Fabric angeschlossen, sendet der ITR einen Map-Request an einen bekannten MR, wenn es ein EID-zu-RLOC-Mapping benötigt, das noch nicht in seinem lokalen Map-Cache vorhanden ist.
+Wird ein noch unbekannter Client an die Fabric angeschlossen, sendet der ITR einen Map-Request an einen bekannten MR, wenn es ein EID-zu-RLOC-Mapping benötigt, das noch nicht in seinem lokalen Map-Cache vorhanden ist.
 
 \begin{figure}[H]
 	\centering
@@ -258,7 +252,7 @@ Wird ein noch unbekannter neuer Client an die Fabric angeschlossen, sendet der I
 \end{figure}
 
 \paragraph{LISP Host Resolution}
-Will ein Client1 mit einem noch unbekannten anderen Client2 kommunizieren, so sucht sein ITR zuerst in seinem lokalen Map-Cache nach einem Eintrag. Ist noch kein Eintrag zum Client2 vorhanden, so schickt der ITR ein Map-Request zu seinem MR. Der MS sendet dann den originalen Map-Reguest an den zuletzt registrierten ETR. Da Client2 noch am ETR angeschlossen ist, sendet dieser einen Map-Reply an den ITR, welcher die angefragten Mapping-Informationen enthält.
+Will ein Client1 mit einem noch unbekannten Client2 kommunizieren, so sucht sein ITR zuerst in seinem lokalen Map-Cache nach einem Eintrag. Ist noch kein Eintrag zum Client2 vorhanden, so schickt der ITR einen Map-Request zu seinem MR. Der MS sendet dann den originalen Map-Reguest an den zuletzt registrierten ETR. Da Client2 noch am ETR angeschlossen ist, sendet dieser einen Map-Reply an den ITR, welcher die angefragten Mapping-Informationen enthält.
 
 Bei einem Ping werden die initialen Pakete verworfen, bis die Host Resolution abgeschlossen ist. 
 
@@ -270,7 +264,7 @@ Bei einem Ping werden die initialen Pakete verworfen, bis die Host Resolution ab
 \end{figure}
 
 \paragraph{Host Mobility}
-Die Host Mobility ist ähnlich wie die Client Registration, da der Client sich beim neuen FE2 zuerst registriert und die neuen Informationen schliesslich vom CP1 dann an den alten FE1 zur Aktualisierung weitergegeben werden.
+Die Host Mobility ist ähnlich wie die Client Registration, da der Client sich beim neuen FE2 zuerst registriert und die neuen Informationen schliesslich vom CP1 an den alten FE1 zur Aktualisierung weitergegeben werden.
 
 \begin{figure}[H]
 	\centering
@@ -279,19 +273,19 @@ Die Host Mobility ist ähnlich wie die Client Registration, da der Client sich b
 	\label{fig:LISP Host Mobility}
 \end{figure}
 
-Wenn eine dynamischer EID zwischen Rechenzentrumsstandorten wechselt, müssen die lokalen LISP Host Mobility-xTRs ihre Existenz erkennen. 
+Wenn eine dynamischer EID zwischen Sites wechselt, müssen die lokalen LISP Host Mobility-xTRs ihre Existenz erkennen. 
 
 Das für LISP Host Mobility konfigurierte xTR erkennt ein Host Mobility Ereignis wenn:
 \begin{enumerate}
-	\item Er empfängt ein IP-Datenpaket von einer Quelle (des neu eingetroffenen Workloads), die aus Routing-Sicht nicht über die Schnittstelle erreichbar ist, auf der das Paket empfangen wurde.
-	\item Die Quelle entspricht der auf die Schnittstelle angewendeten Dynamic-EID-Konfiguration.
+	\item Er empfängt ein IP-Datenpaket von einer Quelle, die aus Routing-Sicht nicht über die Schnittstelle erreichbar ist, auf der das Paket empfangen wurde.
+	\item Die Quelle entspricht der auf die Schnittstelle angewendeten Dynamic-EID-Kon\-figuration.
 \end{enumerate}
 
 
-\subsubsection{Ausfall MSMR}
-Bei einem Ausfall des MSMR kann keine Host Registration mehr vorgenommen werden. Das heisst, neue Clients können keine Verbindung zum restlichen Netzwerk aufbauen. Bestehende Clients können nur mit Clients, welche am selben FE angeschlossen sind, kommunizieren. Dies jedoch nur solange ihr Eintrag im lokalen Map-Cache bestehen bleibt. Der TTL der Einträge im Map-Cache beträgt per default einen Tag. 
+\subsubsection{Ausfall MS/MR}
+Bei einem Ausfall des MS/MR kann keine Host Registration mehr vorgenommen werden. Das heisst, neue Clients können keine Verbindung zum restlichen Netzwerk aufbauen. Bestehende Clients können nur mit Clients, welche am selben FE angeschlossen sind, kommunizieren. Dies jedoch nur solange ihr Eintrag im lokalen Map-Cache bestehen bleibt. Die TTL der Einträge im Map-Cache beträgt per default einen Tag. 
 
-Da jeder xTR seinen eigenen Map-Cache hat und kann sich sein Inhalt innerhalb derselbe LISP-Site unterscheiden. Daher können xTR leicht schwere Paketausfälle erleiden und mit LISP Control Messages geflutet werden.  
+Da jeder xTR seinen eigenen Map-Cache hat, kann sich sein Inhalt innerhalb derselben LISP-Site unterscheiden. Daher können xTR leicht grosse Paketverluste erleiden oder mit LISP Control Messages geflutet werden.  
 
 \paragraph{MS}
 Es sollten mehrere MS vorhanden und eingetragen sein. Im Optimalfall ist mindestens ein MS pro Site vorhanden. Sollte der erste MS nicht erreichbar sein, so wird der zweite MS verwendet.
@@ -300,10 +294,10 @@ Es sollten mehrere MS vorhanden und eingetragen sein. Im Optimalfall ist mindest
 Für den MR sollte eine Anycast IP-Adresse verwendet werden. So werden Pakete gesendet und über einen verfügbaren MR zum Ziel weitergeleitet. Auch hier ist es sinnvoll, mindestens einen MR pro Site bereitzustellen.
 
 \subsubsection{Analyse mittels LISP Commands}
-Es gibt viele LISP Befehle, welche die Analyse vereinfachen können. Nachfolgend werden einige LISP Commands, zusammen mit den ihren Ausgaben beschrieben. \cite{lisp-commands}
+Es gibt viele LISP Befehle, welche die Analyse vereinfachen können. Nachfolgend werden die wichtigsten LISP Commands zusammen mit den ihren Ausgaben beschrieben. \cite{lisp-commands}
 
 \paragraph{LISP EID-Table}
-Auf einem Control Plane kann die EID-Tabelle mit folgendem Befehl ausgegeben werden:
+Auf einem Control Plane Node kann die EID-Tabelle mit folgendem Befehl ausgegeben werden:
 
 \begin{lstlisting}[language=bash]
 show lisp eid-table vrf <VRF Name> ipv4 map-cache
@@ -335,7 +329,7 @@ show lisp eid-table vrf <VRF Name> ipv4 map-cache <IP>
 
 
 \paragraph{LISP Database EID-Table} \label{LISP Database EID-Table}
-Der folgende Befehl kann verwendet werden, um die Egress Tunnel Router (ETR) konfigurierten lokalen IPv4-EID-Präfixes und der zugehörigen Locator-Sets auszugeben:
+Der folgende Befehl kann verwendet werden, um die im ETR konfigurierten lokalen IPv4-EID-Präfixes und der zugehörigen Locator-Sets auszugeben:
 
 \begin{lstlisting}[language=bash]
 show ip lisp database eid-table <VRF Name>
@@ -352,7 +346,7 @@ show ip lisp database eid-table <VRF Name>
 \subsubsection{LISP Test}
 Um die Funktionalität von LISP zu überprüfen, wurde als erstes der Ausfall eines Control Plane Nodes simuliert. Die beiden Clients sind an zwei verschiedene Edge Nodes (C3850 und C9300) in der Site Emmen im Gebäude Flugplatz angeschlossen. 
 
-Als erstes wurde nun die LISP EID-Table auf dem Edge1 angezeigt (siehe Abschnitt \ref{LISP Database EID-Table}: LISP Database EID-Table) und anschliessend mit dem nachfolgenden Befehl gelöscht:
+Als erstes wurde nun die LISP EID-Table auf dem Edge1 angezeigt und anschliessend mit dem nachfolgenden Befehl gelöscht:
 
 \begin{lstlisting}[language=bash]
 clear ip lisp database eid-table <VRF Name>
@@ -376,7 +370,7 @@ Die nachfolgenden Tabellen zeigen die Performance und Scalability Metriken für 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{img/Absicherung/ISE-MaxRadiusScaling}
-	\caption{ISE - Maximum RADIUS Scaling by Deployment with Maximum Passive Identity/Easy Connect Scaling by Deployment Size \cite{ise-scale}}
+	\caption{ISE - Maximum RADIUS Scaling \cite{ise-scale}}
 	\label{fig:ISE - Maximum RADIUS Scaling}
 \end{figure}
 
@@ -394,16 +388,9 @@ Die nachfolgenden Tabellen zeigen die Performance und Scalability Metriken für 
 	\label{fig:ISE - pxGrid v2 Scaling per Dedicated pxGrid Node}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.5\linewidth]{img/Absicherung/ISE-pxGridV2}
-	\caption{ISE - Platform eXchange Grid (pxGrid v2) Scaling \cite{ise-scale}}
-	\label{fig:ISE - Platform eXchange Grid (pxGrid v2) Scaling}
-\end{figure}
-
 \subsubsection{ISE Cluster}
 
-Um die Verfügbarkeit des ISE zu erhöhen, kann diese in einem Cluster, bestehend aus einem Primary Node und einem Secondary Node, betrieben werden. Dies erhöht die Ausfallsicherheit des ISE. Sollte der Primary Node ausfallen, kann der Secondary Node dessen Funktion übernehmen und es ist weiterhin möglich Konfigurationsänderungen vorzunehmen.
+Um die Verfügbarkeit der ISE zu erhöhen, kann diese in einem Cluster, bestehend aus einem Primary Node und einem Secondary Node, betrieben werden. Dies erhöht die Ausfallsicherheit der ISE. Sollte der Primary Node ausfallen, kann der Secondary Node dessen Funktion übernehmen und es ist weiterhin möglich Konfigurationsänderungen vorzunehmen.
 
 \subsubsection{Distributed Deployment}
 
@@ -420,7 +407,7 @@ Alle Informationen des Primary Node werden auf die Secondary Nodes an den Aussen
 
 \paragraph{Installation auf dem ENCS 5400}
 
-Die Installation des ISE auf dem ENCS 5400 funktioniert ähnlich, wie dies bereits in Kapitel 4.2 beschrieben wurde. Daher werden hier nur die Besonderheiten der ISE beschrieben.
+Die Installation der ISE auf dem ENCS 5400 funktioniert ähnlich, wie dies bereits in Kapitel 4.2 beschrieben wurde. Daher werden hier nur die Besonderheiten der ISE beschrieben.
 
 \subparagraph{Image Upload}
 Für die ISE kann kein komplettes Disk Image importiert werden. Daher wird in diesem Fall das ISO auf den ENCS kopiert. Auf Grund der Grösse des ISOs kann dies aber nicht über das Web-Interface gemacht werden.
@@ -432,13 +419,13 @@ Für die ISE kann kein komplettes Disk Image importiert werden. Daher wird in di
 	\label{fig:ENCS - Upload Limit}
 \end{figure}
 
-Ein Image oder ISO über 6GB muss daher via USB, SCP oder NFS auf den ENCS kopiert werden. 
+Ein Image oder ISO über 6 GB muss daher via USB, SCP oder NFS auf den ENCS kopiert werden. 
 
 \begin{lstlisting}[language=bash]
 nfvis# scp root@10.22.0.15:/root/isos/ise-2.3.iso intdatastore:
 \end{lstlisting}
 
-Nach dem Upload muss das ISO noch registriert werden. \textit{VM Life Cycle $\rightarrow$ Image Repository $\rightarrow$ Browse Datastore $\rightarrow$ Register}
+Nach dem Upload muss das ISO noch unter \textit{VM Life Cycle $\rightarrow$ Image Repository $\rightarrow$ Browse Datastore $\rightarrow$ Register} registriert werden.
 
 \subparagraph{Image Deployment}
 
@@ -450,9 +437,9 @@ Falls noch kein passendes Profil existiert, muss dieses wie in der Abbildung \re
 	\begin{tabularx}{\textwidth}{l | X}
 		CPU & 4 Cores mit je 1.8 GHz        \\
 		\hline
-		Memory & 6GB \\
+		Memory & 6 GB \\
 		\hline
-		Hard Disk & 100 GB (Write IO 50MB/s, Read IO 300MB/s) \\
+		Hard Disk & 100 GB (Write IO 50 MB/s, Read IO 300 MB/s) \\
 	\end{tabularx}
 	\caption{ISE Requirements}
 	\label{tab:ISE Requirements}
@@ -469,18 +456,18 @@ Die VM kann nun unter \textit{VM Life Cycle $\rightarrow$ Deploy} erstellt werde
 
 \subparagraph{ISE Konfiguration}
 
-Sobald die VM deployed ist, wird das Setup gestartet. Es müssen grundlegende Informationen wie Hostname und Netzwerkeinstellungen konfiguriert werden.  
+Sobald die VM deployed ist, wird das Setup gestartet. Es müssen grundlegende Informationen wie der Hostname und die Netzwerkeinstellungen konfiguriert werden.  
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{img/Absicherung/ISE-Setup.png}
+	\includegraphics[width=0.6\linewidth]{img/Absicherung/ISE-Setup.png}
 	\caption{ISE - Setup}
 	\label{fig:ISE-Setup}
 \end{figure}
 
 \subparagraph{Distributed Deployment}
 
-Sobald die Installation des zweiten Nodes abgeschlossen ist, kann diese auf dem Primary Node als Secondary Node hinzugefügt werden.
+Sobald die Installation des zweiten Nodes abgeschlossen ist, kann dieser auf dem Primary Node als Secondary Node hinzugefügt werden.
 Wichtig ist insbesondere, dass die beiden Nodes über dieselbe Zeit verfügen und miteinander kommunizieren können.
 
 In einem ersten Schritt muss die CA des künftigen Secondary Node in den Primary Node importiert werden, sodass eine Trust Beziehung entsteht.
@@ -493,7 +480,7 @@ In einem ersten Schritt muss die CA des künftigen Secondary Node in den Primary
 	\label{fig:ISE-Zertifikat}
 \end{figure}
 
-Sofern der Primary Node noch im Standalone Modus ist, kann dieser zum Primary Node gewählt werden. Ist dieser bereits in der Rolle Primary Node, ist der nächste Schritt nicht nötig.
+Sofern der Primary Node noch im Standalone Modus ist, muss dieser zum Primary Node gewählt werden. Ist dieser bereits in der Rolle Primary Node, kann der nächste Schritt übersprungen werden.
 
 \begin{figure}[H]
 	\centering
@@ -522,9 +509,9 @@ Zum Schluss werden die Rollen für den Secondary Node definiert. Die wichtigsten
 	\item pxGrid
 \end{itemize}
 
-In der Lab Umgebung wurde die Auswahl auf den Policy Service und SXP beschränkt, da dies die Dienste sind, die zwingend benötigen werden. 
+In der Lab Umgebung wurde die Auswahl auf den Policy Service und SXP beschränkt, da dies die Dienste sind, die zwingend benötigt werden. 
 
-Nun beginnt die Primary ISE mit der Replikation der Konfigurationen auf den Secondary Node. Dies kann je nach Datenbestand relativ lange dauern. Sobald diese Replikation abgeschlossen ist, können auf dem Secondary Node keine Konfigurationen mehr vorgenommen werden. Damit dieser wieder in den Standalone Mode wechselt, muss er aus dem Deployment entfernt werden.
+Nun beginnt die Primary ISE mit der Replikation der Konfigurationen auf den Secondary Node. Dies kann je nach Datenbestand mehrere Stunden dauern. Sobald diese Replikation abgeschlossen ist, können auf dem Secondary Node keine Konfigurationen mehr vorgenommen werden. Damit dieser wieder in den Standalone Mode wechselt, muss er aus dem Deployment entfernt werden.
 
 \subparagraph{Network Access Devices}
 
@@ -532,7 +519,7 @@ Auf den Network Devices muss der ISE Server vom jeweiligen Standort konfiguriert
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{img/Absicherung/DNA_Center_AAA-Server.png}
+	\includegraphics[width=0.9\linewidth]{img/Absicherung/DNA_Center_AAA-Server.png}
 	\caption{DNA Center - AAA Server }
 	\label{fig:DNA Center - AAA Server}
 \end{figure}
@@ -540,7 +527,7 @@ Auf den Network Devices muss der ISE Server vom jeweiligen Standort konfiguriert
 
 \subsubsection{Third Party Software}
 
-Alternativ zum Distributed Deployment der ISEs kann eine Replikation der Services auch mittels Third Party Software erreicht werden. 
+Alternativ zum Distributed Deployment der ISE kann eine Replikation der Services auch mittels Third Party Software erreicht werden. 
 
 \subsubsection{Read Only Radius Server an Aussenstandorten}
 
@@ -553,11 +540,11 @@ Weitere verteilte grosse Standorte können über eine eigene AAA-Infrastruktur f
 
 \paragraph{Freeradius}
 
-Freeradius wird in einem Master / Slave Setup betrieben. Am Hauptstandort befindet sich der Radius Master und an allen Aussenstandorten ist ein Slave verfügbar. Die Replikation wird mittels MySQL Replikation sichergestellt.
+Freeradius wird in einem Master/Slave Setup betrieben. Am Hauptstandort befindet sich der Radius Master und an allen Aussenstandorten ist ein Slave verfügbar. Die Replikation wird mittels MySQL Replikation sichergestellt.
 
 \subsection{SGT Access List}
-Beim Erstellen von SGTs über die DNA Center Benutzeroberfläche wird auf die ISE-Benutzer\-ober\-fläche weitergeleitet und die Aufgabe wird dort abgeschlossen. ISE verwaltet alle Gruppeninformationen, die später in DNA Center für die Richtlinienerstellung verwendet werden. Obwohl die Richtlinien und die entsprechenden Contracts im DNA Center erstellt werden, werden beide über die REST-API der ISE an die ISE zurückgemeldet. ISE dient dann als zentrale Anlaufstelle für SGTs, Richtlinien und SGACLs, die dann dynamisch an die Netzwerkinfrastruktur verteilt werden.
-Die Segmentierung innerhalb der SDA wird durch die kombinierte Verwendung von virtuellen Netzwerken (VN), die mit VRFs gleichgesetzt sind, als auch TrustSec Scalable Group Tags (SGTs) ermöglicht. Während die Segmentierung durch die Verwendung von absichtsgesteuerten oder speziell dafür entwickelten virtuellen Netzwerken allein erreicht werden kann, bieten die Cisco Trustsec SGTs eine logische Segmentierung basierend auf der Gruppenmitgliedschaft. Cisco bietet eine zusätzliche Granularitätsebene, mit der mehrere SGTs innerhalb eines einzigen VN verwenden können, die eine Mikrosegmentierung innerhalb des VN ermöglicht. Die Segmentierung erfolgt innerhalb des SDA sowohl auf Makro- als auch auf Mikroebene durch virtuelle Netzwerke beziehungsweise SGTs. Die Richtlinien und die damit verbundenen Contracts werden im DNA Center konfiguriert und dann über die REST-API an die ISE übermittelt. ISE aktualisiert dann die Edge Nodes mit den Richtlinien für SGTs, die den angeschlossenen Geräten zugeordnet sind. 
+Beim Erstellen von SGTs über die DNA Center Benutzeroberfläche wird auf die ISE-Benutzer\-ober\-fläche weitergeleitet und die Aufgabe wird dort abgeschlossen. ISE verwaltet alle Gruppeninformationen, die später im DNA Center für die Richtlinienerstellung verwendet werden. Obwohl die Richtlinien und die entsprechenden Contracts im DNA Center erstellt werden, werden beide über die REST-API der ISE an die ISE zurückgemeldet. ISE dient dann als zentrale Anlaufstelle für SGTs, Richtlinien und SGACLs, die dann dynamisch an die Netzwerkinfrastruktur verteilt werden.
+Die Segmentierung innerhalb des SDA wird durch die kombinierte Verwendung von virtuellen Netzwerken (VN), die mit VRFs gleichgesetzt sind und TrustSec Scalable Group Tags (SGTs) ermöglicht. Während die Segmentierung durch die Verwendung von virtuellen Netzwerken allein erreicht werden kann, bieten die Cisco Trustsec SGTs eine logische Segmentierung basierend auf der Gruppenmitgliedschaft. Cisco bietet eine zusätzliche Granularitätsebene, mit der mehrere SGTs innerhalb eines einzigen VN verwendet können. Dies ermöglicht eine Mikrosegmentierung innerhalb des VN. Die Segmentierung erfolgt innerhalb des SDA sowohl auf Makro- als auch auf Mikroebene durch virtuelle Netzwerke beziehungsweise SGTs. Die Richtlinien und die damit verbundenen Contracts werden im DNA Center konfiguriert und dann über die REST-API an die ISE übermittelt. Diese aktualisiert dann die Edge Nodes mit den Richtlinien für SGTs, die den angeschlossenen Geräten zugeordnet sind. 
 \cite{sda-segmentation-may2018}
 
 Es folgt eine kurze Zusammenfassung der damit benötigten Komponenten:
