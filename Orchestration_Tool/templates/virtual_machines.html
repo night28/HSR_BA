@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="starter-template">
+        <p class="lead">Virtual Machines</p>
+    </div>
+
+    <table class="table">
+        <thead>
+        <th>
+            Name
+        </th>
+        <th>
+            Image
+        </th>
+        <th>
+            Flavor
+        </th>
+        <th>
+            Networks
+        </th>
+        <th>
+            State
+        </th>
+        <th>
+            Action
+        </th>
+        </thead>
+        <tbody>
+        {% for vm in vms %}
+            <tr>
+                <td>
+                    {{ vm.name }}
+                </td>
+                <td>
+                    {{ vm.image }}
+                </td>
+                <td>
+                    {{ vm.flavor }}
+                </td>
+                <td>
+                    {% for network in vm.networks %}
+                        {{ network }}<br>
+                    {% endfor %}
+                        </td>
+                <td>
+                    {{ vm.state }}
+                </td>
+                <td>
+                {% if vm.state == 'Up' %}
+                {% set action = 'Stop' %}
+                {% else %}
+                {% set action = 'Start' %}
+                {% endif %}
+    <form action="/virtual_machines" method="POST">
+        <input type="hidden" name="action" value={{ action }}>
+        <input type="hidden" name="vm" value={{ vm.name }}>
+        <p><input type="submit" value={{ action }}></p>
+    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

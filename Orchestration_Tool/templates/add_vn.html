@@ -41,7 +41,7 @@
         <p>
             {% for site in sites %}
                 {{ site.name }}<br>
-                <select name="{{ site }}_ip_pool">
+                <select name="{{ site.id }}_ip_pool">
                 {% for ip_pool in site.ip_pools %}
                     <option value="{{ ip_pool['id'] }}">{{ ip_pool['name'] }}</option>
                 {% endfor %}
@@ -50,7 +50,11 @@
         </p>
         <input type="hidden" name="selected_fabric" value={{ selected_fabric }}>
         <input type="hidden" name="selected_vnname" value={{ selected_vnname }}>
-        <input type="hidden" name="selected_sites" value={{ selected_sites }}>
+        <input type="hidden" name="sites_count" value={{ sites_count }}>
+        {% for i in range(0, sites_count) %}
+            {% set name = 'selected_site_' + i|string %}
+        <input type="hidden" name={{ name }} value={{ sites[i].id }}>
+        {% endfor %}
         <input type="hidden" name="step" value="4">
         <p><input type="submit" value="Create VN"></p>
     </form>
@@ -58,11 +62,13 @@
     <h1>Success</h1>
     <form action="/add_vn" method="POST">
         <p>
-
+            Successfully Created Fabric:
         </p>
         <input type="hidden" name="selected_fabric" value={{ selected_fabric }}>
         <input type="hidden" name="selected_vnname" value={{ selected_vnname }}>
-        <input type="hidden" name="step" value="4">
+        <input type="hidden" name="selected_sites" value={{ selected_sites }}>
+        <input type="hidden" name="selected_ip_pools" value={{ selected_ip_pools }}
+        <input type="hidden" name="step" value="5">
         <p><input type="submit" value="Create VN"></p>
     </form>
     {% endif %}

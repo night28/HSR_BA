@@ -9,11 +9,10 @@
         <th>
             Hostname
         </th>
-        <th>
-            Running Config
+        <th>Management IP
         </th>
         <th>
-            Interface Status
+            Running Config
         </th>
         </thead>
         <tbody>
@@ -23,10 +22,10 @@
                     {{ device.hostname }}
                 </td>
                 <td>
-                    <a href="/show_config/{{ device.hostname }}">Show running config</a>
+                    {{ device.managementIpAddress }}
                 </td>
                 <td>
-                    <a href="/interface_status/{{ device.hostname }}">Show interface status</a>
+                    <a href="/show_config/{{ device.hostname }}">Show running config</a>
                 </td>
             </tr>
 
