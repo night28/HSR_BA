@@ -62,14 +62,37 @@
     <h1>Success</h1>
     <form action="/add_vn" method="POST">
         <p>
-            Successfully Created Fabric:
+            Successfully Created Virtual Network:
+<table class="table">
+        <thead>
+        <th>
+            VN
+        </th>
+        <th>
+            Sites
+        </th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {{ selected_vnname }}
+                </td>
+                <td></td>
+            </tr>
+            <tr>{% for site in selected_sites %}
+                <td>
+                </td>
+                <td>{{ site.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
         </p>
         <input type="hidden" name="selected_fabric" value={{ selected_fabric }}>
         <input type="hidden" name="selected_vnname" value={{ selected_vnname }}>
         <input type="hidden" name="selected_sites" value={{ selected_sites }}>
         <input type="hidden" name="selected_ip_pools" value={{ selected_ip_pools }}
         <input type="hidden" name="step" value="5">
-        <p><input type="submit" value="Create VN"></p>
     </form>
     {% endif %}
 {% endblock %}

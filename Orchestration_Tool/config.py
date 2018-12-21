@@ -1,24 +1,8 @@
-"""Sample Configuration
-DNAC_IP = "1.1.1.1"
-DNAC_PORT = 443
-USERNAME = "username"
-PASSWORD = "password"
-VERSION = "v1"
-DEVICE_IP = "2.2.2.2"
-PRODUCT_FAMILY = "Routers"
-TEMPLATE_NAME = "MyTemplate"
-PROCESS_NAME = "dbm"
-FTP_SERVER = "3.3.3.3"
-FTP_USERNAME = "ftp-username"
-FTP_PASSWORD = "ftp-password"
-QUERY_INTERVAL = "1800"
-"""
-
 #DNA CENTER
 DNAC_IP = "10.22.0.100"
 DNAC_PORT = 443
 USERNAME = "admin"
-PASSWORD = "hallo@1234"
+PASSWORD = "XXXXXXXX"
 VERSION = "v1"
 DEVICE_IP = "Device IP Address"
 PRODUCT_FAMILY = "Device Family - Any one from the list {Routers, Switches}"
@@ -33,12 +17,12 @@ QUERY_INTERVAL = "Time Interval in seconds for EEM run; min 300  to max 604800"
 ENCS_IP = "10.22.0.24"
 ENCS_PORT = "443"
 ENCS_USER = "admin"
-ENCS_PASSWORD = "Hallo#1234"
+ENCS_PASSWORD = "XXXXXXXX"
 
 #NETWORK DEVICES
 NETWORK_USER = "dnaadmin"
-NETWORK_PASSWORD = "hallo@1234"
+NETWORK_PASSWORD = "XXXXXXXX"
 
 #CONFIG HISTORY
-CONFIG_REPO = "https://github.com/dude101/HSR_BA_Backup.git"
+CONFIG_REPO = "https://github.com/XYZ/ABC.git"
 REPO_PATH = "/tmp/config_repo"
