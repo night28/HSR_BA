@@ -13,7 +13,7 @@ import config  # DNAC IP is assigned in config.py
 
 # It's used to get rid of certificate warning messages when using Python 3.
 # For more information please refer to: https://urllib3.readthedocs.org/en/latest/security.html
-requests.packages.urllib3.disable_warnings() # Disable warning message
+requests.packages.urllib3.disable_warnings()  # Disable warning message
 
 
 def get_X_auth_token(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=config.PASSWORD):
@@ -40,7 +40,7 @@ def get_X_auth_token(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAM
     headers = {'content-type': 'application/json'}
     # POST request and response
     try:
-        r = requests.post(post_url, auth=HTTPBasicAuth(username=uname, password=pword), headers=headers,verify=False)
+        r = requests.post(post_url, auth=HTTPBasicAuth(username=uname, password=pword), headers=headers, verify=False)
         # Remove '#' if need to print out response
         #print (r.text)
         r.raise_for_status()
@@ -49,7 +49,7 @@ def get_X_auth_token(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAM
     except requests.exceptions.ConnectionError as e:
         # Something wrong, cannot get service token
         print ("Error: %s" % e)
-        sys.exit ()
+        sys.exit()
 
 
 def get(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=config.PASSWORD, api='', params=''):
@@ -69,18 +69,18 @@ def get(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=conf
     -------
     object: an instance of the Response object(of requests module)
     """
-    token = get_X_auth_token(ip,ver,uname,pword)
+    token = get_X_auth_token(ip, ver, uname, pword)
     headers = {"X-Auth-Token": token}
     url = "https://"+ip+"/api/"+ver+"/"+api
-    print ("\nExecuting GET '%s'\n"%url)
+    print ("\nExecuting GET '%s'\n" % url)
     try:
     # The request and response of "GET" request
-        resp= requests.get(url,headers=headers,params=params,verify = False)
-        print ("GET '%s' Status: "%api,resp.status_code,'\n') # This is the http request status
-        return(resp)
+        resp= requests.get(url, headers=headers, params=params, verify=False)
+        print ("GET '%s' Status: " % api, resp.status_code, '\n') # This is the http request status
+        return resp
     except:
-       print ("Something wrong with GET /",api)
-       sys.exit()
+        print ("Something wrong with GET /", api)
+        sys.exit()
 
 
 def post(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=config.PASSWORD, api='', data=''):
@@ -100,18 +100,18 @@ def post(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=con
     -------
     object: an instance of the Response object(of requests module)
     """
-    token = get_X_auth_token(ip,ver,uname,pword)
-    headers = {"content-type" : "application/json","X-Auth-Token": token}
+    token = get_X_auth_token(ip, ver, uname, pword)
+    headers = {"content-type": "application/json", "X-Auth-Token": token}
     url = "https://"+ip+"/api/"+ver+"/"+api
-    print ("\nExecuting POST '%s'\n"%url)
+    print ("\nExecuting POST '%s'\n" % url)
     try:
     # The request and response of "POST" request
-        resp= requests.post(url,json.dumps(data),headers=headers,verify = False)
-        print ("POST '%s' Status: "%api,resp.status_code,'\n') # This is the http request status
+        resp = requests.post(url, json.dumps(data), headers=headers, verify=False)
+        print ("POST '%s' Status: " % api, resp.status_code, '\n')  # This is the http request status
         return(resp)
     except:
-       print ("Something wrong with POST /",api)
-       sys.exit()
+        print ("Something wrong with POST /", api)
+        sys.exit()
 
 
 def put(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=config.PASSWORD, api='', data=''):
@@ -131,18 +131,18 @@ def put(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=conf
     -------
     object: an instance of the Response object(of requests module)
     """
-    token = get_X_auth_token(ip,ver,uname,pword)
-    headers = {"content-type" : "application/json","X-Auth-Token": token}
+    token = get_X_auth_token(ip, ver, uname, pword)
+    headers = {"content-type": "application/json", "X-Auth-Token": token}
     url = "https://"+ip+"/api/"+ver+"/"+api
-    print ("\nExecuting PUT '%s'\n"%url)
+    print ("\nExecuting PUT '%s'\n" % url)
     try:
     # The request and response of "PUT" request
-        resp= requests.put(url,json.dumps(data),headers=headers,verify = False)
-        print ("PUT '%s' Status: "%api,resp.status_code,'\n') # This is the http request status
+        resp = requests.put(url, json.dumps(data), headers=headers, verify=False)
+        print ("PUT '%s' Status: " % api, resp.status_code, '\n')  # This is the http request status
         return(resp)
     except:
-       print ("Something wrong with PUT /",api)
-       sys.exit()
+        print ("Something wrong with PUT /", api)
+        sys.exit()
 
 
 def delete(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=config.PASSWORD, api='', params=''):
@@ -162,15 +162,15 @@ def delete(ip=config.DNAC_IP, ver=config.VERSION, uname=config.USERNAME, pword=c
     -------
     object: an instance of the Response object(of requests module)
     """
-    token = get_X_auth_token(ip,ver,uname,pword)
-    headers = {"content-type" : "application/json","X-Auth-Token": token}
+    token = get_X_auth_token(ip, ver, uname, pword)
+    headers = {"content-type": "application/json", "X-Auth-Token": token}
     url = "https://"+ip+"/api/"+ver+"/"+api
-    print ("\nExecuting DELETE '%s'\n"%url)
+    print ("\nExecuting DELETE '%s'\n" % url)
     try:
     # The request and response of "DELETE" request
-        resp= requests.delete(url,headers=headers,params=params,verify = False)
-        print ("DELETE '%s' Status: "%api,resp.status_code,'\n') # This is the http request status
+        resp = requests.delete(url, headers=headers, params=params, verify=False)
+        print ("DELETE '%s' Status: " % api, resp.status_code, '\n')  # This is the http request status
         return(resp)
     except:
-       print ("Something wrong with DELETE /",api)
-       sys.exit()
+        print ("Something wrong with DELETE /", api)
+        sys.exit()

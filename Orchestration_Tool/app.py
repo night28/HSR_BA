@@ -8,10 +8,7 @@ import shlex
 import git
 import config
 import shutil
-from flask import Flask, render_template, request, flash, redirect
-from flask_wtf import FlaskForm
-from wtforms import StringField,IntegerField, SubmitField, SelectMultipleField, SelectField, HiddenField
-from wtforms.validators import DataRequired
+from flask import Flask, render_template, request
 
 
 app = Flask(__name__, static_url_path='/static')
@@ -89,12 +86,22 @@ def get_vlan_interfaces(device):
             device.vlanInterfaces.append(VlanInterface(interface))
 
 
-def add_vn_to_border(name, sites=[]):
-    return 0
+def get_devices():
+    devices = []
+    for device in dnac.get(api='network-device').json()['response']:
+        devices.append(NetworkDevice(device))
+    return devices
 
 
-def assign_vn_to_fabric(name, fabric, sites=[], ip_pools=[]):
-    return 'blah'
+def get_scalable_groups(group_id=''):
+    scalable_groups = []
+    for scalable_group in dnac.get(api='data/customer-facing-service/scalablegroup/' + group_id, ver='v2').json()['response']:
+        try:
+            scalable_groups.append(ScalableGroup(scalable_group))
+        except Exception as e:
+            print e
+            continue
+    return scalable_groups
 
 
 class NetworkDevice:
@@ -139,7 +146,7 @@ class Site:
 
     def get_ip_pools(self):
         pool_ids = []
-        for pool_id in dnac.get(api='commonsetting/global/{}'.format(self.id), params={'key':'.*ip.pool..*'}).json()['response']:
+        for pool_id in dnac.get(api='commonsetting/global/{}'.format(self.id), params={'key': '.*ip.pool..*'}).json()['response']:
             if pool_id['value'][0]['objReferences'][0]:
                 print pool_id['value'][0]['objReferences'][0]
                 pool_ids.append(pool_id['value'][0]['objReferences'][0])
@@ -177,7 +184,6 @@ class VirtualNetwork:
             try:
                 self.scalable_groups.append(get_scalable_groups(scalable_group['idRef'])[0])
             except IndexError:
-                print 'VN {} has no scalable Group'.format(self.name)
                 continue
 
 
@@ -192,13 +198,12 @@ class VirtualMachine:
                 self.networks.append(network['network'])
         self.state = self.get_state()
 
-
     def get_state(self):
         state = encs.get(api='operational/vm_lifecycle/opdata/tenants/tenant/admin/deployments/{}'.format(self.name)).json()['vmlc:deployments']['state_machine']['state']
-        print state
         if state == 'SERVICE_ACTIVE_STATE':
             return 'Up'
         return 'Down'
+
 
 @app.route('/')
 def net_overview():
@@ -212,56 +217,46 @@ def virtual_network_overview():
     virtual_networks = get_virtual_networks()
     # for scalable_group in get_scalable_groups():
     #     scalable_groups.append(ScalableGroup(scalable_group))
-    for network in virtual_networks:
-        print network.name
     return render_template('virtual_networks.html', virtual_networks=virtual_networks, scalable_groups=scalable_groups)
+
 
 @app.route('/show_config/<device>')
 def show_config(device):
     network_device = NetworkDevice(dnac.get(api='network-device', params={'hostname': device}).json()['response'][0])
-    config = dnac.get(api='network-device/' + network_device.id + '/config').json()['response']
-    return render_template('config.html', device=network_device, config=config)
+    configuration = dnac.get(api='network-device/' + network_device.id + '/config').json()['response']
+    return render_template('config.html', device=network_device, config=configuration)
 
 
 @app.route('/add_vn', methods=['GET', 'POST'])
 def add_vn():
     if 'step' not in request.form:
-        print get_fabrics_for_form()
         return render_template('add_vn.html', step='1', fabrics=get_fabrics_for_form())
     elif request.form['step'] == '2':
-        print 'Step 2'
         selected_fabric = str(request.form['fabric'])
         selected_vnname = str(request.form['vnname'])
         sites = get_sites_for_fabric(selected_fabric)
         return render_template('add_vn.html', step='2', sites=sites, selected_fabric=selected_fabric, selected_vnname=selected_vnname)
     elif request.form['step'] == '3':
-        print 'Step3'
         selected_sites = request.form.getlist('selected_sites')
         selected_fabric = request.form['selected_fabric']
         selected_vnname = request.form['selected_vnname']
         sites = get_sites_for_fabric(selected_fabric)
         new_sites = []
-        print 'Selected Sites: {}'.format(selected_sites)
         for site in sites:
             if site.id in selected_sites:
                 site.get_ip_pools()
                 new_sites.append(site)
-        print 'New Sites: {}'.format(new_sites)
         sites_count = len(new_sites)
-        print 'Sites Count: {}'.format(sites_count)
         return render_template('add_vn.html', step='3', sites=new_sites, selected_fabric=selected_fabric, selected_vnname=selected_vnname, sites_count=sites_count)
     elif request.form['step'] == '4':
-        print 'Step4'
         selected_sites = []
         selected_fabric = request.form['selected_fabric']
         selected_vnname = request.form['selected_vnname']
         sites_count = int(request.form['sites_count'])
-        print 'Sites Count: {}'.format(sites_count)
         for i in range(0, sites_count, 1):
             selected_sites.append(request.form['selected_site_' + str(i)])
         selected_ip_pools = {}
         for site in selected_sites:
-            print site + '_ip_pool'
             selected_ip_pools[site] = request.form[site + '_ip_pool']
         print 'Selected VN Name: {}'.format(selected_vnname)
         print 'Selected Fabric: {}'.format(selected_fabric)
@@ -284,7 +279,7 @@ def add_vn():
                 print "Border Node: {}".format(node.hostname)
                 print "Vlan Interfaces {}".format(node.vlanInterfaces)
                 for interface in node.vlanInterfaces:
-                    print interface.
+                    print interface.vlanNumber
 
         return render_template('add_vn.html', step='4', selected_fabric=selected_fabric, selected_vnname=selected_vnname, selected_sites=selected_sites, selected_ip_pools=selected_ip_pools)
 
@@ -292,8 +287,7 @@ def add_vn():
 @app.route('/virtual_machines', methods=['GET', 'POST'])
 def virtual_machines():
     vms = []
-    for deployment in \
-    encs.get(api='config/vm_lifecycle/tenants/tenant/admin/deployments?deep').json()['vmlc:deployments']['deployment']:
+    for deployment in encs.get(api='config/vm_lifecycle/tenants/tenant/admin/deployments?deep').json()['vmlc:deployments']['deployment']:
         vms.append(VirtualMachine(deployment['vm_group'][0]))
     if 'action' not in request.form:
         return render_template('virtual_machines.html', vms=vms)
@@ -307,7 +301,8 @@ def virtual_machines():
         print encs.post(api='operations/vmAction', data=json.dumps(data))
         return render_template('virtual_machines.html', vms=vms)
 
-@app.route('/config_history', methods=['GET'])
+
+@app.route('/configuration_history', methods=['GET'])
 def config_history():
     if os.path.exists(config.REPO_PATH):
         shutil.rmtree(config.REPO_PATH)
@@ -322,49 +317,8 @@ def config_history():
         print commit.hexsha
         print commit.committed_datetime
         print commit.message
-
-
-@app.route('/add_ip_pool')
-def add_ip_pool():
-    form = AddIPPoolForm()
-    return render_template('add_ip_pool.html', form=form)
-
-
-def get_areas():
-    areas = []
-    sites = dnac.get(api='topology/site-topology').json()['response']['sites']
-    for site in sites:
-        if site['locationType'] == 'area':
-            areas.append(site['name'])
-    return areas
-
-
-def get_devices():
-    devices = []
-    for device in dnac.get(api='network-device').json()['response']:
-        devices.append(NetworkDevice(device))
-    return devices
-
-
-def get_scalable_groups(group_id=''):
-    scalable_groups = []
-    for scalable_group in dnac.get(api = 'data/customer-facing-service/scalablegroup/' + group_id, ver='v2').json()['response']:
-        try:
-            scalable_groups.append(ScalableGroup(scalable_group))
-        except Exception as e:
-            print e
-            continue
-    return scalable_groups
+    return render_template('config_history.html')
 
 
 if __name__ == '__main__':
     app.run()
-
-driver = napalm.get_network_driver('ios')
-user='dnaadmin'
-password='hallo@1234'
-border1 = driver(hostname='10.22.30.1', username=user, password=password)
-border1.cli
-
-
-
