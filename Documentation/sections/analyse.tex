@@ -1,7 +1,7 @@
 \section{Analyse}
-Nachfolgend werden alle kritischen Elemente der SDA Lösung analysiert. Dazu gehören beispielsweise Dienste, wie die LISP Datenbank, Radius, SGT Access List. und 
+Nachfolgend werden alle kritischen Elemente der SDA Lösung analysiert. Dazu gehören Dienste wie die LISP Datenbank, Radius und DNS.  
 
-Das Ziel ist die komplette Analyse der SDA Lösung und die Identifizierung der kritischen Elemente der Verfügbarkeit (LISP Database, Radius, SGT Access-list etc.) und der Network Services (NTP, DNS, Lizenzen etc.).
+Das Ziel ist die komplette Analyse der SDA Lösung und die Identifizierung der kritischen Elemente der Verfügbarkeit (LISP Database, Radius, SGT Access-list etc.) und der Network Services (NTP, DNS, DHCP etc.).
 
 \subsection{SDA Architektur und Design}
 Die Architektur der Lab Umgebung, welche in der Studienarbeit erarbeitet wurde, sah folgendermassen aus:
@@ -13,24 +13,24 @@ Die Architektur der Lab Umgebung, welche in der Studienarbeit erarbeitet wurde, 
 	\label{fig:Architektur Studienarbeit}
 \end{figure}
 
-Die Analyse wird auf dieser Architektur aufbauen und die von der FUB gegebenen Grössenordnung berücksichtigen. \\
+Die Analyse wird auf dieser Architektur aufbauen und die von der FUB gegebene Grössenordnung berücksichtigen. \\
 
-Nachfolgend werden die aktuell von Cisco empfohlenen Design Entscheidungen, Grössen\-über\-legungen, sowie die Skalierungen gezeigt. Aktuelle und ausführliche Informationen hierzu, können direkt im SDA Design Guide von Cisco \cite{sda-designguide-sept2018} eingesehen werden. 
+Nachfolgend werden die derzeit von Cisco empfohlenen Design Entscheidungen, Grössen\-über\-legungen, sowie die Skalierungen gezeigt. Aktuelle und ausführliche Informationen hierzu, können direkt im SDA Design Guide von Cisco \cite{sda-designguide-sept2018} eingesehen werden.
 
 \subsubsection{Platform Entscheidungen}
-Die Design Entscheidungen beruhen auf den aktuellen Empfehlungen von Cisco, welche sich jedoch laufend ändern können. Nachfolgende Cisco Validated Design (CVD) Empfehlungen sind für die Version 1.2.5 vom September 2018, welche für die zu verwendenden Geräte relevant sind. Ein Catalyst 9300 sollte zum Beispiel nicht als Border oder Control Plane Node verwendet werden. Im Verlauf der Implementation der einzelnen Geräte ist es ausserdem auch wichtig die darauf zu achten, welche genauen IOS Versionen unterstützt werden. 
+Die Design Entscheidungen beruhen auf den aktuellen Empfehlungen von Cisco, welche sich jedoch laufend ändern können. Nachfolgende Cisco Validated Design (CVD) Empfehlungen sind für die Version 1.2.5 vom September 2018, welche für die zu verwendenden Geräte relevant sind. Ein Catalyst 9300 sollte zum Beispiel nicht als Border oder Control Plane Node verwendet werden. Im Verlauf der Inbetriebnahme der einzelnen Geräte ist ausserdem darauf zu achten, welche IOS Versionen mit dem verwendeten DNA Center Release kompatibel sind.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-SDAswitchingplatformsanddeploymentcapabilities-1-2-5}
-	\caption{SDA switching platforms and deployment capabilities \cite{sda-designguide-sept2018}}
+	\includegraphics[width=0.8\linewidth]{img/Analyse/CVD-SDAswitchingplatformsanddeploymentcapabilities-1-2-5}
+	\caption{SDA Platforms and Deployment Capabilities \cite{sda-designguide-sept2018}}
 	\label{fig:SDA switching platforms and deployment capabilities}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-SDAroutingandwirelessplatformsanddeploymentcapabilities-1-2-5}
-	\caption{SDA routing and wireless platforms and deployment capabilities \cite{sda-designguide-sept2018}}
+	\includegraphics[width=0.8\linewidth]{img/Analyse/CVD-SDAroutingandwirelessplatformsanddeploymentcapabilities-1-2-5}
+	\caption{SDA Platforms and Deployment Capabilities \cite{sda-designguide-sept2018}}
 	\label{fig:SDA routing and wireless platforms and deployment capabilities}
 \end{figure}
 
@@ -40,42 +40,42 @@ Diese Grössenüberlegungen sind besonders für grosse Organisationen wichtig, d
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-DNACmanagementofSDA-1-2-5}
-	\caption{DNA Center management of SDA \cite{sda-designguide-sept2018}}
+	\includegraphics[width=0.8\linewidth]{img/Analyse/CVD-DNACmanagementofSDA-1-2-5}
+	\caption{DNA Center Management of SDA \cite{sda-designguide-sept2018}}
 	\label{fig:DNA Center management of SDA}
 \end{figure}
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-SDAvirtualnetworksbyplatformandrole-1-2-5}
-	\caption{SDA virtual networks by platform and role \cite{sda-designguide-sept2018}}
+	\includegraphics[width=0.8\linewidth]{img/Analyse/CVD-SDAvirtualnetworksbyplatformandrole-1-2-5}
+	\caption{SDA Virtual Networks by Platform and Role \cite{sda-designguide-sept2018}}
 	\label{fig:SDA virtual networks by platform and role}
 \end{figure}
 
 
 \subsubsection{Maximum Skalierungen}
-Folgende maximalen Skalierungen sollten für grosse Organisationen besonders berücksichtigt werden. Diese Daten sollten bei der Auswahl von Plattformen, die während der Planung für das aktuelle und zukünftige Wachstum des Netzwerks verwendet werden, berücksichtigt werden.
+Folgende maximalen Skalierungen sollten berücksichtigt werden. Diese Daten sollten bei der Auswahl von Plattformen, die während der Planung für das aktuelle und zukünftige Wachstum des Netzwerks verwendet werden, berücksichtigt werden.
 
-Die DNA Center Anzahlen sind pro Instanz, bei denen es sich um ein DNA Center mit einem einzelnen Server oder einem DNA Center Cluster mit drei Servern handeln kann. Die maximalen Zahlen sind entweder die absoluten Grenzen der Plattform oder die empfohlenen Höchstgrenzen aktueller Tests einer einzelnen Plattform.
+Die DNA Center Anzahlen sind pro Instanz, bei denen es sich um ein DNA Center mit einem einzelnen Server oder einem DNA Center Cluster mit drei Servern handeln kann. Die maximalen Zahlen sind entweder die absoluten Grenzen der Plattform oder die empfohlenen Höchstwerte aktueller Tests einer einzelnen Plattform.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-MaxScale-DNAC-1-2-5}
+	\includegraphics[width=0.8\linewidth]{img/Analyse/CVD-MaxScale-DNAC-1-2-5}
 	\caption{DNA Center Maximum Scale Recommendations \cite{sda-designguide-sept2018} }
 	\label{fig:DNA Center Maximum Scale RecommendationsA}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-MaxScale-EdgeNode-1-2-5}
+	\includegraphics[width=0.8\linewidth]{img/Analyse/CVD-MaxScale-EdgeNode-1-2-5}
 	\caption{Edge Node Maximum Scale Recommendations \cite{sda-designguide-sept2018} }
 	\label{fig:Edge Node Maximum Scale RecommendationsA}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\linewidth]{img/Analyse/CVD-MaxScale-BorderNode-1-2-5}
+	\includegraphics[width=0.8\linewidth]{img/Analyse/CVD-MaxScale-BorderNode-1-2-5}
 	\caption{Border Node Maximum Scale Recommendations \cite{sda-designguide-sept2018} }
 	\label{fig:Border Node Maximum Scale RecommendationsA}
 \end{figure}
@@ -83,7 +83,7 @@ Die DNA Center Anzahlen sind pro Instanz, bei denen es sich um ein DNA Center mi
 
 
 \subsection{Verfügbarkeit}
-Die Verfügbarkeit der nachfolgenden Dienste sind für den Betrieb eines SDA mit dem DNA Center wichtig, um die volle Funktion des Netzwerkes bereitstellen zu können. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Severity (Schweregrad) gewichtet. Die Definitionen der Severities werden von den \textit{Cisco Severity and Escalation Guidelines} übernommen. \cite{cisco-severity-guidelines}
+Die Verfügbarkeit der nachfolgenden Dienste ist für den Betrieb eines SDA mit dem DNA Center wichtig, damit die volle Funktionalität des Netzwerkes bereitgestellt werden kann. Darum ist es von Vorteil, wenn die kritischen Server und Dienste redundant ausgelegt sind. Den einzelnen Komponenten werden jeweils mit einer Priorität (Severity) gewichtet. Die Definitionen der Severities werden von den \textit{Cisco Severity and Escalation Guidelines} übernommen. \cite{cisco-severity-guidelines}
 
 \subsubsection{DNA Center}
 
@@ -104,25 +104,24 @@ Um die negativen Auswirkungen während eines Ausfalls möglichst gering zu halte
 \begin{itemize}
 \item DNA Center Betrieb im Cluster
 \item DNA Center an verschiedenen Standorten
-\item Backup, damit schneller Restore möglich ist
+\item Regelmässige Backups damit ein schneller Restore möglich ist
 \end{itemize}
 
 \subsubsection{LISP Map Server / Control Plane Node}
 
 \paragraph{Beschreibung}
 
-Der LISP Map Server auf dem Control Plane Node verwaltet die RLOCs aller Clients in einer Fabric. Die entsprechenden Edge Nodes melden ihr bekannte Clients an den Control Plane Node, welche diese Information in der LISP Database speichert. Benötigt ein Edge Node die RLOC eines Clients, kann er diesen auf der LISP Database abfragen.
+Der LISP Map Server auf dem Control Plane Node verwaltet die RLOCs aller Clients in einer Fabric. Die entsprechenden Edge Nodes melden ihr bekannte Clients an den Control Plane Node, welcher diese Information in der LISP Database speichert. Benötigt ein Edge Node die RLOC eines Clients, kann er diesen auf der LISP Database abfragen.
 
 \paragraph{Impact}
 
-Fällt der Control Plane Node aus und die LISP Database steht nicht mehr zur Verfügung, ist die Kommuikation im Netzwerk nur noch eingeschränkt möglich. Clients die sich am selben Edge Node befinden, können weiterhin ohne Einschränkung miteinander kommunizieren. Verbindungen zu Geräten an anderen Edge Nodes sind nur noch möglich, sofern sich diese im Map-Cache des Source Edge Nodes befinden. Dies gilt ebenfalls für Ziele ausserhalb der Fabric, beispielsweise der Internetzugriff.
+Fällt der Control Plane Node aus und die LISP Database steht nicht mehr zur Verfügung, ist die Kommuikation im Netzwerk nur noch eingeschränkt möglich. Clients die sich am selben Edge Node befinden, können weiterhin ohne Einschränkung miteinander kommunizieren. Verbindungen zu Geräten an anderen Edge Nodes sind nur noch möglich, sofern sich die entsprechenden RLOCs im Map-Cache des Source Edge Nodes befinden. Dies gilt ebenfalls für Ziele ausserhalb der Fabric, beispielsweise den Internetzugriff.
 
 \paragraph{Severity} 1
 
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
-Es ist möglich mehrere Control Plane Nodes in einer Fabric zu betreiben. Im DNA Center Release 1.2.5 sind dies bis zu sechs Nodes. Damit kann eine sehr hohe Redundanz gewährleistet werden. Solange mindestens eine Control Plane Node pro Fabric funktioniert, hat der Ausfall der restlichen keinen Einfluss auf den Netzwerkbetrieb. Bei einer Fabric über mehrere Standorte ist es sinnvoll, die LISP Databases dezentral zu positionieren, also über die verschiedenen Standorte zu verteilen, sodass diese lokal noch verfügbar sind, sollte die Kommunikation zum Hauptsitz unterbrochen sein. Ebenfalls ist denkbar, die Map Caches der einzelnen Geräte zu konfigurieren, sodass der letzte funktionierende Stand auch bei einem Ausfall des Map Servers noch auf den Netzwerkgeräten vorhanden ist. 
-
+Es ist möglich mehrere Control Plane Nodes in einer Fabric zu betreiben. Im DNA Center Release 1.2.5 sind dies bis zu sechs Nodes pro Fabric Site. Damit kann eine sehr hohe Redundanz gewährleistet werden. Solange mindestens eine Control Plane Node pro Fabric funktioniert, hat der Ausfall der restlichen keinen Einfluss auf den Netzwerkbetrieb. Bei einer Fabric über mehrere Standorte ist es sinnvoll, die LISP Databases dezentral zu positionieren, also über die verschiedenen Standorte zu verteilen, sodass diese lokal noch verfügbar sind, sollte die Kommunikation zum Hauptsitz unterbrochen sein. Ebenfalls ist denkbar, die Map Caches der einzelnen Geräte zu konfigurieren, sodass der letzte funktionierende Stand auch bei einem Ausfall des Map Servers noch auf den Netzwerkgeräten vorhanden ist. 
 
 \subsubsection{ISE / Radius}
 
@@ -142,11 +141,11 @@ Der Radius Server oder ISE kann redundant betrieben werden. Es können mehrere I
 
 \subsubsection{SGT Access List}
 \paragraph{Beschreibung}
-Der Sicherheitsgruppen Tag (SGT) weist jeder Sicherheitsgruppe eine eindeutige 16-Bit-Sicherheitsgruppennummer zu, deren Geltungsbereich in einer TrustSec-Domäne global ist. Die Nummern werden automatisch generiert, wenn eine SGT auf dem ISE erstellt wird. Die Anzahl der Sicherheitsgruppen im Switch ist auf die Anzahl der authentifizierten Netzwerkeinheiten beschränkt.
+Der Secure Group Tag (SGT) weist jeder Sicherheitsgruppe eine eindeutige 16-Bit Sicherheitsgruppennummer zu, deren Geltungsbereich in einer TrustSec-Domäne global ist. Die Nummern werden automatisch generiert, wenn ein SGT auf der ISE erstellt wird. Die Anzahl der Sicherheitsgruppen im Switch ist auf die Anzahl der authentifizierten Netzwerkeinheiten beschränkt.
 
-Die SGT ermöglicht es dem ISE, Richtlinien für die Zugriffssteuerung durchzusetzen, indem es dem Endgerät ermöglicht, auf die SGT zu reagieren, um den Datenverkehr zu filtern.
+Die SGTs ermöglichen es der ISE, Richtlinien für die Zugriffssteuerung durchzusetzen, indem es dem Endgerät ermöglicht auf die SGT zu reagieren, um den Datenverkehr zu filtern.
 
-Die Sicherheitsgruppen-Zugriffssteuerungsliste (SGACL) ermöglicht die Steuerung des Zugriffs und der Berechtigungen basierend auf den zugewiesenen SGTs.
+Die Sicherheitsgruppen Access Control List (SGACL) ermöglicht die Steuerung der Zugriffe und der Berechtigungen basierend auf den zugewiesenen SGTs.
 
 \paragraph{Impact bei Ausfall}
 DNA Center: Auf dem DNA Center sind die Sicherheitsgruppen nicht mehr verfügbar und können auch nicht neu erstellt werden.
@@ -156,8 +155,8 @@ Netzwerk: Die definierten Policies stehen nicht mehr zur Verfügung. Es werden a
 
 \paragraph{Mögliche Ansätze für bessere Krisenresistenz}
 \begin{itemize}
-	\item Redundanz des ISE
-	\item Read-Only Kopien des ISE / Radius an Aussenstandorten
+	\item Redundanz der ISE
+	\item Read-Only Kopien der ISE / Radius an Aussenstandorten
 	\item SGT Access Lists mittels SXP auf alle Nodes statisch deployen (Limitierungen müssen abgeklärt werden)
 \end{itemize}
 
@@ -165,23 +164,23 @@ Netzwerk: Die definierten Policies stehen nicht mehr zur Verfügung. Es werden a
 
 \paragraph{Beschreibung}
 
-Der Border Node stellt die Verbindung der Fabric zu externen Netzwerken sicher. Unter anderem ermöglicht der Border Node den Internetzugriff.
+Der Border Node stellt die Verbindung der Fabric zu externen Netzwerken sicher. Unter anderem ermöglicht der Border Node den Internetzugriff oder den Zugriff auf andere Fabric Sites.
 
 \paragraph{Impact}
 
-Fallen alle Border Nodes einer Fabric aus, können die Clients der Fabric nur noch innerhalb dieser Fabric kommunizieren. Es ist nicht mehr möglich, mit Devices in anderen Fabrics oder Devices ausserhalb der Fabrics, bzw. dem Internet zu kommunizieren.
+Fallen alle Border Nodes einer Fabric Site aus, können die Clients der Fabric nur noch innerhalb dieser Fabric Site kommunizieren. Es ist nicht mehr möglich, mit Devices in anderen Sites oder Devices ausserhalb der Fabric oder dem Internet zu kommunizieren.
 
 \paragraph{Severity} 2
 
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
-Es können pro Fabric maximal zwei Border Nodes definiert werden. Damit kann eine Redundanz sichergestellt werden, sodass beim Ausfall eines Nodes keine Einschränkungen für die Clients entstehen. 
+Es können pro Fabric Site maximal zwei Border Nodes definiert werden. Damit kann eine Redundanz sichergestellt werden, sodass beim Ausfall eines Nodes keine Einschränkungen für die Clients entstehen. 
 
 \subsubsection{Fusion Router}
 
 \paragraph{Beschreibung}
 
-Der Fusion Router stellt die Kommunikation zwischen den verschiedenen Fabrics, sowie zwischen den Fabrics und der Aussenwelt sicher. Dies ist somit eine sehr zentrale Komponente, die für den Betrieb des Netzwerks sehr wichtig ist.
+Der Fusion Router stellt die Kommunikation zwischen den verschiedenen Fabric Sites, Fabrics, sowie zwischen den Fabrics und der Aussenwelt sicher. Dies ist somit eine sehr zentrale Komponente, die für den Betrieb des Netzwerks sehr wichtig ist.
 
 \paragraph{Impact}
 
@@ -191,7 +190,7 @@ Fällt der Fusion Router aus, ist keine Kommunikation zwischen verschiedenen Fab
 
 \paragraph{Mögliche Ansätze für mehr Krisenresistenz}
 
-Der Fusion Router sollte redundant vorhanden sein. Dabei ist zu beachten, dass die Border Nodes dann Verbindungen zu allen Fusion Routern haben sollten.
+Der Fusion Router sollte redundant vorhanden sein. Dabei ist zu beachten, dass die Border Nodes dann Verbindungen zu mehreren Fusion Routern haben müssen.
 
 \subsubsection{DHCP}
 
@@ -244,12 +243,12 @@ Die Lizenzen der Geräte können über das DNA Center verwaltet werden. Dazu ist
 Die Lizenzen für die einzelnen Switches müssen beim Kauf unbedingt beachtet werden.
 
 \paragraph{Impact bei Ausfall}
-Keine, da Lizenzen nicht enforced werden und Lizenzen somit weiterlaufen.
+Keine, da Lizenzen nicht enforced werden und alle Funktionen weiter laufen, auch wenn die Lizenz dafür nicht mehr vorhanden oder abgelaufen ist.
 
 \paragraph{Severity} 4
 
 \paragraph{Mögliche Ansätze für bessere Krisenresistenz}
-Richtige Lizenzen für alle Geräte von Anfang an einplanen.
+Richtige Lizenzen für alle Geräte bereits zu Beginn einplanen.
 
 \subsubsection{Hardware}
 \paragraph{Beschreibung}
@@ -261,11 +260,11 @@ DNA Center, ISE, Netzwerk nicht mehr verfügbar
 \paragraph{Severity} Abhängig von der Komponente
 
 \paragraph{Mögliche Ansätze für bessere Krisenresistenz}
-Bei der Hardware ist zu beachten, dass sowohl der Strom, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können. Ein Backup für den Notfall ist immer zu empfehlen, damit bei einem Hardwaredefekt ein schneller Restore möglich ist. Ersatzgeräte sind von Vorteil.
+Bei der Hardware ist zu beachten, dass sowohl die Stromversorgung, als auch die Netzwerkverbindungen redundant vorhanden sind. Ebenfalls sollte die Hardware bei einem Stromausfall durch eine USV eine gewisse Zeit weiter betrieben werden können. Dies ermöglicht ein saubers Herunterfahren der Geräte, was die Wahrscheinlichkeit von verlorenen oder korrupten Daten verringert. Ein Backup für den Notfall ist immer zu empfehlen, damit bei einem Hardwaredefekt ein schneller Restore möglich ist. Ersatzgeräte sind ebenfalls von Vorteil.
 
 \paragraph{Wireless Controller}
 \paragraph{Beschreibung}
-Der Wireless Controller managed die Access Points und stellt den Betrieb des Wireless LAN sicher. Da Wireless aber kein Bestandteil dieser Arbeit ist, wird nicht genauer darauf eingegangen.
+Der Wireless Controller verwaltet die Access Points und stellt den Betrieb des Wireless LAN sicher. Da Wireless aber kein Bestandteil dieser Arbeit ist, wird nicht genauer darauf eingegangen.
 
 \paragraph{Impact bei Ausfall}
 Bei einem Ausfall aller WLCs stehen keine Wireless Netzwerke mehr zur Verfügung. Die Kommunikation für drahtlose Clients ist somit nicht mehr möglich.
