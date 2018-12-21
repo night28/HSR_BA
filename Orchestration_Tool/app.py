@@ -104,6 +104,22 @@ def get_scalable_groups(group_id=''):
     return scalable_groups
 
 
+def get_segment_id(site, vn, fabric):
+    segment = ''
+    # dnac.get(api='data/customer-facing-service/VirtualNetwork?name=.*{}.*'.format(fabric.name), ver='v2').json()['response']:
+    return segment
+
+
+def assign_ip_pool_to_virtual_network(ippool, segment, site):
+    # payload = []
+    # task_id = dnac.put(api='data/customer-facing-service/VirtualNetwork', ver='v2', data=payload).json()['response']['taskId']
+    # wait_for_task(task_id)
+    return 0
+
+def create_fusion_router_configuration(border_node):
+    return 0
+
+
 class NetworkDevice:
     def __init__(self, device):
         self.id = device['id']
@@ -262,7 +278,7 @@ def add_vn():
         print 'Selected Fabric: {}'.format(selected_fabric)
         print 'Selected Sites: {}'.format(selected_sites)
         print 'Selected IP Pools: {}'.format(selected_ip_pools)
-        # vn_id = create_virtual_network(selected_vnname)
+        vn_id = create_virtual_network(selected_vnname)
         sites = []
         for site in get_sites_for_fabric(selected_fabric):
             if site.id in selected_sites:
@@ -274,14 +290,18 @@ def add_vn():
             for border_node in site.border_nodes:
                 get_vlan_interfaces(border_node)
         for site in sites:
-            print "Site: {}".format(site.name)
-            for node in site.border_nodes:
-                print "Border Node: {}".format(node.hostname)
-                print "Vlan Interfaces {}".format(node.vlanInterfaces)
-                for interface in node.vlanInterfaces:
-                    print interface.vlanNumber
-
-        return render_template('add_vn.html', step='4', selected_fabric=selected_fabric, selected_vnname=selected_vnname, selected_sites=selected_sites, selected_ip_pools=selected_ip_pools)
+            segment = get_segment_id(site, selected_vnname, selected_fabric)
+            assign_ip_pool_to_virtual_network(selected_ip_pools, segment, site)
+            for border_node in site.border_nodes:
+                create_fusion_router_configuration(border_node)
+        # for site in sites:
+        #     print "Site: {}".format(site.name)
+        #     for node in site.border_nodes:
+        #         print "Border Node: {}".format(node.hostname)
+        #         print "Vlan Interfaces {}".format(node.vlanInterfaces)
+        #         for interface in node.vlanInterfaces:
+        #             print interface.vlanNumber
+        return render_template('add_vn.html', step='4', selected_vnname=selected_vnname, selected_sites=sites, selected_ip_pools=selected_ip_pools)
 
 
 @app.route('/virtual_machines', methods=['GET', 'POST'])
