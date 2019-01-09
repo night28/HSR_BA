@@ -49,9 +49,14 @@ def get_sites_for_fabric(fabric):
 
 def wait_for_task(task_id):
     while True:
-        finished = dict(token.split('=') for token in shlex.split(dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response']['data'].replace(';', ' ')))['processcfs_complete']
-        if finished == 'true':
-            break
+        response = dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response']
+        if 'data' in response:
+            finished = dict(token.split('=') for token in shlex.split(response['data'].replace(';', ' ')))['processcfs_complete']
+            if finished == 'true':
+                break
+        elif 'endTime' in response:
+            file = response['progress'].split(':')[1].strip('}').strip('"')
+            return dnac.get(api='file/{}'.format(file), ver='v1')
         time.sleep(1)
     response = dict(token.split('=') for token in shlex.split(dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response']['data'].replace(';', ' ')))['cfs_id']
     return response
@@ -67,13 +72,13 @@ def create_virtual_network(name):
     return vn_id
 
 
-def get_border_for_site(site):
+def get_border_for_site(site, siteid):
     border_nodes = []
     nodes = dnac.get(api='data/device-config-status?cfsNamespace={}&isLatest=true'.format(site), ver='v2').json()['response']
     for node in nodes:
         print node
         if node['role'] == 'BORDER ROUTER':
-            border_nodes.append(NetworkDevice(node))
+            border_nodes.append(BorderNode(node, siteid))
     return border_nodes
 
 
@@ -120,7 +125,7 @@ def create_fusion_router_configuration(border_node):
     return 0
 
 
-class NetworkDevice:
+class NetworkDevice(object):
     def __init__(self, device):
         self.id = device['id']
         self.managementIpAddress = device['managementIpAddress']
@@ -129,6 +134,57 @@ class NetworkDevice:
         self.externalInterfaces = []
         if 'deviceId' in device:
             self.deviceId = device['deviceId']
+
+
+class BorderNode(NetworkDevice):
+    def __init__(self, device, siteId):
+        super(BorderNode, self).__init__(device)
+        self.siteId = siteId
+        self.extConnectivitySettings = ''
+        self.asNumber = None
+
+    def get_ext_connectivity_settings(self):
+        print self.siteId
+        for i in dnac.get(api='data/customer-facing-service/DeviceInfo?siteDeviceList={}'.format(self.siteId), ver='v2').json()['response']:
+            if 'BORDERNODE' in i['roles']:
+                print '###################################'
+                print i
+                self.asNumber = i['deviceSettings']['internalDomainProtocolNumber']
+                self.extConnectivitySettings = i['deviceSettings']['extConnectivitySettings']
+        for i in self.extConnectivitySettings:
+            self.externalInterfaces.append(ExternalInterface(i))
+
+    def get_fusion_router(self):
+        for interface in self.externalInterfaces:
+            taskId = dnac.post(api='network-device-poller/cli/read-request', data={"name":"command-runner","deviceUuids":["{}".format(self.deviceId)],"commands":["show cdp neighbor {}".format(interface.name)]}, ver='v1').json()['response']['taskId']
+            print '######## taskID {}:'.format(taskId)
+            neighbor = wait_for_task(taskId)
+            print neighbor
+
+
+    def configure_peers(self, vnId):
+        for i in self.externalInterfaces:
+            for j in i['l3Handoffs']:
+                if vnId == j['virtualNetwork']['Refs']:
+                    remoteAddress = j['remoteIpAddress']
+                    vlanId = j['vlanId']
+            #RestConfStuff on Peer
+
+
+class ExternalInterface:
+    def __init__(self, settings):
+        self.name = settings['interfaceUuid']
+        self.remoteAsNumber = settings['externalDomainProtocolNumber']
+        self.l3Handoffs = []
+        self.peer = ''
+        for handoff in settings['l3Handoff']:
+            self.l3Handoffs.append(handoff)
+
+
+class Peer:
+    def __init__(self, hostname, interface):
+        self.hostname = hostname
+        self.interface = interface
 
 
 class VlanInterface:
@@ -284,8 +340,12 @@ def add_vn():
             if site.id in selected_sites:
                 sites.append(site)
         for site in sites:
-            for border_node in get_border_for_site(site.fabricSiteUuid):
+            for border_node in get_border_for_site(site.fabricSiteUuid, site.id):
+                print 'get External Connectivity Settings'
+                border_node.get_ext_connectivity_settings()
+                border_node.get_fusion_router()
                 site.border_nodes.append(border_node)
+                print border_node.externalInterfaces
         for site in sites:
             for border_node in site.border_nodes:
                 get_vlan_interfaces(border_node)
