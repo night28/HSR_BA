@@ -1,0 +1,22 @@
+<config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+      <interface>
+         <GigabitEthernet>
+            <name>{{ interface_id }}.{{ vlan_id }}</name>
+            <encapsulation>
+               <dot1Q>
+                  <vlan-id>{{ vlan_id }}</vlan-id>
+               </dot1Q>
+            </encapsulation>
+            <ip>
+               <address>
+                  <primary>
+                     <address>{{ ip }}</address>
+                     <mask>{{ subnet_mask }}</mask>
+                  </primary>
+               </address>
+            </ip>
+         </GigabitEthernet>
+      </interface>
+   </native>
+</config>

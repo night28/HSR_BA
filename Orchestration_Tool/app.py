@@ -1,4 +1,3 @@
-import napalm
 import json
 import dnac
 import encs
@@ -8,8 +7,13 @@ import shlex
 import git
 import config
 import shutil
+import re
+import requests
+import netaddr
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+from ncclient import manager
 from flask import Flask, render_template, request
-
 
 app = Flask(__name__, static_url_path='/static')
 SECRET_KEY = os.urandom(32)
@@ -18,14 +22,17 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 def get_virtual_networks():
     virtual_networks = []
-    for virtual_network in dnac.get(api='data/customer-facing-service/virtualnetworkcontext', ver='v2').json()['response']:
+    for virtual_network in dnac.get(api='data/customer-facing-service/virtualnetworkcontext', ver='v2').json()[
+        'response']:
         virtual_networks.append(VirtualNetwork(virtual_network))
     return virtual_networks
 
 
 def get_fabrics():
     fabrics = []
-    for fabric in dnac.get(api='data/customer-facing-service/ConnectivityDomain?domainType=FABRIC_LAN', ver='v2').json()['response']:
+    for fabric in \
+            dnac.get(api='data/customer-facing-service/ConnectivityDomain?domainType=FABRIC_LAN', ver='v2').json()[
+                'response']:
         fabrics.append(Fabric(fabric))
     return fabrics
 
@@ -40,7 +47,9 @@ def get_fabrics_for_form():
 def get_sites_for_fabric(fabric):
     sites = []
     if fabric:
-        for site in dnac.get(api='data/customer-facing-service/summary/ConnectivityDomain?cdFSiteList={}'.format(fabric), ver='v2').json()['response'][0]['fabricSiteSummary']:
+        for site in \
+                dnac.get(api='data/customer-facing-service/summary/ConnectivityDomain?cdFSiteList={}'.format(fabric),
+                         ver='v2').json()['response'][0]['fabricSiteSummary']:
             print site
             sites.append(Site(site))
         return sites
@@ -51,20 +60,24 @@ def wait_for_task(task_id):
     while True:
         response = dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response']
         if 'data' in response:
-            finished = dict(token.split('=') for token in shlex.split(response['data'].replace(';', ' ')))['processcfs_complete']
+            finished = dict(token.split('=') for token in shlex.split(response['data'].replace(';', ' ')))[
+                'processcfs_complete']
             if finished == 'true':
                 break
         elif 'endTime' in response:
             file = response['progress'].split(':')[1].strip('}').strip('"')
             return dnac.get(api='file/{}'.format(file), ver='v1')
         time.sleep(1)
-    response = dict(token.split('=') for token in shlex.split(dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response']['data'].replace(';', ' ')))['cfs_id']
+    response = dict(token.split('=') for token in shlex.split(
+        dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response']['data'].replace(';', ' ')))['cfs_id']
     return response
 
 
 def create_virtual_network(name):
     payload = [{'name': name, 'virtualNetworkContextType': 'ISOLATED'}]
-    task_id = dnac.post(api='data/customer-facing-service/virtualnetworkcontext', ver='v2', data=payload).json()['response']['taskId']
+    task_id = \
+        dnac.post(api='data/customer-facing-service/virtualnetworkcontext', ver='v2', data=payload).json()['response'][
+            'taskId']
     print 'Task ID: {}'.format(task_id)
     print dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response']
     vn_id = wait_for_task(task_id)
@@ -74,7 +87,8 @@ def create_virtual_network(name):
 
 def get_border_for_site(site, siteid):
     border_nodes = []
-    nodes = dnac.get(api='data/device-config-status?cfsNamespace={}&isLatest=true'.format(site), ver='v2').json()['response']
+    nodes = dnac.get(api='data/device-config-status?cfsNamespace={}&isLatest=true'.format(site), ver='v2').json()[
+        'response']
     for node in nodes:
         print node
         if node['role'] == 'BORDER ROUTER':
@@ -100,7 +114,8 @@ def get_devices():
 
 def get_scalable_groups(group_id=''):
     scalable_groups = []
-    for scalable_group in dnac.get(api='data/customer-facing-service/scalablegroup/' + group_id, ver='v2').json()['response']:
+    for scalable_group in dnac.get(api='data/customer-facing-service/scalablegroup/' + group_id, ver='v2').json()[
+        'response']:
         try:
             scalable_groups.append(ScalableGroup(scalable_group))
         except Exception as e:
@@ -121,9 +136,23 @@ def assign_ip_pool_to_virtual_network(ippool, segment, site):
     # wait_for_task(task_id)
     return 0
 
-def create_fusion_router_configuration(border_node):
-    return 0
 
+def create_xml_config(interface_template, interface, int_id, vlan, ip, mask):
+    """Function to render XML document to configure interface from Jinja2."""
+    # Use the Jinja2 template provided to create the XML config
+    env = Environment(loader=FileSystemLoader('netconf_templates'))
+    template = env.get_template(interface_template)
+    rendered = template.render(base=interface, interface_id=int_id,
+                               vlan_id=vlan, ip=ip, subnet_mask=mask)
+    return rendered
+    # save the results to the XML file passed as an argument
+    with open(xml_file, "wb") as f:
+        f.write(rendered)
+
+    # exit if the file hasn't been created
+    if os.path.isfile(xml_file) is not True:
+        print("Failed to create the XML config file!")
+        sys.exit()
 
 class NetworkDevice(object):
     def __init__(self, device):
@@ -140,35 +169,71 @@ class BorderNode(NetworkDevice):
     def __init__(self, device, siteId):
         super(BorderNode, self).__init__(device)
         self.siteId = siteId
-        self.extConnectivitySettings = ''
+        self.extConnectivitySettings = []
         self.asNumber = None
 
     def get_ext_connectivity_settings(self):
         print self.siteId
-        for i in dnac.get(api='data/customer-facing-service/DeviceInfo?siteDeviceList={}'.format(self.siteId), ver='v2').json()['response']:
-            if 'BORDERNODE' in i['roles']:
+        for i in \
+                dnac.get(api='data/customer-facing-service/DeviceInfo?siteDeviceList={}'.format(self.siteId),
+                         ver='v2').json()[
+                    'response']:
+            if 'BORDERNODE' in i['roles'] and self.deviceId == i['networkDeviceId']:
                 print '###################################'
                 print i
                 self.asNumber = i['deviceSettings']['internalDomainProtocolNumber']
-                self.extConnectivitySettings = i['deviceSettings']['extConnectivitySettings']
+                self.extConnectivitySettings.append(i['deviceSettings']['extConnectivitySettings'])
         for i in self.extConnectivitySettings:
-            self.externalInterfaces.append(ExternalInterface(i))
+            for j in i:
+                self.externalInterfaces.append(ExternalInterface(j))
 
     def get_fusion_router(self):
         for interface in self.externalInterfaces:
-            taskId = dnac.post(api='network-device-poller/cli/read-request', data={"name":"command-runner","deviceUuids":["{}".format(self.deviceId)],"commands":["show cdp neighbor {}".format(interface.name)]}, ver='v1').json()['response']['taskId']
+            taskId = dnac.post(api='network-device-poller/cli/read-request',
+                               data={"name": "command-runner", "deviceUuids": ["{}".format(self.deviceId)],
+                                     "commands": ["show cdp neighbor {}".format(interface.name)]}, ver='v1').json()[
+                'response']['taskId']
             print '######## taskID {}:'.format(taskId)
-            neighbor = wait_for_task(taskId)
-            print neighbor
-
+            response = wait_for_task(taskId).json()[0]['commandResponses']['SUCCESS']['show cdp neighbor {}'.format(interface.name)]
+            print response.splitlines()
+            interface.peer = response.splitlines()[6].split()[0]
+            interface.peerInterface = ''.join(response.splitlines()[7].split()[-2::])
+            print interface.peer
+            print interface.peerInterface
+            print interface.remoteAsNumber
+            print interface.l3Handoffs
 
     def configure_peers(self, vnId):
         for i in self.externalInterfaces:
-            for j in i['l3Handoffs']:
-                if vnId == j['virtualNetwork']['Refs']:
+            print '##### {}'.format(self.hostname)
+            print i.name
+            print i.peer
+            print i.peerInterface
+            for j in i.l3Handoffs:
+                print j
+                continue
+            if j == 'blah':
+                if vnId == j['virtualNetwork']['idRef']:
                     remoteAddress = j['remoteIpAddress']
                     vlanId = j['vlanId']
-            #RestConfStuff on Peer
+                interface = filter(None, re.split(r'(\d+.*)', i.peerInterface))
+                print interface
+                ip = netaddr.IPNetwork(j['remoteIpAddress'])
+                interfaceConfig = create_xml_config('subinterface.j2', interface[0], interface[1], j['vlanId'], ip.ip, ip.netmask)
+                # open the NETCONF session
+                with manager.connect(host=i.peer, port=830, username=config.NETWORK_USER, password=config.NETWORK_PASSWORD, hostkey_verify=False, device_params={'name':'csr'}) as m:
+                    try:
+                        # issue the edit-config operation with the XML config
+                        print interfaceConfig
+                        rpc_reply = m.edit_config(target='running', config=interfaceConfig)
+                        print rpc_reply
+                    except Exception as e:
+                        print("Encountered the following RPC error!")
+                        print(e)
+                        # validate the RPC Reply returns "ok"
+                    if rpc_reply.ok is not True:
+                        print("Encountered a problem when configuring the device!")
+
 
 
 class ExternalInterface:
@@ -177,6 +242,7 @@ class ExternalInterface:
         self.remoteAsNumber = settings['externalDomainProtocolNumber']
         self.l3Handoffs = []
         self.peer = ''
+        self.peerInterface = ''
         for handoff in settings['l3Handoff']:
             self.l3Handoffs.append(handoff)
 
@@ -218,7 +284,8 @@ class Site:
 
     def get_ip_pools(self):
         pool_ids = []
-        for pool_id in dnac.get(api='commonsetting/global/{}'.format(self.id), params={'key': '.*ip.pool..*'}).json()['response']:
+        for pool_id in dnac.get(api='commonsetting/global/{}'.format(self.id), params={'key': '.*ip.pool..*'}).json()[
+            'response']:
             if pool_id['value'][0]['objReferences'][0]:
                 print pool_id['value'][0]['objReferences'][0]
                 pool_ids.append(pool_id['value'][0]['objReferences'][0])
@@ -271,7 +338,10 @@ class VirtualMachine:
         self.state = self.get_state()
 
     def get_state(self):
-        state = encs.get(api='operational/vm_lifecycle/opdata/tenants/tenant/admin/deployments/{}'.format(self.name)).json()['vmlc:deployments']['state_machine']['state']
+        state = \
+            encs.get(
+                api='operational/vm_lifecycle/opdata/tenants/tenant/admin/deployments/{}'.format(self.name)).json()[
+                'vmlc:deployments']['state_machine']['state']
         if state == 'SERVICE_ACTIVE_STATE':
             return 'Up'
         return 'Down'
@@ -307,7 +377,8 @@ def add_vn():
         selected_fabric = str(request.form['fabric'])
         selected_vnname = str(request.form['vnname'])
         sites = get_sites_for_fabric(selected_fabric)
-        return render_template('add_vn.html', step='2', sites=sites, selected_fabric=selected_fabric, selected_vnname=selected_vnname)
+        return render_template('add_vn.html', step='2', sites=sites, selected_fabric=selected_fabric,
+                               selected_vnname=selected_vnname)
     elif request.form['step'] == '3':
         selected_sites = request.form.getlist('selected_sites')
         selected_fabric = request.form['selected_fabric']
@@ -319,7 +390,8 @@ def add_vn():
                 site.get_ip_pools()
                 new_sites.append(site)
         sites_count = len(new_sites)
-        return render_template('add_vn.html', step='3', sites=new_sites, selected_fabric=selected_fabric, selected_vnname=selected_vnname, sites_count=sites_count)
+        return render_template('add_vn.html', step='3', sites=new_sites, selected_fabric=selected_fabric,
+                               selected_vnname=selected_vnname, sites_count=sites_count)
     elif request.form['step'] == '4':
         selected_sites = []
         selected_fabric = request.form['selected_fabric']
@@ -334,26 +406,29 @@ def add_vn():
         print 'Selected Fabric: {}'.format(selected_fabric)
         print 'Selected Sites: {}'.format(selected_sites)
         print 'Selected IP Pools: {}'.format(selected_ip_pools)
-        vn_id = create_virtual_network(selected_vnname)
+        #vn_id = create_virtual_network(selected_vnname)
         sites = []
         for site in get_sites_for_fabric(selected_fabric):
             if site.id in selected_sites:
                 sites.append(site)
         for site in sites:
             for border_node in get_border_for_site(site.fabricSiteUuid, site.id):
-                print 'get External Connectivity Settings'
                 border_node.get_ext_connectivity_settings()
+                print border_node.hostname
+                print border_node.id
+                print border_node.deviceId
                 border_node.get_fusion_router()
                 site.border_nodes.append(border_node)
-                print border_node.externalInterfaces
-        for site in sites:
-            for border_node in site.border_nodes:
-                get_vlan_interfaces(border_node)
-        for site in sites:
-            segment = get_segment_id(site, selected_vnname, selected_fabric)
-            assign_ip_pool_to_virtual_network(selected_ip_pools, segment, site)
-            for border_node in site.border_nodes:
-                create_fusion_router_configuration(border_node)
+                for ext in border_node.externalInterfaces:
+                    print ext.l3Handoffs
+                #border_node.configure_peers(vn_id)
+        #for site in sites:
+        #    for border_node in site.border_nodes:
+        #        get_vlan_interfaces(border_node)
+        #for site in sites:
+        #    segment = get_segment_id(site, selected_vnname, selected_fabric)
+        #    assign_ip_pool_to_virtual_network(selected_ip_pools, segment, site)
+        #    for border_node in site.border_nodes:
         # for site in sites:
         #     print "Site: {}".format(site.name)
         #     for node in site.border_nodes:
@@ -361,13 +436,16 @@ def add_vn():
         #         print "Vlan Interfaces {}".format(node.vlanInterfaces)
         #         for interface in node.vlanInterfaces:
         #             print interface.vlanNumber
-        return render_template('add_vn.html', step='4', selected_vnname=selected_vnname, selected_sites=sites, selected_ip_pools=selected_ip_pools)
+        return render_template('add_vn.html', step='4', selected_vnname=selected_vnname, selected_sites=sites,
+                               selected_ip_pools=selected_ip_pools)
 
 
 @app.route('/virtual_machines', methods=['GET', 'POST'])
 def virtual_machines():
     vms = []
-    for deployment in encs.get(api='config/vm_lifecycle/tenants/tenant/admin/deployments?deep').json()['vmlc:deployments']['deployment']:
+    for deployment in \
+            encs.get(api='config/vm_lifecycle/tenants/tenant/admin/deployments?deep').json()['vmlc:deployments'][
+                'deployment']:
         vms.append(VirtualMachine(deployment['vm_group'][0]))
     if 'action' not in request.form:
         return render_template('virtual_machines.html', vms=vms)
