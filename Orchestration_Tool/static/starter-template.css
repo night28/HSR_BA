@@ -10,3 +10,16 @@ body {
 .code {
     white-space: pre-wrap;
 }
+
+.configs {
+    white-space: pre;
+}
+
+.red {
+    background-color: rgba(242, 9, 9, 0.75)
+}
+
+.green {
+    background-color: rgba(128, 191, 106, 0.75);
+    ;
+}

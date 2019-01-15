@@ -1,5 +1,33 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
+
+<div class="starter-template">
     <h1>Config History</h1>
+    <p class="lead">Configuration History of {{ device.hostname }}</p>
+</div>
+
+<div class="configs">
+    {{diff_as_patch}}
+</div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var configs = document.getElementsByClassName('configs');
+        var lines = configs[0].innerHTML.split('\n');
+        lines.splice(0, 6);
+        configs[0].innerHTML = "";
+        for (var i = 0; i < lines.length; i++) {
+            var node = document.createElement("p");
+            var firstChar = lines[i].charAt(0);
+            node.innerHTML = lines[i];
+
+            if (firstChar === '+') {
+                node.className = 'green';
+            } else if (firstChar === '-') {
+                node.className = 'red';
+            }
+            configs[0].appendChild(node);
+        }
+    }
+</script>
 {% endblock %}

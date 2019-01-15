@@ -9,14 +9,18 @@
         <th>
             Hostname
         </th>
-        <th>Management IP
+        <th>
+            Management IP
         </th>
         <th>
             Running Config
         </th>
+        <th>
+            Config History
+        </th>
         </thead>
         <tbody>
-        {% for device in devices %}
+            {% for device in devices %}
             <tr>
                 <td>
                     {{ device.hostname }}
@@ -27,10 +31,12 @@
                 <td>
                     <a href="/show_config/{{ device.hostname }}">Show running config</a>
                 </td>
+                <td>
+                    <a href="/show_history/{{ device.hostname }}">Show history</a>
+                </td>
             </tr>
 
-
-        {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}

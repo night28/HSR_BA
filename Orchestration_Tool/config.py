@@ -24,5 +24,5 @@ NETWORK_USER = "dnaadmin"
 NETWORK_PASSWORD = "hallo@1234"
 
 #CONFIG HISTORY
-CONFIG_REPO = "https://github.com/XYZ/ABC.git"
-REPO_PATH = "/tmp/config_repo"
+CONFIG_REPO = "https://github.com/dude101/HSR_BA_Backup.git"
+REPO_PATH = "./tmp/config_repo"

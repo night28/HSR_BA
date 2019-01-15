@@ -8,6 +8,8 @@ import shlex
 import git
 import config
 import shutil
+import stat
+import uuid
 from flask import Flask, render_template, request
 
 
@@ -41,7 +43,7 @@ def get_sites_for_fabric(fabric):
     sites = []
     if fabric:
         for site in dnac.get(api='data/customer-facing-service/summary/ConnectivityDomain?cdFSiteList={}'.format(fabric), ver='v2').json()['response'][0]['fabricSiteSummary']:
-            print site
+            print(site)
             sites.append(Site(site))
         return sites
     return None
@@ -65,10 +67,10 @@ def wait_for_task(task_id):
 def create_virtual_network(name):
     payload = [{'name': name, 'virtualNetworkContextType': 'ISOLATED'}]
     task_id = dnac.post(api='data/customer-facing-service/virtualnetworkcontext', ver='v2', data=payload).json()['response']['taskId']
-    print 'Task ID: {}'.format(task_id)
-    print dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response']
+    print('Task ID: {}'.format(task_id))
+    print(dnac.get(api='task/{}'.format(task_id), ver='v1').json()['response'])
     vn_id = wait_for_task(task_id)
-    print 'VN ID: {}'.format(vn_id)
+    print('VN ID: {}'.format(vn_id))
     return vn_id
 
 
@@ -76,7 +78,7 @@ def get_border_for_site(site, siteid):
     border_nodes = []
     nodes = dnac.get(api='data/device-config-status?cfsNamespace={}&isLatest=true'.format(site), ver='v2').json()['response']
     for node in nodes:
-        print node
+        print(node)
         if node['role'] == 'BORDER ROUTER':
             border_nodes.append(BorderNode(node, siteid))
     return border_nodes
@@ -86,7 +88,7 @@ def get_vlan_interfaces(device):
     interfaces = []
     interfaces = dnac.get(api='network-device/{}/vlan'.format(device.deviceId)).json()['response']
     for interface in interfaces:
-        print interface
+        print(interface)
         if 'vlanType' in interface and interface['vlanType'] == 'vrf interface to External router':
             device.vlanInterfaces.append(VlanInterface(interface))
 
@@ -104,7 +106,7 @@ def get_scalable_groups(group_id=''):
         try:
             scalable_groups.append(ScalableGroup(scalable_group))
         except Exception as e:
-            print e
+            print(e)
             continue
     return scalable_groups
 
@@ -144,11 +146,11 @@ class BorderNode(NetworkDevice):
         self.asNumber = None
 
     def get_ext_connectivity_settings(self):
-        print self.siteId
+        print(self.siteId)
         for i in dnac.get(api='data/customer-facing-service/DeviceInfo?siteDeviceList={}'.format(self.siteId), ver='v2').json()['response']:
             if 'BORDERNODE' in i['roles']:
-                print '###################################'
-                print i
+                print('###################################')
+                print(i)
                 self.asNumber = i['deviceSettings']['internalDomainProtocolNumber']
                 self.extConnectivitySettings = i['deviceSettings']['extConnectivitySettings']
         for i in self.extConnectivitySettings:
@@ -157,9 +159,9 @@ class BorderNode(NetworkDevice):
     def get_fusion_router(self):
         for interface in self.externalInterfaces:
             taskId = dnac.post(api='network-device-poller/cli/read-request', data={"name":"command-runner","deviceUuids":["{}".format(self.deviceId)],"commands":["show cdp neighbor {}".format(interface.name)]}, ver='v1').json()['response']['taskId']
-            print '######## taskID {}:'.format(taskId)
+            print('######## taskID {}:'.format(taskId))
             neighbor = wait_for_task(taskId)
-            print neighbor
+            print(neighbor)
 
 
     def configure_peers(self, vnId):
@@ -220,16 +222,16 @@ class Site:
         pool_ids = []
         for pool_id in dnac.get(api='commonsetting/global/{}'.format(self.id), params={'key': '.*ip.pool..*'}).json()['response']:
             if pool_id['value'][0]['objReferences'][0]:
-                print pool_id['value'][0]['objReferences'][0]
+                print(pool_id['value'][0]['objReferences'][0])
                 pool_ids.append(pool_id['value'][0]['objReferences'][0])
-        print pool_ids
+        print(pool_ids)
         params = ''
         for i in pool_ids:
             params += ('instanceUuid=' + i + '&')
         params.rstrip('&')
-        print 'Params: {}'.format(params)
+        print('Params: {}'.format(params))
         for pool in dnac.get(api='ippool?{}'.format(params), ver='v2').json()['response']:
-            print pool
+            print(pool)
             self.ip_pools.append(IPPool(pool))
 
 
@@ -330,10 +332,10 @@ def add_vn():
         selected_ip_pools = {}
         for site in selected_sites:
             selected_ip_pools[site] = request.form[site + '_ip_pool']
-        print 'Selected VN Name: {}'.format(selected_vnname)
-        print 'Selected Fabric: {}'.format(selected_fabric)
-        print 'Selected Sites: {}'.format(selected_sites)
-        print 'Selected IP Pools: {}'.format(selected_ip_pools)
+        print('Selected VN Name: {}'.format(selected_vnname))
+        print('Selected Fabric: {}'.format(selected_fabric))
+        print('Selected Sites: {}'.format(selected_sites))
+        print('Selected IP Pools: {}'.format(selected_ip_pools))
         vn_id = create_virtual_network(selected_vnname)
         sites = []
         for site in get_sites_for_fabric(selected_fabric):
@@ -341,11 +343,11 @@ def add_vn():
                 sites.append(site)
         for site in sites:
             for border_node in get_border_for_site(site.fabricSiteUuid, site.id):
-                print 'get External Connectivity Settings'
+                print('get External Connectivity Settings')
                 border_node.get_ext_connectivity_settings()
                 border_node.get_fusion_router()
                 site.border_nodes.append(border_node)
-                print border_node.externalInterfaces
+                print(border_node.externalInterfaces)
         for site in sites:
             for border_node in site.border_nodes:
                 get_vlan_interfaces(border_node)
@@ -378,27 +380,26 @@ def virtual_machines():
             data = {"vmAction": {"actionType": "START", "vmName": vm}}
         else:
             data = {"vmAction": {"actionType": "STOP", "vmName": vm}}
-        print encs.post(api='operations/vmAction', data=json.dumps(data))
+        print(encs.post(api='operations/vmAction', data=json.dumps(data)))
         return render_template('virtual_machines.html', vms=vms)
 
 
-@app.route('/configuration_history', methods=['GET'])
-def config_history():
-    if os.path.exists(config.REPO_PATH):
-        shutil.rmtree(config.REPO_PATH)
-    os.makedirs(config.REPO_PATH)
-    repo = git.Repo.init(config.REPO_PATH)
-    origin = repo.create_remote('origin', config.CONFIG_REPO)
-    origin.fetch()
-    origin.pull(origin.refs[0].remote_head)
-    commits = []
-    for commit in repo.iter_commits():
-        commits.append(commit)
-        print commit.hexsha
-        print commit.committed_datetime
-        print commit.message
-    return render_template('config_history.html')
-
-
+@app.route('/show_history/<device>', methods=['GET', 'POST'])
+def config_history(device):
+	network_device = NetworkDevice(dnac.get(api='network-device', params={'hostname': device}).json()['response'][0])
+	if os.path.exists(config.REPO_PATH):
+		shutil.rmtree(config.REPO_PATH, False)
+	if not os.path.exists(config.REPO_PATH):
+		os.makedirs(config.REPO_PATH)
+		os.chmod(config.REPO_PATH, stat.S_IWRITE)
+	repo = git.Repo.init(config.REPO_PATH)
+	origin = repo.create_remote('origin', config.CONFIG_REPO)
+	origin.fetch()
+	origin.pull(origin.refs[0].remote_head)
+	path = "configs/" + device
+	commits = list(repo.iter_commits(paths=path))
+	diff_as_patch = repo.git.diff(commits[1], commits[0], path)
+	return render_template('config_history.html', device=network_device, diff_as_patch=diff_as_patch)
+	
 if __name__ == '__main__':
     app.run()
